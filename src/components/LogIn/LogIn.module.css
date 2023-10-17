@@ -1,0 +1,116 @@
+.bG.bG {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.text {
+  z-index: 0;
+  height: min-content;
+  flex: 1;
+  flex-direction: column;
+  /*color: #6b7280;*/
+  /*font-size: 15px;*/
+  /*line-height: 22px;*/
+  /*font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',*/
+  /*'Liberation Sans', sans-serif;*/
+}
+.root {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  align-items: flex-start;
+  background-color: #fff;
+  overflow: hidden;
+}
+.content {
+  position: absolute;
+  left: calc(50% - 0.5px);
+  top: 50%;
+  width: 481px;
+  height: min-content;
+  flex-direction: column;
+  place-content: center;
+  gap: 40px;
+  padding: 80px 48px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814;
+  transform: translate(-50%, -50%);
+  margin-top: 60px;
+}
+.titleSignIn {
+  height: min-content;
+  align-self: stretch;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.signIn {
+  color: #1f2937;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+  'Liberation Sans', sans-serif;
+  width: min-content;
+  height: min-content;
+  white-space: nowrap;
+  flex-direction: column;
+}
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 152px;
+  width: 188px;
+  height: 111px;
+  background-image:/* webpackIgnore: true */ url('/assets/logo.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translateX(-50%);
+}
+form {
+  gap: 32px;
+  flex-direction: column;
+}
+.inputs {
+  height: min-content;
+  align-self: stretch;
+  flex-direction: column;
+  /*gap: 32px;*/
+}
+.buttonlabelText {
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+  'Liberation Sans', sans-serif;
+  width: min-content;
+  height: min-content;
+  text-align: center;
+  align-items: center;
+  white-space: nowrap;
+  flex-direction: column;
+}
+.textField.textField {
+  width: 100%;
+  align-self: stretch;
+  align-items: flex-start;
+}
+.inputText.inputText {
+  max-width: 100%;
+  max-height: 100%;
+}
+.inputLabelText {
+  color: #62a6db;
+  font-size: 12px;
+  line-height: 8px;
+  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+  'Liberation Sans', sans-serif;
+  width: min-content;
+  height: min-content;
+  white-space: nowrap;
+  flex-direction: column;
+}
+

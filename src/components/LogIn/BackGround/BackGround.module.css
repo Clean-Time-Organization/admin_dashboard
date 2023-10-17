@@ -1,0 +1,54 @@
+.root {
+  position: relative;
+  height: 100%;
+  align-items: flex-start;
+  overflow: hidden;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.50);
+  backdrop-filter: blur(7.5px);
+}
+.icon {
+  width: 100%;
+  height: 100%;
+}
+.ellipse1 {
+  position: absolute;
+  left: -299px;
+  top: -262px;
+  width: 504px;
+  height: 505px;
+  overflow: visible;
+}
+.ellipse2 {
+  position: absolute;
+  left: -158px;
+  top: -386px;
+  width: 504px;
+  height: 505px;
+  overflow: visible;
+}
+.circle1 {
+  position: absolute;
+  left: calc(100% * 845 / 1440);
+  top: -755px;
+  width: calc(100% * 1460 / 1440);
+  height: calc(100% * 1460 / 1024);
+  overflow: visible;
+}
+.circle2 {
+  position: absolute;
+  left: calc(100% * 1120 / 1440);
+  top: -655px;
+  width: calc(100% * 1460 / 1440);
+  height: calc(100% * 1460 / 1024);
+  overflow: visible;
+}
+.rectangle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff80;
+  backdrop-filter: blur(7.5px);
+}
