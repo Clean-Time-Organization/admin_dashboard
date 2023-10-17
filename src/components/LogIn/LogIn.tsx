@@ -8,6 +8,7 @@ import {LoadingButton} from "../Form/LoadingButton/LoadingButton";
 import {TextInput} from "../Form/TextInput/TextInput";
 import { useForm } from 'react-hook-form';
 import {useMutation} from "react-query";
+import {Box, TextField} from "@mui/material";
 
 interface Props {
   className?: string;
@@ -57,21 +58,21 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
     return response.json();
   };
 
-  const { mutate, isLoading }  = useMutation(getEmailInfo);
+  //const { mutate, isLoading }  = useMutation(getEmailInfo);
 
   const onSubmit = (data: LoginFormData) => {
     console.dir(data);
 
-    mutate(data, {
-      onSuccess: (data) => {
-        console.dir(data)
-      },
-      onError: (error) => {
-        console.dir(error)
-      },
-    })
-
-    return { mutate, isLoading };
+    // mutate(data, {
+    //   onSuccess: (data) => {
+    //     console.dir(data)
+    //   },
+    //   onError: (error) => {
+    //     console.dir(error)
+    //   },
+    // })
+    //
+    // return { mutate, isLoading };
   }
 
 
@@ -84,21 +85,32 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
         </div>
         <div className={classes.inputs}>
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <TextInput
-              name={'email'}
-              label={'Email'}
-              type={'text'}
-              register={register}
-              validationSchema={validationSchema}
-              className={classes.textField}
-              classes={{ inputText: classes.inputText }}
-              hide={{
-                supportingText: false,
-              }}
-              text={{
-                labelText: <div className={classes.inputLabelText}>Email</div>,
-              }}
-            />
+            <Box
+                component="form"
+                sx={{
+                  '& > :not(style)': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >
+              <TextField id="outlined-basic" label="Email" variant="outlined" />
+            </Box>
+
+            {/*<TextInput*/}
+            {/*  name={'email'}*/}
+            {/*  label={'Email'}*/}
+            {/*  type={'text'}*/}
+            {/*  register={register}*/}
+            {/*  validationSchema={validationSchema}*/}
+            {/*  className={classes.textField}*/}
+            {/*  classes={{ inputText: classes.inputText }}*/}
+            {/*  hide={{*/}
+            {/*    supportingText: false,*/}
+            {/*  }}*/}
+            {/*  text={{*/}
+            {/*    labelText: <div className={classes.inputLabelText}>Email</div>,*/}
+            {/*  }}*/}
+            {/*/>*/}
             <LoadingButton
               text={{
                 labelText: <div className={classes.buttonlabelText}>Continue</div>,
