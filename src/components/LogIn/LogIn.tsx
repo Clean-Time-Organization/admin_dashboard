@@ -1,14 +1,12 @@
-import { memo } from 'react';
+import {memo, useState} from 'react';
 import type { FC } from 'react';
 
 import resets from '../resets.module.css';
 import {BackGround} from './BackGround/BackGround';
 import classes from './LogIn.module.css';
-import {LoadingButton} from "../Form/LoadingButton/LoadingButton";
-import {TextInput} from "../Form/TextInput/TextInput";
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {useMutation} from "react-query";
-import {Box, TextField} from "@mui/material";
+import {Box, Button, Card, CardContent, CardHeader, FormControl, Stack, TextField, Typography} from "@mui/material";
 
 interface Props {
   className?: string;
@@ -18,108 +16,104 @@ interface Props {
 }
 
 type LoginFormData = {
-  step: number
   email: string
   password: string
 }
 
 export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
-  const { register, handleSubmit } = useForm<LoginFormData>({
+  const [step, setStep] = useState(1);
+
+  const { handleSubmit, control, reset, formState: { errors } } = useForm<LoginFormData>({
     defaultValues: {
-      step: 1,
       email: '',
       password: ''
     }
   });
 
-  const validationSchema = {
-    required: "Email is required",
-      minLength: {
-      value: 3,
-        message: "Please enter a minimum of 3 characters"
-    }
-  }
+  const checkEmail = async ({ email }: LoginFormData) => {
+    const body = new FormData();
+    body.append('email', email);
 
-  const getEmailInfo = async (data: LoginFormData) => {
-    const response = await fetch('https://dev.cleantime-co.com/admin/api/v1/auth/email_check', {
+    const response = fetch('https://dev.cleantime-co.com/admin/api/v1/auth/email_check?email=123@f.com', {
       method: 'POST',
-      body: JSON.stringify({
-        email: data.email
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    });
+      // body: JSON.stringify({
+      //   email
+      // }),
+      body
+    }).then(response => response.json());
 
-    if (!response.ok) {
-      throw new Error('Failed to update user');
-    }
+    // if (!response.ok) {
+    //   throw new Error('Failed to update user');
+    // }
 
-    return response.json();
+    //return response.json();
   };
 
-  //const { mutate, isLoading }  = useMutation(getEmailInfo);
+  const { mutate, isLoading }  = useMutation(checkEmail);
 
   const onSubmit = (data: LoginFormData) => {
-    console.dir(data);
+    switch (step) {
+      case 1:
+        mutate(data, {
+          onSuccess: (data) => {
+            console.dir(data)
+          },
 
-    // mutate(data, {
-    //   onSuccess: (data) => {
-    //     console.dir(data)
-    //   },
-    //   onError: (error) => {
-    //     console.dir(error)
-    //   },
-    // })
-    //
-    // return { mutate, isLoading };
+          onError: (error) => {
+            console.dir(error)
+          },
+        })
+
+        break;
+
+      case 2:
+        reset();
+        break;
+
+      default:
+        console.error('unknown step')
+        break;
+    }
+
+    //return { mutate, isLoading };
   }
 
 
   return (
     <div className={`${resets.ctResets} ${classes.root}`}>
       <BackGround className={classes.bG} />
-      <div className={classes.content}>
-        <div className={classes.titleSignIn}>
-          <div className={classes.signIn}>Sign in</div>
-        </div>
-        <div className={classes.inputs}>
-          <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Box
-                component="form"
-                sx={{
-                  '& > :not(style)': { m: 1, width: '25ch' },
-                }}
-                noValidate
-                autoComplete="off"
-            >
-              <TextField id="outlined-basic" label="Email" variant="outlined" />
-            </Box>
-
-            {/*<TextInput*/}
-            {/*  name={'email'}*/}
-            {/*  label={'Email'}*/}
-            {/*  type={'text'}*/}
-            {/*  register={register}*/}
-            {/*  validationSchema={validationSchema}*/}
-            {/*  className={classes.textField}*/}
-            {/*  classes={{ inputText: classes.inputText }}*/}
-            {/*  hide={{*/}
-            {/*    supportingText: false,*/}
-            {/*  }}*/}
-            {/*  text={{*/}
-            {/*    labelText: <div className={classes.inputLabelText}>Email</div>,*/}
-            {/*  }}*/}
-            {/*/>*/}
-            <LoadingButton
-              text={{
-                labelText: <div className={classes.buttonlabelText}>Continue</div>,
-              }}
-            />
-          </form>
-        </div>
-      </div>
       <div className={classes.logo}></div>
+      {/*<div className={classes.content}>*/}
+      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <Card sx={{ maxWidth: 345 }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Sign in
+            </Typography>
+            <Stack spacing={2}>
+              <Box>
+                <Controller
+                  render={({ field: { name, value, onChange } }) => (
+                    <TextField
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      label="Email"
+                      variant="outlined" />
+                  )}
+                  control={control}
+                  defaultValue=""
+                  name={'email'}
+                />
+              </Box>
+              <Box>
+                <Button type="submit" variant="contained">Continue</Button>
+              </Box>
+            </Stack>
+          </CardContent>
+        </Card>
+      </form>
+      {/*</div>*/}
     </div>
   );
 });
