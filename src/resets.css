@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@100;200;300;400;500;600;700;800&display=swap');
+
 html,
 body,
 #root {
@@ -7,6 +9,7 @@ body,
   display: flex;
   flex-basis: 100%;
   width: 100%;
+  font-family: 'Anek Latin', sans-serif;
 }
 
 #root {
@@ -20,6 +23,7 @@ body button:not(:disabled) {
 }
 
 body label {
+  font-family: 'Anek Latin', sans-serif;
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
