@@ -35,6 +35,8 @@ type LoginReponse = {
 }
 
 export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
+  const env = import.meta.env;
+
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState(Steps.EmailCheck)
   const [email, setEmail] = useState('')
@@ -60,7 +62,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
     setEmailError('')
     setPasswordError('')
 
-    await fetch('https://dev.cleantime-co.com/admin/api/v1/auth/email_check?email=' + encodeURIComponent(email), {
+    await fetch(`${env.VITE_API_BASE_URL}/email_check?email=${encodeURIComponent(email)}`, {
       method: 'POST',
     }).then((resp) => {
       response.status = resp.status
@@ -81,7 +83,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
 
     setPasswordError('')
 
-    await fetch('https://dev.cleantime-co.com/admin/api/v1/auth/access-token', {
+    await fetch(`${env.VITE_API_BASE_URL}/auth/access-token`, {
       method: 'POST',
       headers:{
         'Content-Type': 'application/x-www-form-urlencoded'
