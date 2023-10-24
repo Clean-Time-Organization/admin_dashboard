@@ -14,7 +14,6 @@ import {
   CircularProgress, Divider, IconButton, InputAdornment, Link, Stack, TextField, Typography
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 
 interface Props {
   className?: string;
@@ -114,7 +113,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
           break
 
         case 404:
-          setEmailError("There isn't any account with this email address")
+          setEmailError("Couldn't find your account")
           break
 
         case 422:
@@ -147,8 +146,8 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
           break
 
         case 403:
-          //setPasswordError('Incorrect password. Please try again')
-          setStep(Steps.TryAgainLater)
+          setPasswordError('Incorrect password. Please try again')
+          //setStep(Steps.TryAgainLater)
           break
 
         case 404:
@@ -294,15 +293,39 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                           <TextField
                               id={field.name}
                               label="Email"
-                              InputLabelProps={{ shrink: true }}
+                              InputLabelProps={{
+                                shrink: true,
+                                style: {
+                                  floatingLabelFocusStyle: {
+                                    color: "#2E8DC8",
+                                  },
+                                  fontFamily: "Anek Latin",
+                                  fontStyle: "normal",
+                                  fontWeight: "400",
+                                }
+                              }}
                               fullWidth
                               error={!!emailError}
                               defaultValue={email}
                               onChange={e => setEmail(e.target.value)}
                               variant="outlined"
-                              inputProps={{ maxLength: 40 }}
+                              inputProps={{
+                                style: {
+                                  WebkitBoxShadow: "0 0 0 1000px white inset"
+                                }
+                              }}
                               sx={{
-
+                                "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                                  width: "357px"
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                  "& fieldset": {
+                                    borderColor: "#6B7280",
+                                  },
+                                  '&.Mui-focused fieldset': {
+                                    borderColor: "#2E8DC8",
+                                  },
+                                },
                               }}
                           />
                         )}
@@ -331,15 +354,23 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                         <TextField
                           id={field.name}
                           label="Password"
-                          InputLabelProps={{ shrink: true }}
+                          InputLabelProps={{
+                            shrink: true,
+                            style: {
+                              floatingLabelFocusStyle: {
+                                color: "#2E8DC8",
+                              },
+                              fontFamily: "Anek Latin",
+                              fontStyle: "normal",
+                              fontWeight: "400",
+                            }
+                          }}
                           fullWidth
                           type={showPassword ? 'text' : 'password'}
                           error={!!passwordError}
-                          helperText={passwordError}
                           defaultValue={password}
                           onChange={e => setPassword(e.target.value)}
                           variant="outlined"
-                          inputProps={{ maxLength: 40 }}
                           InputProps={{
                             endAdornment:
                               <InputAdornment
@@ -352,23 +383,40 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                                   onClick={handleClickShowPassword}
                                   onMouseDown={handleMouseDownPassword}
                                   edge="end"
-                                  // sx={{
-                                  //   paddingTop: 2,
-                                  //   paddingBottom: 2,
-                                  //   paddingRight: 30,
-                                  //   paddingLeft: -30
-                                  // }}
                                 >
                                   {showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                               </InputAdornment>,
                           }}
+                          sx={{
+                            "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                              width: "85%"
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: "#6B7280",
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: "#2E8DC8",
+                              },
+                            },
+                          }}
                           aria-describedby="base-name-helper-text"
-
                         />
                       )}
                     />
-                    {emailError ? <div>{emailError}</div> : ''}
+                    {passwordError ?
+                      <div className={classes.helper_alert}>
+                        <Alert
+                          sx={{
+                            backgroundColor: "white",
+                            color: "#B91C1C",
+                            fontSize: "12px",
+                            padding: "0",
+                          }}
+                          severity="error">{passwordError}</Alert>
+                      </div>
+                      : null}
                   </div>
                   : ''}
               </Box>
@@ -399,7 +447,11 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
               </Box>
               {[Steps.Login, Steps.PasswordReset].includes(step) ?
                 <span>
-                  <Divider light />
+                  <Divider
+                    light
+                    sx={{
+                      paddingTop: "34px"
+                    }}/>
                   {step === Steps.Login ?
                     <Link
                       component="button"
@@ -411,6 +463,8 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                         fontStyle: "normal",
                         fontWeight: "500",
                         lineHeight: "24px",
+                        height: "40px",
+                        paddingTop: "20px"
                       }}
                       onClick={() => {
                         setPassword('')
@@ -448,6 +502,8 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                       fontStyle: "normal",
                       fontWeight: "500",
                       lineHeight: "24px",
+                      height: "40px",
+                      paddingTop: "26px"
                     }}
                     onClick={() => {
                       setEmail('')
