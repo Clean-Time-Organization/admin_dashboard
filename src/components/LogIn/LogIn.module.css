@@ -49,8 +49,7 @@
   font-size: 28px;
   line-height: 36px;
   font-weight: 600;
-  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-  'Liberation Sans', sans-serif;
+  font-family: 'Anek Latin';
   width: min-content;
   height: min-content;
   white-space: nowrap;
@@ -61,39 +60,6 @@
   margin-bottom: 16px;
   flex-direction: column;
   max-height: 55px;
-}
-.input {
-  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-  'Liberation Sans', sans-serif;
-  width: 319px;
-  height: 40px;
-  padding: 8px 0 8px 16px;
-  margin-bottom: 16px;
-}
-.button {
-  width: 125px;
-  height: 40px;
-  padding: 0 !important;
-  margin: 0 !important;
-  left: 68%;
-  background: #2E8DC8 !important;
-}
-.button_next {
-  font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-  'Liberation Sans', sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
-  padding: 10px 30px;
-  align-items: center;
-  align-self: stretch;
-  border-radius: 4px;
-  background: #2E8DC8;
-  color: #ffffff;
-  text-transform: capitalize;
-  width: 125px;
-  height: 40px;
 }
 .email_chip {
   margin-bottom: 48px;
