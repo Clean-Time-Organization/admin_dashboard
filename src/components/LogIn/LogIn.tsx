@@ -14,19 +14,23 @@ import {
   CircularProgress, Divider, IconButton, InputAdornment, Link, Stack, TextField, Typography
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useNavigate, useParams} from "react-router-dom";
 
 interface Props {
   className?: string;
   hide?: {
     fiEye?: boolean;
   };
+  token?: string;
 }
 
 enum Steps {
   EmailCheck,
   Login,
   TryAgainLater,
-  PasswordReset,
+  PasswordResetStart,
+  PasswordResetNext,
+  PasswordResetSuccess,
 }
 
 type LoginReponse = {
@@ -45,7 +49,10 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
   const [passwordError, setPasswordError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [tmpToken, setTmpToken] = useState('')
   const { handleSubmit, control, reset, formState: { errors } } = useForm()
+  const navigate = useNavigate();
+  const { token } = useParams();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -62,7 +69,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
     setEmailError('')
     setPasswordError('')
 
-    await fetch(`${env.VITE_API_BASE_URL}/email_check?email=${encodeURIComponent(email)}`, {
+    await fetch(`${env.VITE_API_BASE_URL}/auth/email_check?email=${encodeURIComponent(email)}`, {
       method: 'POST',
     }).then((resp) => {
       response.status = resp.status
@@ -103,6 +110,85 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
     return response
   };
 
+  const resetPasswordStart = async (): Promise<LoginReponse> => {
+    let response: LoginReponse = {
+      status: 400,
+      details: 'Server error'
+    };
+
+    setPassword('')
+    setEmailError('')
+    setPasswordError('')
+    setTmpToken('')
+
+    await fetch(`${env.VITE_API_BASE_URL}/auth/send-email`, {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        email,
+      })
+    }).then((resp) => {
+      response.status = resp.status
+      return resp.json()
+    }).then(jsonData => {
+      if (response.status === 200) {
+        setTmpToken(jsonData.tmp_token)
+      }
+    }).catch(err => {
+      response.details = 'Server is unavailable, try again later'
+    })
+
+    return response;
+  };
+
+  const resetPasswordNext = async (): Promise<LoginReponse> => {
+    let response: LoginReponse = {
+      status: 400,
+      details: 'Server error'
+    };
+
+    setEmailError('')
+    setPasswordError('')
+    setTmpToken('')
+
+    await fetch(`${env.VITE_API_BASE_URL}/auth/reset-password`, {
+      method: 'PATCH',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tmp_token: token,
+        new_password: password
+      })
+    }).then((resp) => {
+      response.status = resp.status
+      return resp.json()
+    }).then(jsonData => {
+      if (response.status === 422) {
+        const detail = jsonData.detail[0]
+        switch (detail.type.toLowerCase()) {
+          case 'value_error':
+            response.details = 'Token is invalid or has been expired'
+            break;
+
+          case 'value_error.any_str.min_length':
+            response.details = 'Please choose a stronger password. It should contain at least 8 characters'
+            break;
+
+          default:
+            response.details = 'Weak password'
+            break;
+        }
+      }
+    }).catch(err => {
+      response.details = 'Server is unavailable, try again later'
+    })
+
+    return response;
+  };
+
   const checkEmailMutation = useMutation(checkEmail, {
     onSuccess: response => {
       switch (response.status) {
@@ -128,7 +214,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
       }
     },
     onError: (error) => {
-      setErrorMessage('Error occured while communicating server')
+      setErrorMessage('Error occurred while communicating server')
       console.warn(error)
     },
     onSettled: () => {
@@ -140,7 +226,8 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          console.log('succeeded')
+          //setAccessToken
+          navigate('/')
           break
 
         case 400:
@@ -166,7 +253,75 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
       }
     },
     onError: (error) => {
-      setErrorMessage('Error occured while communicating server')
+      setErrorMessage('Error occurred while communicating server')
+      console.warn(error)
+    },
+    onSettled: () => {
+      //queryClient.invalidateQueries('create');
+    }
+  });
+
+  const resetPasswordStartMutation = useMutation(resetPasswordStart, {
+    onSuccess: response => {
+      switch (response.status) {
+        case 200:
+          setStep(Steps.PasswordResetStart)
+          break
+
+        case 400:
+          setErrorMessage(response.details)
+          break
+
+        case 404:
+          setErrorMessage("Couldn't find your account")
+          break
+
+        case 422:
+          setErrorMessage('Please provide a valid email address')
+          break
+
+        default:
+          setErrorMessage('Unknown server response')
+          break
+      }
+    },
+    onError: (error) => {
+      setErrorMessage('Error occurred while communicating server')
+      console.warn(error)
+    },
+    onSettled: () => {
+      //queryClient.invalidateQueries('create');
+    }
+  });
+
+  const resetPasswordNextMutation = useMutation(resetPasswordNext, {
+    onSuccess: response => {
+      switch (response.status) {
+        case 200:
+          setPassword('')
+          setStep(Steps.PasswordResetSuccess)
+          break
+
+        case 403:
+          setPasswordError(response.details)
+          break
+
+        case 404:
+          setErrorMessage("Couldn't find your account")
+          break
+
+        case 400:
+        case 422:
+          setPasswordError(response.details)
+          break
+
+        default:
+          setErrorMessage('Unknown server response')
+          break
+      }
+    },
+    onError: (error) => {
+      setErrorMessage('Error occurred while communicating server')
       console.warn(error)
     },
     onSettled: () => {
@@ -200,14 +355,46 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
         setStep(Steps.EmailCheck)
         break
 
+      case Steps.PasswordResetNext:
+        if (password.trim() === '') {
+          setPasswordError('Please enter a password')
+        } else {
+          resetPasswordNextMutation.mutate()
+        }
+        break
+
       default:
         break
     }
   }
 
+  const onResetPassword = () => {
+    resetPasswordStartMutation.mutate()
+  }
+
+  const onGoToPasswordReset = () => {
+    setPasswordError('')
+    navigate(`/login/${tmpToken}`)
+  }
+
+  const onGoToSignIn = () => {
+    setStep(Steps.EmailCheck)
+    setEmail('')
+    setEmailError('')
+    setPassword('')
+    setPasswordError('')
+    navigate('/login')
+  }
+
   useEffect(() => {
-    setIsLoading(checkEmailMutation.isLoading || loginMutation.isLoading)
-  }, [checkEmailMutation.isLoading, loginMutation.isLoading])
+    setIsLoading(checkEmailMutation.isLoading || loginMutation.isLoading || resetPasswordNextMutation.isLoading)
+  }, [checkEmailMutation.isLoading, loginMutation.isLoading, resetPasswordNextMutation.isLoading])
+
+  useEffect(() => {
+    if (token) {
+      setStep(Steps.PasswordResetNext)
+    }
+  }, [token])
 
   return (
     <div className={`${resets.ctResets} ${classes.root}`}>
@@ -216,6 +403,16 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Card sx={{ maxWidth: 481 }} className={classes.content}>
           <CardContent className={classes.inner}>
+            {step === Steps.PasswordResetSuccess ?
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <mask id="mask0_88_45188" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+                  <rect width="64" height="64" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_88_45188)">
+                  <path d="M32.0047 57.3333C28.5009 57.3333 25.2075 56.6684 22.1245 55.3386C19.0414 54.0088 16.3596 52.2042 14.079 49.9246C11.7984 47.645 9.99288 44.9644 8.66253 41.8827C7.33217 38.801 6.66699 35.5083 6.66699 32.0045C6.66699 28.5007 7.33199 25.2072 8.66199 22.1242C9.99199 19.0411 11.797 16.3593 14.077 14.0788C16.357 11.7981 19.0381 9.99264 22.1203 8.66228C25.2025 7.33193 28.4958 6.66675 32.0003 6.66675C34.2191 6.66675 36.3695 6.94966 38.4515 7.51548C40.5336 8.0813 42.5251 8.89926 44.4259 9.96935C44.9387 10.2565 45.2738 10.6702 45.4311 11.2104C45.5883 11.7505 45.496 12.2548 45.1541 12.7231C44.8123 13.1915 44.3601 13.4847 43.7977 13.6026C43.2354 13.7206 42.6927 13.636 42.1696 13.3488C40.6106 12.477 38.9704 11.812 37.249 11.3539C35.5276 10.8957 33.778 10.6667 32.0003 10.6667C26.0891 10.6667 21.0558 12.7445 16.9003 16.9C12.7447 21.0556 10.6669 26.0889 10.6669 32C10.6669 37.9111 12.7447 42.9445 16.9003 47.1C21.0558 51.2556 26.0891 53.3334 32.0003 53.3334C37.9114 53.3334 42.9447 51.2556 47.1003 47.1C51.2558 42.9445 53.3336 37.9111 53.3336 32C53.3336 31.4839 53.3139 30.984 53.2746 30.5001C53.2353 30.0163 53.1678 29.5196 53.0721 29.0102C52.9832 28.4424 53.0806 27.8995 53.3643 27.3818C53.6481 26.864 54.0753 26.5282 54.6459 26.3743C55.1829 26.2205 55.6814 26.2872 56.1412 26.5744C56.601 26.8615 56.8754 27.2752 56.9643 27.8153C57.0873 28.4889 57.1796 29.1701 57.2412 29.8592C57.3028 30.5482 57.3335 31.2618 57.3335 32C57.3335 35.5045 56.6686 38.7978 55.3389 41.8799C54.0091 44.9622 52.2044 47.6433 49.9249 49.9233C47.6453 52.2033 44.9646 54.0083 41.8829 55.3383C38.8013 56.6683 35.5085 57.3333 32.0047 57.3333ZM28.2157 37.7232L53.1182 12.7795C53.4874 12.4103 53.9447 12.2146 54.49 12.1924C55.0353 12.1702 55.5166 12.3678 55.934 12.7851C56.3166 13.1677 56.5079 13.6342 56.5079 14.1847C56.5079 14.7351 56.3147 15.2034 55.9284 15.5898L29.9028 41.6563C29.4207 42.1384 28.8584 42.3794 28.2157 42.3794C27.5729 42.3794 27.0105 42.1384 26.5285 41.6563L19.2105 34.3384C18.8413 33.9692 18.6524 33.5051 18.6439 32.9461C18.6353 32.3872 18.8242 31.9146 19.2105 31.5283C19.5968 31.1419 20.0652 30.9487 20.6157 30.9487C21.1661 30.9487 21.6344 31.1419 22.0207 31.5283L28.2157 37.7232Z" fill="#9CA3AF"/>
+                </g>
+              </svg>
+              : null}
             {step === Steps.TryAgainLater ?
               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
                 <mask id="mask0_88_46105" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
@@ -234,8 +431,14 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                 {step === Steps.Login ?
                   'Enter your password'
                   : ''}
-                {step === Steps.PasswordReset ?
+                {step === Steps.PasswordResetStart ?
                   'Verify your identity'
+                  : ''}
+                {step === Steps.PasswordResetNext ?
+                  'Reset your password'
+                  : ''}
+                {step === Steps.PasswordResetSuccess ?
+                  'Your password has been updated!'
                   : ''}
                 {step === Steps.TryAgainLater ?
                   'Try again later'
@@ -255,10 +458,35 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                 </Typography>
               </span>
             : null}
-            {step === Steps.PasswordReset ?
+            {step === Steps.PasswordResetStart ?
               <span>
-                <Typography gutterBottom component="div">
-                  We've sent you a verification link to {email}.Please follow the link to confirm your identity
+                <Typography
+                  gutterBottom
+                  component="div"
+                  style={{
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    lineHeight: "24px",
+                    flexDirection: "column",
+                    display: "flex",
+                  }}
+                >We've sent you a verification link to
+                  <Typography
+                    gutterBottom
+                    component="div"
+                    style={{
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "600",
+                      lineHeight: "24px",
+                      marginBottom: "0px",
+                    }}
+                  >{email}.
+                  </Typography>
+                  Please follow the link to confirm your identity
                 </Typography>
                 <Divider light />
               </span>
@@ -298,9 +526,6 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                               InputLabelProps={{
                                 shrink: true,
                                 style: {
-                                  floatingLabelFocusStyle: {
-                                    color: "#2E8DC8",
-                                  },
                                   fontFamily: "Anek Latin",
                                   fontStyle: "normal",
                                   fontWeight: "400",
@@ -310,6 +535,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                               error={!!emailError}
                               defaultValue={email}
                               onChange={e => setEmail(e.target.value)}
+                              onFocus={e => setEmailError('')}
                               variant="outlined"
                               inputProps={{
                                 style: {
@@ -346,7 +572,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                       : null}
                   </div>
                   : ''}
-                {step === Steps.Login ?
+                {[Steps.Login, Steps.PasswordResetNext].includes(step) ?
                   <div className={classes.email}>
                     <Controller
                       control={control}
@@ -355,13 +581,10 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                       render={({ field: { ref, ...field }, fieldState: { error } }) => (
                         <TextField
                           id={field.name}
-                          label="Password"
+                          label={step === Steps.Login ? "Password" : "New password"}
                           InputLabelProps={{
                             shrink: true,
                             style: {
-                              floatingLabelFocusStyle: {
-                                color: "#2E8DC8",
-                              },
                               fontFamily: "Anek Latin",
                               fontStyle: "normal",
                               fontWeight: "400",
@@ -372,6 +595,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                           error={!!passwordError}
                           defaultValue={password}
                           onChange={e => setPassword(e.target.value)}
+                          onFocus={e => setPasswordError('')}
                           variant="outlined"
                           InputProps={{
                             endAdornment:
@@ -403,7 +627,6 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                               },
                             },
                           }}
-                          aria-describedby="base-name-helper-text"
                         />
                       )}
                     />
@@ -422,32 +645,171 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                   </div>
                   : ''}
               </Box>
-              <Box>
+              <Box
+                sx={{
+                  justifyContent: "flex-end"
+              }}>
                 {[Steps.EmailCheck, Steps.Login].includes(step) ?
                   <Button
-                    className={classes.button}
                     type="submit"
                     variant="contained"
+                    disableElevation={true}
+                    style={{
+                      backgroundColor: "#2E8DC8",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      margin: "0px",
+                      maxWidth: "135px",
+                      maxHeight: "40px",
+                      minWidth: "135px",
+                      minHeight: "40px",
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "500",
+                      lineHeight: "24px",
+                      textTransform: "capitalize",
+                    }}
                     startIcon={
                       isLoading ? (
-                        <div className={classes.button_next}>
-                          <CircularProgress size={25} style={{'color': 'white',  position: 'absolute', left: '40%',}} />
-                        </div>
+                        <Stack
+                          alignItems="center"
+                          style={{
+                            paddingLeft: "15px"
+                        }}>
+                          <CircularProgress
+                            size={25}
+                            style={{
+                              color: "white",
+                            }} />
+                        </Stack>
                       ) : null
-                    }>
-                    {isLoading ? '' : <div className={classes.button_next}>Continue</div>}
+                    }
+                  >
+                    {isLoading ? '' : 'Continue'}
+                  </Button>
+                  : null}
+                {step === Steps.PasswordResetNext ?
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disableElevation={true}
+                    style={{
+                      backgroundColor: "#2E8DC8",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      margin: "0px",
+                      maxWidth: "172px",
+                      maxHeight: "40px",
+                      minWidth: "172px",
+                      minHeight: "40px",
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "500",
+                      lineHeight: "24px",
+                      textTransform: "capitalize",
+                    }}
+                    startIcon={
+                      isLoading ? (
+                        <Stack
+                          alignItems="center"
+                          style={{
+                            paddingLeft: "15px"
+                          }}>
+                          <CircularProgress
+                            size={25}
+                            style={{
+                              color: "white",
+                            }} />
+                        </Stack>
+                      ) : null
+                    }
+                  >
+                    {isLoading ? '' : 'Reset password'}
                   </Button>
                   : null}
                 {step === Steps.TryAgainLater ?
                   <Button
                     className={classes.button}
                     type="submit"
-                    variant="contained">
-                    <div className={classes.button_next}>Got it</div>
+                    variant="contained"
+                    disableElevation={true}
+                    style={{
+                      backgroundColor: "#2E8DC8",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      margin: "0px",
+                      maxWidth: "135px",
+                      maxHeight: "40px",
+                      minWidth: "135px",
+                      minHeight: "40px",
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "500",
+                      lineHeight: "24px",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Got it
+                  </Button>
+                  : null}
+                {step === Steps.PasswordResetStart ?
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    disableElevation={true}
+                    style={{
+                      backgroundColor: "#2E8DC8",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      margin: "0px",
+                      maxWidth: "185px",
+                      maxHeight: "40px",
+                      minWidth: "185px",
+                      minHeight: "40px",
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "500",
+                      lineHeight: "24px",
+                      textTransform: "capitalize",
+                    }}
+                    onClick={onGoToPasswordReset}
+                  >
+                    Go to password reset
+                  </Button>
+                  : null}
+                {step === Steps.PasswordResetSuccess ?
+                  <Button
+                    className={classes.button}
+                    type="submit"
+                    variant="contained"
+                    disableElevation={true}
+                    style={{
+                      backgroundColor: "#2E8DC8",
+                      borderRadius: "4px",
+                      padding: "0px",
+                      margin: "0px",
+                      maxWidth: "148px",
+                      maxHeight: "40px",
+                      minWidth: "148px",
+                      minHeight: "40px",
+                      fontFamily: "Anek Latin",
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      fontWeight: "500",
+                      lineHeight: "24px",
+                      textTransform: "capitalize",
+                    }}
+                    onClick={onGoToSignIn}
+                  >
+                    Go to Sign in
                   </Button>
                   : null}
               </Box>
-              {[Steps.Login, Steps.PasswordReset].includes(step) ?
+              {[Steps.Login, Steps.PasswordResetStart].includes(step) ?
                 <span>
                   <Divider
                     light
@@ -458,6 +820,7 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                     <Link
                       component="button"
                       underline="none"
+                      disabled={resetPasswordStartMutation.isLoading}
                       sx={{
                         color: "#2E8DC8",
                         fontFamily: "Anek Latin",
@@ -465,20 +828,23 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                         fontStyle: "normal",
                         fontWeight: "500",
                         lineHeight: "24px",
-                        height: "40px",
-                        paddingTop: "20px"
+                        paddingTop: "26px",
+                        "&[disabled]": {
+                          color: "grey",
+                          cursor: "default",
+                          "&:hover": {
+                            textDecoration: "none"
+                          }
+                        }
                       }}
-                      onClick={() => {
-                        setPassword('')
-                        setEmailError('')
-                        setPasswordError('')
-                        setStep(Steps.PasswordReset)
-                      }}>Reset your password</Link>
+                      onClick={onResetPassword}
+                    >Reset your password</Link>
                     : null}
-                  {step === Steps.PasswordReset ?
+                  {step === Steps.PasswordResetStart ?
                     <Link
                       component="button"
                       underline="none"
+                      disabled={resetPasswordStartMutation.isLoading}
                       sx={{
                         color: "#2E8DC8",
                         fontFamily: "Anek Latin",
@@ -486,13 +852,17 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                         fontStyle: "normal",
                         fontWeight: "500",
                         lineHeight: "24px",
+                        paddingTop: "26px",
+                        "&[disabled]": {
+                          color: "grey",
+                          cursor: "default",
+                          "&:hover": {
+                            textDecoration: "none"
+                          }
+                        }
                       }}
-                      onClick={() => {
-                        setPassword('')
-                        setEmailError('')
-                        setPasswordError('')
-                        setStep(Steps.PasswordReset)
-                      }}>Resend link</Link>
+                      onClick={onResetPassword}
+                    >Resend link</Link>
                     : null}
                   <Link
                     component="button"
@@ -513,7 +883,8 @@ export const LogIn: FC<Props> = memo(function LogIn(props = {}) {
                       setEmailError('')
                       setPasswordError('')
                       setStep(Steps.EmailCheck)
-                    }}>Sign in to a different account</Link>
+                    }}
+                  >Sign in to a different account</Link>
                 </span>
                 : null}
             </Stack>
