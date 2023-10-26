@@ -44,17 +44,6 @@
   flex-direction: column;
   padding: 0 !important;
 }
-.title {
-  color: #1f2937;
-  font-size: 28px;
-  line-height: 36px;
-  font-weight: 600;
-  font-family: 'Anek Latin';
-  width: min-content;
-  height: min-content;
-  white-space: nowrap;
-  margin-bottom: 40px;
-}
 .email {
   width: 385px;
   margin-bottom: 16px;
