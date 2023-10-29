@@ -12,7 +12,7 @@ env:
 
 jobs:
   deploy-dev:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/dev-test'
     name: Deploy services via helm chart in Development k8s AWS Account
     runs-on: ubuntu-latest
     steps:
