@@ -1,0 +1,30 @@
+replicaCount: 1
+
+service:
+  name: admin-dashboard
+  image:
+    repository: 261990183663.dkr.ecr.eu-west-1.amazonaws.com/igate-mgmt-cleantime-admin-dashboard
+    tag: dev
+  service:
+    http: 3000
+    path: /
+
+  configMap:
+    name: cleantime-admin-dashboard
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+namespace: backend-dev
+
+nodeSelector: [ ]
+
+tolerations: [ ]
+
+affinity: { }
+
