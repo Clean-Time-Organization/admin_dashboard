@@ -20,7 +20,7 @@ resources:
     cpu: 250m
     memory: 512Mi
 
-namespace: backend-dev
+namespace: backend-develop
 
 nodeSelector: [ ]
 
