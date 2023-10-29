@@ -6,7 +6,7 @@ on:
 
 env:
   CLUSTER_NAME: igate-dev-eks
-  SERVICES_NAMESPACE: backend-dev
+  SERVICES_NAMESPACE: backend-develop
   IMAGE_TAG : ${{ github.sha }}
   ECR_REPOSITORY: igate-mgmt-cleantime-admin-dashboard
 
@@ -46,12 +46,12 @@ jobs:
 
       - name: delete and build configmap from .env file
         run: |
-          if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_PREFIX-$GITHUB_REF_NAME; then
-            kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_PREFIX-$GITHUB_REF_NAME
+          if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE; then
+            kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE
           fi
-          kubectl create configmap cleantime-admin-dashboard --from-env-file=.env -n $SERVICES_NAMESPACE_PREFIX-$GITHUB_REF_NAME
+          kubectl create configmap cleantime-admin-dashboard --from-env-file=.env -n $SERVICES_NAMESPACE
 
       - name: Deploy service by helm chart to EKS
         run:
-          helm upgrade admin-dashboard  ./helm/ --install   -f ./charts/services/values-admin-$GITHUB_REF_NAME.yaml   -n $SERVICES_NAMESPACE_PREFIX-$GITHUB_REF_NAME  --set service.image.tag=$IMAGE_TAG
+          helm upgrade admin-dashboard  ./helm/ --install   -f ./helm/values.yaml   -n $SERVICES_NAMESPACE  --set service.image.tag=$IMAGE_TAG
 
