@@ -7,7 +7,7 @@ service:
     tag: dev
   service:
     http: 3000
-    path: /
+    path: /admin-dashboard
 
   configMap:
     name: cleantime-admin-dashboard
@@ -17,8 +17,8 @@ resources:
     cpu: 1500m
     memory: 1500Mi
   requests:
-    cpu: 1500m
-    memory: 1500Mi
+    cpu: 1000m
+    memory: 1000Mi
 
 namespace: backend-develop
 
