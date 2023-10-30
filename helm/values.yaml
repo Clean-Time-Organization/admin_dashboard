@@ -6,7 +6,7 @@ service:
     repository: 261990183663.dkr.ecr.eu-west-1.amazonaws.com/igate-mgmt-cleantime-admin-dashboard
     tag: dev
   service:
-    http: 3001
+    http: 3000
     path: /
 
   configMap:
