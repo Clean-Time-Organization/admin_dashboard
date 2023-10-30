@@ -1,10 +1,10 @@
 {
   "name": "vite-react-ts",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "start": "vite",
-    "dev": "vite",
+    "dev": "tsc && vite build",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
