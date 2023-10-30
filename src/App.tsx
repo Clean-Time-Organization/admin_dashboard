@@ -18,18 +18,18 @@ const queryClient = new QueryClient()
 export const App: FC<Props> = memo(function App(props = {}) {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`${resets.ctResets} ${classes.root}`}>
+      {/* <div className={`${resets.ctResets} ${classes.root}`}>
         <LogIn />
-      </div>
-      {/* <MainLayout>
+      </div> */}
+      <MainLayout>
         <Routes>
           <Route path={'/'} element={<Stuff />} />
-          <Route path={'/stuff'} element={<Stuff />} />
+          <Route path={'/staff'} element={<Stuff />} />
           <Route path={'/customers'} element={<Stuff />} />
           <Route path={'/laundries'} element={<Stuff />} />
           <Route path={'/orders'} element={<Stuff />} />
         </Routes>
-      </MainLayout> */}
+      </MainLayout>
     </QueryClientProvider>
   );
 });

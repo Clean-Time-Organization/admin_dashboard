@@ -1,5 +1,3 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import logoSmall from '/assets/logoSmall.png';
 import { ArrowDown } from '../Icons/ArrowDown';
 import {
@@ -12,10 +10,9 @@ import {
   HeaderRightSide,
   HeaderLeftSide,
   UserIconPlaceholder,
-} from './styled.ts';
+} from './styled';
 
 const Header = () => {
-  
   return <BaseHeader>
     <HeaderLeftSide>
       <HeaderLogo>
@@ -29,8 +26,8 @@ const Header = () => {
           </HeaderMenuItemText>
         </HeaderMenuItem>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/stuff'} activeClassName="active">
-            Stuff
+          <HeaderMenuItemText to={'/staff'} activeClassName="active">
+            Staff
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
         </HeaderMenuItem>
