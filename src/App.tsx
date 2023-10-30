@@ -16,7 +16,7 @@ export const App: FC = memo(function App() {
           <Route path={'/'} element={<Stuff />} />
           <Route path={'/login'} element={<LogIn />} />
           <Route path={'/login/:token'} element={<LogIn />} />
-          <Route path={'/stuff'} element={<Stuff />} />
+          <Route path={'/staff'} element={<Stuff />} />
           <Route path={'/customers'} element={<Stuff />} />
           <Route path={'/laundries'} element={<Stuff />} />
           <Route path={'/orders'} element={<Stuff />} />
