@@ -12,7 +12,7 @@ import {
   HeaderRightSide,
   HeaderLeftSide,
   UserIconPlaceholder,
-} from './styled.ts';
+} from './styled';
 
 const Header = () => {
   
