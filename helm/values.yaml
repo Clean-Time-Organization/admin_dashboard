@@ -21,7 +21,9 @@ resources:
     memory: 1000Mi
 
 namespace: backend-develop
-
+ingress:
+  name: ingress-admin-dashboard
+  host: dev.cleantime-co.com
 nodeSelector: [ ]
 
 tolerations: [ ]

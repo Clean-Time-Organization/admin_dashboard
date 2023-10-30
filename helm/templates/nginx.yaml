@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.service.admin_dashboard.ingress.name }}
+  name: {{ .Values.ingress.name }}
   namespace: {{ .Values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -11,13 +11,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{ .Values.service.ingress.host }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: {{ .Values.service.admin_dashboard.service.path }}(/|$)(.*)
+          - path: {{ .Values.service.service.path }}(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.service.admin_dashboard.name }}
+                name: {{ .Values.service.name }}
                 port:
-                  number: {{ .Values.service.admin_dashboard.service.http }}
+                  number: {{ .Values.service.service.http }}
