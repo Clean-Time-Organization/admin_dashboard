@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "vite",
-    "dev": "tsc && vite build",
+    "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
