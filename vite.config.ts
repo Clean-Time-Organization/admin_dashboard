@@ -10,7 +10,7 @@ export default defineConfig({
       awaitWriteFinish: true
     },
     host: 'localhost',
-    //port: 3000,
+    port: 3000,
   },
 
   build: {
