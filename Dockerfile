@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/node:18.14
+FROM public.ecr.aws/docker/library/node:16.14
 WORKDIR /app
 COPY . /app/
 RUN npm install -f
