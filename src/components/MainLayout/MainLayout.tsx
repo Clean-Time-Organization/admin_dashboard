@@ -7,7 +7,7 @@ import {useLocation} from "react-router-dom";
 import {ReactNode} from "react";
 
 interface Props {
-  children: ReactNode
+  children: JSX.Element;
 }
 
 const MainLayout = ({ children }: Props) => {
