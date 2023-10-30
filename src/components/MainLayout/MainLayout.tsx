@@ -10,9 +10,9 @@ interface Props {
   children: ReactNode;
 }
 
-const MainLayout = ({ children }: Props): ReactNode => {
+const MainLayout = ({ children }: Props) => {
   const location = useLocation();
-  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return children || <></>;
+  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>;
   return <Main>
     <Header />
     <Content>
