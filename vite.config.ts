@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import preserveDirectives from "rollup-plugin-preserve-directives";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    preserveDirectives(),
+  ],
 
   server: {
     watch: {
@@ -15,5 +19,5 @@ export default defineConfig({
 
   build: {
     emptyOutDir: true,
-  }
+  },
 });
