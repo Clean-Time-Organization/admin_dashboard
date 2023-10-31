@@ -23,7 +23,7 @@ resources:
 namespace: backend-develop
 ingress:
   name: ingress-admin-dashboard
-  host: dev-dashboard.cleantime-co.com
+  host: dashboard.dev.cleantime-co.com
 nodeSelector: [ ]
 
 tolerations: [ ]
