@@ -2,7 +2,7 @@ name: Deploy services via helm chart to k8s
 
 on:
   push:
-    branches: [ "dev-test" ]
+    branches: [ "devt" ]
 
 env:
   CLUSTER_NAME: igate-dev-eks
@@ -12,7 +12,7 @@ env:
 
 jobs:
   deploy-dev:
-    if: github.ref == 'refs/heads/dev-test'
+    if: github.ref == 'refs/heads/devt'
     name: Deploy services via helm chart in Development k8s AWS Account
     runs-on: ubuntu-latest
     steps:
@@ -53,5 +53,5 @@ jobs:
 
       - name: Deploy service by helm chart to EKS
         run:
-          helm upgrade admin-dashboard  ./helm/ --install   -f ./helm/values.yaml   -n $SERVICES_NAMESPACE  --set service.image.tag=$IMAGE_TAG
+          helm upgrade admin-dashboard  ./helm/ --install   -f ./helm/values-dev.yaml   -n $SERVICES_NAMESPACE  --set service.image.tag=$IMAGE_TAG
 
