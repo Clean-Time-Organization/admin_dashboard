@@ -78,18 +78,15 @@ const Stuff = () => {
   }, [selectedStatus, selectedRole]);
 
   const resetList = async () => {
-    const response = await fetch('https://dev.cleantime-co.com/admin/api/v1/user/staff', {
+    await fetch('https://dev.cleantime-co.com/admin/api/v1/user/staff', {
       method: 'GET',
       headers: {
           'Authorization':
-          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6MSwiZXhwIjoxNjk4NzYwNDUxLCJ0eXBlIjoiYWNjZXNzIn0.BlEmTHi1Sry9QE6jCzL9Us80Vc-Q87gKUVq1eZkuWU4`,
+          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6MSwiZXhwIjoxNjk4ODM5ODMyLCJ0eXBlIjoiYWNjZXNzIn0.8CGVuuRem-lWQGOCMmyTUIzmC9tVkCkCpX5cjjk3N-s`,
       },
+    }).then((response) => {
+      console.log(response.json());
     });
-
-    if (response.ok) {
-      console.log(response);
-      setUserList(response.json());
-    }
   };
 
   return <ContentBody>

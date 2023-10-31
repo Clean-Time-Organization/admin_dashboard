@@ -2,7 +2,7 @@ import { Header } from '../Header/Header';
 import {
   Main,
   Content,
-} from './styled.ts';
+} from './styled';
 
 const MainLayout = ({ children }) => {
   return <Main>
