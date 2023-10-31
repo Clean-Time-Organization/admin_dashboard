@@ -6,8 +6,7 @@
     "start": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "serve": "serve -s dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
