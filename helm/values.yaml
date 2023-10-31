@@ -14,14 +14,16 @@ service:
 
 resources:
   limits:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 1500m
+    memory: 1500Mi
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 1000Mi
 
 namespace: backend-develop
-
+ingress:
+  name: ingress-admin-dashboard
+  host: dashboard.dev.cleantime-co.com
 nodeSelector: [ ]
 
 tolerations: [ ]

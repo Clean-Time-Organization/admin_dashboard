@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
   ],
-
   server: {
     watch: {
       awaitWriteFinish: true
