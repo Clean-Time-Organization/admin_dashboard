@@ -1,13 +1,17 @@
-import { useState, useRef } from "react";
+import { useState, useRef, FC } from "react";
 import { SearchBody, SearchIcon } from "./styled";
 import { Search as SearchImage } from '../Icons/Search';
 import { Input } from "@mui/material";
 import { Close } from "../Icons/Close";
 
-const Search = () => {
+interface ISearchProps {
+  value: string;
+  setValue: (val: string) => void;
+}
+
+const Search: FC<ISearchProps> = ({ value, setValue }) => {
   const searchComponent = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState('');
 
   function handleClickOutside(e: any) {
     if (searchComponent.current && !searchComponent.current.contains(e.target)) {

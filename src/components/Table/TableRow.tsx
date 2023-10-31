@@ -1,7 +1,13 @@
+import { FC } from "react";
 import { TableRowLayout } from "./styled";
 
-const TableRow = ({ children }) => {
-  return <TableRowLayout>
+interface ITableRowProps {
+  active: boolean;
+  children: JSX.Element;
+}
+
+const TableRow: FC<ITableRowProps> = ({ active, children }) => {
+  return <TableRowLayout active={active}>
     {children}
   </TableRowLayout>
 }

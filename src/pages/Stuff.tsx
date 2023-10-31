@@ -11,47 +11,29 @@ import {
   BasicText,
   BasicTextName,
   ColoredText,
+  Chips,
+  ChipsButton,
 } from './styled';
 import { User, UsersList } from '../types/user';
 import { Grid } from '@mui/material';
 import { Inactive } from '../components/Icons/Inactive';
 import { Active } from '../components/Icons/Active';
 import { Search } from '../components/Search/Search';
+import { LinkButton } from '../components/Button/Buttons';
+import { Close } from '../components/Icons/Close';
+import { EmptyState } from '../components/EmptyState/EmptyState';
 
 interface IStaffRowProps {
   user: User;
 }
 
 const Stuff = () => {
+  const env = import.meta.env;
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [selectedRole, setSelectedRole] = useState<number | string | boolean>();
-  const [userList, setUserList] = useState<UsersList>({
-    items: [
-      {
-        first_name: 'test',
-        last_name: 'test',
-        phone_number: '+123456789',
-        id: 1,
-        is_active: true,
-        role: 'Admin',
-        staff: {
-          laundry: {
-            id: 1,
-            name_en: 'asdasasd',
-            name_ar: 'sfthfgfgb',
-          },
-          branch: {
-            id: 2,
-            address: 'nxfk kjdfkj'
-          }
-        }
-      },
-    ],
-    total: 1,
-    page: 1,
-    size: 1,
-    pages: 1,
-  });
+  const [userList, setUserList] = useState<UsersList>();
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
   const statusProperties = [
     {
       id: true,
@@ -74,57 +56,132 @@ const Stuff = () => {
   ];
 
   useEffect(() => {
-    resetList();
-  }, [selectedStatus, selectedRole]);
+    resetList(1);
+  }, [selectedStatus, selectedRole, searchValue]);
 
-  const resetList = async () => {
-    await fetch('https://dev.cleantime-co.com/admin/api/v1/user/staff', {
+  useEffect(() => {
+    resetList();
+  }, [currentPage]);
+
+  const resetList = async (page?: number) => {
+    const params = new URLSearchParams();
+    params.append('size', '8');
+    if (page) {
+      setCurrentPage(page);
+      return;
+    }
+    if (selectedStatus !== undefined) {
+      params.append('status', selectedStatus + '');
+    }
+    if (selectedRole) {
+      params.append('role', selectedRole + '');
+    }
+    if (searchValue) {
+      params.append('value', searchValue);
+    }
+    if (currentPage && !page) {
+      params.append('page', currentPage + '');
+    }
+    await fetch(`${env.VITE_API_BASE_URL}/user/staff?` + new URLSearchParams(params), {
       method: 'GET',
       headers: {
           'Authorization':
-          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6MSwiZXhwIjoxNjk4ODM5ODMyLCJ0eXBlIjoiYWNjZXNzIn0.8CGVuuRem-lWQGOCMmyTUIzmC9tVkCkCpX5cjjk3N-s`,
+          `Bearer ${localStorage.getItem('accessToken')}`,
       },
     }).then((response) => {
-      console.log(response.json());
+      return response.json();
+    }).then(jsonData => {
+      setUserList(jsonData);
     });
+  };
+
+  const clearFilters = () => {
+    setSelectedRole(undefined);
+    setSelectedStatus(undefined);
+    setCurrentPage(1);
   };
 
   return <ContentBody>
     <PageTitle
-      name={'Stuff'}
+      name={'Staff'}
       createButtonName={'Create staff user'}
       createButtonClick={console.log}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
-    <FilterRow>
-      <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} />
-      <FilterDropdown name={'Role'} properties={roleProperties} selectProperty={setSelectedRole} />
-      <Search />
-    </FilterRow>
-    <Table>
-      <>
-        {
-          userList.items.map((user: User) => (
-            <StaffRow user={user} />
-          ))
-        }
-      </>
-    </Table>
+    {
+      (!userList) ?
+        <></>
+        // <EmptyState
+        //   title={'There are no staff users yet'}
+        //   subtitle={'You don\'t have any staff users created yet'}
+        //   buttonName={'Create staff user'}
+        //   buttonAction={console.log}
+        // />
+        : <>
+          <FilterRow>
+            <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
+            <FilterDropdown name={'Role'} properties={roleProperties} selectProperty={setSelectedRole} selectedProperty={selectedRole} />
+            <Search value={searchValue} setValue={setSearchValue} />
+          </FilterRow>
+          {
+            (selectedRole || selectedStatus !== undefined) && <FilterRow>
+              {
+                selectedStatus !== undefined && <Chips>
+                  {statusProperties.find(item => item.id === selectedStatus)?.name}
+                  <ChipsButton onClick={() => setSelectedStatus(undefined)}>
+                    <Close />
+                  </ChipsButton>
+                </Chips>
+              }
+              {
+                selectedRole &&
+                  <Chips>
+                    {roleProperties.find(item => item.id === selectedRole)?.name}
+                    <ChipsButton onClick={() => setSelectedRole(undefined)}>
+                      <Close />
+                    </ChipsButton>
+                  </Chips>
+              }
+              <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
+            </FilterRow>
+          }
+          <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
+            <>
+              {
+                userList?.items.map((user: User) => (
+                  <StaffRow user={user} key={'user' + user.id} />
+                ))
+              }
+            </>
+          </Table>
+        </>
+    }
   </ContentBody>
 };
 
 const StaffRow: FC<IStaffRowProps> = ({ user }) => {
-  return <TableRow>
-    <Grid container xs={12}>
-      <Grid item xs={4}>
-        <Grid container xs={12}>
+  const roles = [
+    {
+      id: 'POS',
+      name: 'Operator POS',
+    },
+    {
+      id: 'Admin',
+      name: 'Admin',
+    },
+  ];
+
+  return <TableRow active={user.is_active}>
+    <Grid container>
+      <Grid item xs={4} style={{ display: 'flex' }}>
+        <Grid container>
           <Grid item xs={3} style={{ display: 'flex', alignItems: 'center' }}>
             <Logo>{user.first_name.charAt(0) + user.last_name.charAt(0)}</Logo>
           </Grid>
           <Grid item xs={9}>
             <Name>{user.first_name + ' ' + user.last_name}</Name>
-            <BasicText>{user.role}</BasicText>
+            <BasicText>{roles.find(item => item.id === user.role)?.name || ''}</BasicText>
           </Grid>
         </Grid>
       </Grid>
@@ -136,8 +193,15 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
         {
           user.staff &&
             <>
-              <BasicText>Laundry:&nbsp;<BasicTextName>{user.staff.laundry.name_en}</BasicTextName></BasicText>
-              <BasicText>Branch:&nbsp;<BasicTextName>{user.staff.branch.address}</BasicTextName></BasicText>
+              {
+                user?.staff?.laundry &&
+                  <BasicText>Laundry:&nbsp;<BasicTextName>{user?.staff?.laundry?.name_en}</BasicTextName></BasicText>
+              }
+              {
+                user?.staff?.branch &&
+                  <BasicText>Branch:&nbsp;<BasicTextName>{user?.staff?.branch?.address}</BasicTextName></BasicText>
+              }
+              
             </>
         }
       </Grid>

@@ -11,6 +11,10 @@ export const FilterRow = styled('div')`
   display: flex;
   gap: 12px;
   align-items: center;
+
+  > .MuiButtonBase-root {
+    height: 28px;
+  }
 `;
 
 export const Logo = styled('div')`
@@ -58,4 +62,21 @@ export const BasicTextName = styled(BasicText)`
 
 export const ColoredText = styled('div')<{color: string}>`
   color: ${({color}) => color};
+`;
+
+export const Chips = styled('div')`
+  padding: 4px 8px;
+  background: #E8E8EA;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140.5%;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  border-radius: 4px;
+`;
+
+export const ChipsButton = styled('div')`
+  display: flex;
+  cursor: pointer;
 `;

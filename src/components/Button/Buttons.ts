@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 import { Button } from './Button';
 
-export const BasicButton = styled(Button)<{ pretext?: boolean }>`
+export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
   padding: 10px ${({pretext}) => !pretext ? '16px' : '24px' } 10px 16px;
   border-radius: 4px;
   background: #2E8DC8;

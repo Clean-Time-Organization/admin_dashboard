@@ -31,13 +31,13 @@ const PageTitle: FC<IPageTitleProps> = ({
     <TitleRightSide>
       {
         (exportButtonName && exportButtonClick) &&
-          <LinkButton onClick={exportButtonClick} preTextIcon={<Export />} pretext={true}>
+          <LinkButton onClick={exportButtonClick} preTextIcon={<Export />} pretext="true">
             {exportButtonName}
           </LinkButton>
       }
       {
         (createButtonName && createButtonClick) &&
-          <BasicButton onClick={createButtonClick} preTextIcon={<Plus />} pretext={true}>
+          <BasicButton onClick={createButtonClick} preTextIcon={<Plus />} pretext="true">
             {createButtonName}
           </BasicButton>
       }

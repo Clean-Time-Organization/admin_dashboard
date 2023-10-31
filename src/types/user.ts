@@ -6,8 +6,8 @@ export type User = {
   is_active: boolean;
   role: 'Admin' | 'POS';
   staff?: {
-    laundry: Laundry;
-    branch: Branch;
+    laundry?: Laundry;
+    branch?: Branch | null;
   }
 }
 

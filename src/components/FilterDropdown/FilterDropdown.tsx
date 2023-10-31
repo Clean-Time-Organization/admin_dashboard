@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { DropdownBody, DropdownPanel, DropdownPanelButtons } from './styled';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { BasicButton, LinkButton } from '../Button/Buttons';
@@ -7,17 +7,25 @@ import { ArrowDownSmall, ArrowUpSmall } from '../Icons/ArrowsSmall';
 interface IFilterDropdownProps {
   name: string;
   properties: Array<{ id: number | string | boolean; name: string }>;
+  selectedProperty: number | string | boolean | undefined;
   selectProperty?: (value: number | string | boolean | undefined) => void;
 }
 
 const FilterDropdown: FC<IFilterDropdownProps> = ({
   name,
   properties,
+  selectedProperty,
   selectProperty,
 }) => {
   const [selectedPoint, setSelectedPoint] = useState<{ id: number | string | boolean; name: string }>();
   const [isOpen, setOpen] = useState(false);
   const dropdownComponent = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setSelectedPoint(
+      selectedProperty ? properties.find(item => item.id === selectedProperty) : undefined
+    )
+  }, [selectedProperty]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -69,6 +77,7 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
                 properties.map(item =>
                   <FormControlLabel
                     value={item.id}
+                    key={item.id + item.name}
                     control={<Radio />}
                     label={item.name}
                     checked={selectedPoint && item.id === selectedPoint.id}

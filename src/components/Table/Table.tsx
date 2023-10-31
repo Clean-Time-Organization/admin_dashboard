@@ -1,14 +1,30 @@
+import { FC } from "react";
 import { Pagination } from "./Pagination";
 import { PaginationBlock, TableBlock, TableBody } from "./styled";
 
-const Table = ({ children }) => {
+interface ITableProps {
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: (page: number) => void;
+  children: JSX.Element;
+}
+
+const Table: FC<ITableProps> = ({
+  currentPage,
+  totalPages,
+  setCurrentPage,
+  children,
+}) => {
   return <TableBody>
     <TableBlock>
       {children}
     </TableBlock>
-    <PaginationBlock>
-      <Pagination totalPages={10} currentPage={1} />
-    </PaginationBlock>
+    {
+      totalPages > 1 &&
+        <PaginationBlock>
+          <Pagination totalPages={totalPages} currentPage={currentPage} changePage={setCurrentPage} />
+        </PaginationBlock>
+    }
   </TableBody>
 }
 

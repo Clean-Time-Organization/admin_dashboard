@@ -48,7 +48,7 @@ export const PaginationBlock = styled('div')`
   }
 `;
 
-export const TableRowLayout = styled('div')`
+export const TableRowLayout = styled('div')<{ active: boolean }>`
   width: 100%;
   height: 37px;
   padding: 16px;
@@ -56,4 +56,5 @@ export const TableRowLayout = styled('div')`
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
+  opacity: ${({active}) => active ? '1' : '0.64'};
 `;
