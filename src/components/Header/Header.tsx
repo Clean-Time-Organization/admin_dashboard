@@ -1,5 +1,3 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import logoSmall from '/assets/logoSmall.png';
 import { ArrowDown } from '../Icons/ArrowDown';
 import {
@@ -15,7 +13,6 @@ import {
 } from './styled';
 
 const Header = () => {
-  
   return <BaseHeader>
     <HeaderLeftSide>
       <HeaderLogo>

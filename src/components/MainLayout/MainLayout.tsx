@@ -7,12 +7,14 @@ import {useLocation} from "react-router-dom";
 import {ReactNode} from "react";
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const MainLayout = ({ children }: Props) => {
   const location = useLocation();
-  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>
+
+  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>;
+
   return <Main>
     <Header />
     <Content>
