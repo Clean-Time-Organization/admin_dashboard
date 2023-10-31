@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
   ],
-  base: '/admin-dashboard/',
   server: {
     watch: {
       awaitWriteFinish: true
