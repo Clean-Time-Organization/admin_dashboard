@@ -7,7 +7,7 @@ service:
     tag: dev
   service:
     http: 3000
-    path: /
+    path: /admin-dashboard
 
   configMap:
     name: cleantime-admin-dashboard
@@ -23,7 +23,7 @@ resources:
 namespace: backend-develop
 ingress:
   name: ingress-admin-dashboard
-  host: dashboard.dev.cleantime-co.com
+  host: dev.cleantime-co.com
 nodeSelector: [ ]
 
 tolerations: [ ]
