@@ -1,17 +1,10 @@
 import {memo} from 'react';
 import type { FC } from 'react';
-import resets from '../../resets.module.css';
 import classes from './BackGround.module.css';
 import { EllipseIcon } from './EllipseIcon.js';
 import {CircleIcon} from "./CircleIcon";
 import {CircleIconProps, EllipseIconProps} from "./Props";
-
-interface Props {
-  className?: string;
-  classes?: {
-    root?: string;
-  };
-}
+import {Box} from "@mui/material";
 
 const ellipse1Props: EllipseIconProps = {
   svg: {
@@ -35,9 +28,9 @@ const ellipse2Props: EllipseIconProps = {
   ellipse: {
     stroke: '#6ABF5C',
     cx: 252,
-    cy: 252.5,
+    cy: 250,
     rx: 252,
-    ry: 252.5
+    ry: 250
   }
 };
 
@@ -67,22 +60,22 @@ const circle2Props: CircleIconProps = {
   }
 };
 
-export const BackGround: FC<Props> = memo(function BackGround(props = {}) {
+export const BackGround: FC = memo(function BackGround(props = {}) {
   return (
-    <div className={`${resets.ctResets} ${props.classes?.root || ''} ${props.className || ''} ${classes.root}`}>
-      <div className={classes.ellipse1}>
+    <Box className={classes.root}>
+      <Box className={classes.ellipse1}>
         <EllipseIcon {...ellipse1Props}/>
-      </div>
-      <div className={classes.ellipse2}>
+      </Box>
+      <Box className={classes.ellipse2}>
         <EllipseIcon {...ellipse2Props}/>
-      </div>
-      <div className={classes.circle1}>
+      </Box>
+      <Box className={classes.circle1}>
         <CircleIcon {...circle1Props}/>
-      </div>
-      <div className={classes.circle2}>
+      </Box>
+      <Box className={classes.circle2}>
         <CircleIcon {...circle2Props}/>
-      </div>
-      <div className={classes.rectangle}></div>
-    </div>
+      </Box>
+      <Box className={classes.rectangle}></Box>
+    </Box>
   );
 });

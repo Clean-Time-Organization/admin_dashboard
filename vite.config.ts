@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [
+    react(),
+  ],
   server: {
     watch: {
       awaitWriteFinish: true
@@ -10,5 +13,16 @@ export default defineConfig({
     host: 'localhost',
     port: 3000,
   },
-  plugins: [react()],
+  base: '/admin-dashboard/',
+  build: {
+    emptyOutDir: true,
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return
+        }
+        warn(warning)
+      }
+    }
+  },
 });
