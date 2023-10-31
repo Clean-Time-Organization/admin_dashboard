@@ -5,6 +5,8 @@ import { LogIn } from './components/LogIn/LogIn';
 import { MainLayout } from './components/MainLayout/MainLayout';
 import { Stuff } from './pages/Stuff';
 import {QueryClient, QueryClientProvider} from "react-query";
+import { Customers } from './pages/Customers';
+import { Home } from './pages/Home';
 
 const queryClient = new QueryClient()
 
@@ -13,13 +15,13 @@ export const App: FC = memo(function App() {
     <QueryClientProvider client={queryClient}>
       <MainLayout>
         <Routes>
-          <Route path={'/'} element={<Stuff />} />
+          <Route path={'/'} element={<Home />} />
           <Route path={'/login'} element={<LogIn />} />
           <Route path={'/login/:token'} element={<LogIn />} />
-          <Route path={'/stuff'} element={<Stuff />} />
-          <Route path={'/customers'} element={<Stuff />} />
-          <Route path={'/laundries'} element={<Stuff />} />
-          <Route path={'/orders'} element={<Stuff />} />
+          <Route path={'/staff'} element={<Stuff />} />
+          <Route path={'/customers'} element={<Customers />} />
+          <Route path={'/laundries'} element={<Home />} />
+          <Route path={'/orders'} element={<Home />} />
         </Routes>
       </MainLayout>
     </QueryClientProvider>

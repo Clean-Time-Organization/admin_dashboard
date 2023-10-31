@@ -1,5 +1,3 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import logoSmall from '/assets/logoSmall.png';
 import { ArrowDown } from '../Icons/ArrowDown';
 import {
@@ -12,10 +10,9 @@ import {
   HeaderRightSide,
   HeaderLeftSide,
   UserIconPlaceholder,
-} from './styled.ts';
+} from './styled';
 
 const Header = () => {
-  
   return <BaseHeader>
     <HeaderLeftSide>
       <HeaderLogo>
@@ -23,31 +20,31 @@ const Header = () => {
       </HeaderLogo>
       <HeaderMenu>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/'} activeClassName="active">
+          <HeaderMenuItemText to={'/'} className={({isActive}) => isActive ? 'active' : ''}>
             Home
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
         </HeaderMenuItem>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/stuff'} activeClassName="active">
-            Stuff
+          <HeaderMenuItemText to={'/staff'} className={({isActive}) => isActive ? 'active' : ''}>
+            Staff
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
         </HeaderMenuItem>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/customers'} activeClassName="active">
+          <HeaderMenuItemText to={'/customers'} className={({isActive}) => isActive ? 'active' : ''}>
             Customers
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
         </HeaderMenuItem>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/laundries'} activeClassName="active">
+          <HeaderMenuItemText to={'/laundries'} className={({isActive}) => isActive ? 'active' : ''}>
             Laundries <ArrowDown />
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
         </HeaderMenuItem>
         <HeaderMenuItem>
-          <HeaderMenuItemText to={'/orders'} activeClassName="active">
+          <HeaderMenuItemText to={'/orders'} className={({isActive}) => isActive ? 'active' : ''}>
             Orders
             <HeaderMenuItemSelection />
           </HeaderMenuItemText>
