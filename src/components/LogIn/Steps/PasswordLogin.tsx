@@ -291,7 +291,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "#6B7280",
+                      borderColor: "#D1D5DB",
                     },
                     '&.Mui-focused fieldset': {
                       borderColor: "#2E8DC8",

@@ -134,7 +134,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "#6B7280",
+                      borderColor: "#D1D5DB",
                     },
                     '&.Mui-focused fieldset': {
                       borderColor: "#2E8DC8",

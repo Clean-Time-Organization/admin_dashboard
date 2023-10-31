@@ -189,7 +189,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "#6B7280",
+                      borderColor: "#D1D5DB",
                     },
                     '&.Mui-focused fieldset': {
                       borderColor: "#2E8DC8",
