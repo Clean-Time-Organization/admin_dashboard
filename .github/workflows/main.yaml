@@ -2,17 +2,18 @@ name: Deploy services via helm chart to k8s
 
 on:
   push:
-    branches: [ "dev-test" ]
+    branches: [ "dev" ]
 
 env:
   CLUSTER_NAME: igate-dev-eks
   SERVICES_NAMESPACE: backend-develop
   IMAGE_TAG : ${{ github.sha }}
   ECR_REPOSITORY: igate-mgmt-cleantime-admin-dashboard
+  ENV_FILE: .env
 
 jobs:
   deploy-dev:
-    if: github.ref == 'refs/heads/dev-test'
+    if: github.ref == 'refs/heads/dev'
     name: Deploy services via helm chart in Development k8s AWS Account
     runs-on: ubuntu-latest
     steps:
@@ -44,14 +45,14 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name $CLUSTER_NAME
 
-      - name: delete and build configmap from .env file
+      - name: delete and build configmap from ENV_FILE file
         run: |
           if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE; then
             kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE
           fi
-          kubectl create configmap cleantime-admin-dashboard --from-env-file=.env -n $SERVICES_NAMESPACE
+          kubectl create configmap cleantime-admin-dashboard --from-env-file=$ENV_FILE -n $SERVICES_NAMESPACE
 
       - name: Deploy service by helm chart to EKS
         run:
-          helm upgrade admin-dashboard  ./helm/ --install   -f ./helm/values.yaml   -n $SERVICES_NAMESPACE  --set service.image.tag=$IMAGE_TAG
+          helm upgrade admin-dashboard  ./helm/ --install   -f ./helm/values-dev.yaml   -n $SERVICES_NAMESPACE  --set service.image.tag=$IMAGE_TAG
 
