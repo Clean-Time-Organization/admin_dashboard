@@ -7,7 +7,7 @@ on:
 env:
   CLUSTER_NAME: igate-dev-eks
   SERVICES_NAMESPACE_DEV: backend-develop
-  SERVICES_NAMESPACE_STAGE: backend-stage
+  SERVICES_NAMESPACE_STAGE: backend-staging
   IMAGE_TAG : ${{ github.sha }}
   ECR_REPOSITORY: igate-mgmt-cleantime-admin-dashboard
 
