@@ -23,6 +23,7 @@ import { Search } from '../components/Search/Search';
 import { LinkButton } from '../components/Button/Buttons';
 import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
+import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 
 interface IStaffRowProps {
   user: User;
@@ -107,6 +108,7 @@ const Stuff = () => {
   };
 
   return <ContentBody>
+    <Breadcrumbs />
     <PageTitle
       name={'Staff'}
       createButtonName={'Create staff user'}
@@ -153,7 +155,7 @@ const Stuff = () => {
           {
             userList &&
               <FilterRow>
-                { (selectedRole || selectedStatus || searchValue) &&
+                { (selectedRole || selectedStatus !== undefined || searchValue) &&
                   <HintText>
                     { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}
                   </HintText>
