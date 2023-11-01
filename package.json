@@ -4,8 +4,9 @@
   "version": "0.1.0",
   "scripts": {
     "start": "vite",
-    "dev": "vite",
+    "dev": "tsc && vite build --mode development",
     "build": "tsc && vite build",
+    "staging": "tsc && vite build --mode staging",
     "preview": "vite preview",
     "serve": "serve -s dist"
   },
