@@ -2,7 +2,7 @@ name: Deploy services via helm chart to k8s
 
 on:
   push:
-    branches: [ "devt" ]
+    branches: [ "dev" ]
 
 env:
   CLUSTER_NAME: igate-dev-eks
@@ -13,7 +13,7 @@ env:
 
 jobs:
   deploy-dev:
-    if: github.ref == 'refs/heads/devt'
+    if: github.ref == 'refs/heads/dev'
     name: Deploy services via helm chart in Development k8s AWS Account
     runs-on: ubuntu-latest
     steps:
