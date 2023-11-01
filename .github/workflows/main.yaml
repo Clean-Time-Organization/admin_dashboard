@@ -36,7 +36,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./
+          docker build --build-arg NPM_MODE=dev -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - uses: azure/setup-kubectl@v3
@@ -45,13 +45,6 @@ jobs:
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name $CLUSTER_NAME
-
-      - name: delete and build configmap from .env file
-        run: |
-          if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_DEV; then
-            kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_DEV
-          fi
-          kubectl create configmap cleantime-admin-dashboard --from-env-file=.env -n $SERVICES_NAMESPACE_DEV
 
       - name: Deploy service by helm chart to EKS
         run:
@@ -80,7 +73,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./
+          docker build --build-arg NPM_MODE=staging -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - uses: azure/setup-kubectl@v3
@@ -89,13 +82,6 @@ jobs:
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name $CLUSTER_NAME
-
-      - name: delete and build configmap from .env.staging file
-        run: |
-          if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_STAGE; then
-            kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE_STAGE
-          fi
-          kubectl create configmap cleantime-admin-dashboard --from-env-file=.env.staging -n $SERVICES_NAMESPACE_STAGE
 
       - name: Deploy service by helm chart to EKS
         run:

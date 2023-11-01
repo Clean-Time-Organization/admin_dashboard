@@ -5,6 +5,7 @@ export type User = {
   id: number;
   is_active: boolean;
   role: 'Admin' | 'POS';
+  email?: string;
   staff?: {
     laundry?: Laundry;
     branch?: Branch | null;

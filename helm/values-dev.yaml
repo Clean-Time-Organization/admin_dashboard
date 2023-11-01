@@ -8,8 +8,7 @@ service:
   service:
     http: 3000
     path: /
-  configMap:
-    name: cleantime-admin-dashboard
+
 
 resources:
   limits:
