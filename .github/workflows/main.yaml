@@ -9,7 +9,7 @@ env:
   SERVICES_NAMESPACE: backend-develop
   IMAGE_TAG : ${{ github.sha }}
   ECR_REPOSITORY: igate-mgmt-cleantime-admin-dashboard
-  ENV_FILE: .env
+
 
 jobs:
   deploy-dev:
@@ -45,7 +45,7 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name $CLUSTER_NAME
 
-      - name: delete and build configmap from ENV_FILE file
+      - name: delete and build configmap from .env file
         run: |
           if kubectl get configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE; then
             kubectl delete configmap cleantime-admin-dashboard -n $SERVICES_NAMESPACE
