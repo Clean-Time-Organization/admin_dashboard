@@ -52,7 +52,7 @@ const Header = () => {
     </HeaderMenu>
     </HeaderLeftSide>
     <HeaderRightSide>
-      <UserIconPlaceholder>AB</UserIconPlaceholder>
+      <UserIconPlaceholder>TT</UserIconPlaceholder>
     </HeaderRightSide>
   </BaseHeader>;
 }

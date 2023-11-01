@@ -12,6 +12,7 @@ import {
   ColoredText,
   Chips,
   ChipsButton,
+  HintText,
 } from './styled';
 import { User, UsersList } from '../types/user';
 import { Grid } from '@mui/material';
@@ -20,6 +21,7 @@ import { Active } from '../components/Icons/Active';
 import { Search } from '../components/Search/Search';
 import { LinkButton } from '../components/Button/Buttons';
 import { Close } from '../components/Icons/Close';
+import { EmptyState } from '../components/EmptyState/EmptyState';
 
 interface IStaffRowProps {
   user: User;
@@ -31,6 +33,7 @@ const Customers = () => {
   const [userList, setUserList] = useState<UsersList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isListLoading, setIsListLoading] = useState(false);
   const statusProperties = [
     {
       id: true,
@@ -43,17 +46,19 @@ const Customers = () => {
   ];
 
   useEffect(() => {
+    setIsListLoading(true);
     resetList(1);
   }, [selectedStatus, searchValue]);
 
   useEffect(() => {
+    setIsListLoading(true);
     resetList();
   }, [currentPage]);
 
   const resetList = async (page?: number) => {
     const params = new URLSearchParams();
     params.append('size', '8');
-    if (page) {
+    if (page && page !== currentPage) {
       setCurrentPage(page);
       return;
     }
@@ -76,6 +81,7 @@ const Customers = () => {
       return response.json();
     }).then(jsonData => {
       setUserList(jsonData);
+      setIsListLoading(false);
     });
   };
 
@@ -90,51 +96,70 @@ const Customers = () => {
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
-    <FilterRow>
-      <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
-      <Search value={searchValue} setValue={setSearchValue} />
-    </FilterRow>
-    {
-      (selectedStatus) && <FilterRow>
-        {
-          selectedStatus && <Chips>
-            {statusProperties.find(item => item.id === selectedStatus)?.name}
-            <ChipsButton onClick={() => setSelectedStatus(undefined)}>
-              <Close />
-            </ChipsButton>
-          </Chips>
-        }
-        <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
-      </FilterRow>
-    }
-    <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
-      <>
-        {
-          userList?.items.map((user: User) => (
-            <CustomerRow user={user} key={'user' + user.id} />
-          ))
-        }
-      </>
-    </Table>
+      {
+        (!userList && !selectedStatus && !searchValue && !isListLoading) ?
+          <EmptyState
+            title={'There are no staff users yet'}
+            subtitle={'You don\'t have any staff users created yet'}
+            buttonName={'Create staff user'}
+            buttonAction={console.log}
+          />
+          : <>
+            <FilterRow>
+              <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
+              <Search value={searchValue} setValue={setSearchValue} />
+            </FilterRow>
+            {
+              (selectedStatus !== undefined) && <FilterRow>
+                <Chips>
+                  {statusProperties.find(item => item.id === selectedStatus)?.name}
+                  <ChipsButton onClick={() => setSelectedStatus(undefined)}>
+                    <Close />
+                  </ChipsButton>
+                </Chips>
+                <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
+              </FilterRow>
+            }
+            {
+              userList &&
+                <FilterRow>
+                  {(selectedStatus || searchValue) &&
+                    <HintText>
+                      { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}
+                    </HintText>
+                  }
+                </FilterRow>
+            }
+            <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
+              <>
+                {
+                  userList?.items.map((user: User) => (
+                    <CustomerRow user={user} key={'user' + user.id} />
+                  ))
+                }
+              </>
+            </Table>
+          </>
+      }
   </ContentBody>
 };
 
 const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
   return <TableRow active={user.is_active}>
     <Grid container>
-      <Grid item xs={7} style={{ display: 'flex' }}>
+      <Grid item xs={6} style={{ display: 'flex' }}>
         <Grid container>
-          <Grid item xs={3} style={{ display: 'flex', alignItems: 'center'}}>
+          <Grid item xs={1} style={{ display: 'flex', alignItems: 'center'}}>
             <Logo>{user.first_name.charAt(0) + user.last_name.charAt(0)}</Logo>
           </Grid>
-          <Grid item xs={9} style={{ display: 'flex', alignItems: 'center'}}>
+          <Grid item xs={11} style={{ display: 'flex', alignItems: 'center'}}>
             <Name>{user.first_name + ' ' + user.last_name}</Name>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <BasicText>{user.phone_number}</BasicText>
-        <BasicText>{user.phone_number}</BasicText>
+        <BasicText>{user.email}</BasicText>
       </Grid>
       <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <BasicText>
