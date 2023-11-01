@@ -1,0 +1,32 @@
+replicaCount: 1
+
+service:
+  name: admin-dashboard
+  image:
+    repository: 261990183663.dkr.ecr.eu-west-1.amazonaws.com/igate-mgmt-cleantime-admin-dashboard
+    tag: stage
+  service:
+    http: 3000
+    path: /
+  configMap:
+    name: cleantime-admin-dashboard-stage
+
+resources:
+  limits:
+    cpu: 1500m
+    memory: 1500Mi
+  requests:
+    cpu: 1000m
+    memory: 1000Mi
+
+namespace: backend-staging
+ingress:
+  name: ingress-admin-dashboard
+  host: dashboard-stage.cleantime-co.com
+
+nodeSelector: [ ]
+
+tolerations: [ ]
+
+affinity: { }
+
