@@ -13,6 +13,7 @@ import {
   ColoredText,
   Chips,
   ChipsButton,
+  HintText,
 } from './styled';
 import { User, UsersList } from '../types/user';
 import { Grid } from '@mui/material';
@@ -34,6 +35,7 @@ const Stuff = () => {
   const [userList, setUserList] = useState<UsersList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isListLoading, setIsListLoading] = useState(false);
   const statusProperties = [
     {
       id: true,
@@ -56,17 +58,19 @@ const Stuff = () => {
   ];
 
   useEffect(() => {
+    setIsListLoading(true);
     resetList(1);
   }, [selectedStatus, selectedRole, searchValue]);
 
   useEffect(() => {
+    setIsListLoading(true);
     resetList();
   }, [currentPage]);
 
   const resetList = async (page?: number) => {
     const params = new URLSearchParams();
     params.append('size', '8');
-    if (page) {
+    if (page && page !== currentPage) {
       setCurrentPage(page);
       return;
     }
@@ -92,6 +96,7 @@ const Stuff = () => {
       return response.json();
     }).then(jsonData => {
       setUserList(jsonData);
+      setIsListLoading(false);
     });
   };
 
@@ -110,14 +115,13 @@ const Stuff = () => {
       exportButtonClick={console.log}
     />
     {
-      (!userList) ?
-        <></>
-        // <EmptyState
-        //   title={'There are no staff users yet'}
-        //   subtitle={'You don\'t have any staff users created yet'}
-        //   buttonName={'Create staff user'}
-        //   buttonAction={console.log}
-        // />
+      (!userList && !selectedRole && !selectedStatus && !searchValue && !isListLoading) ?
+        <EmptyState
+          title={'There are no staff users yet'}
+          subtitle={'You don\'t have any staff users created yet'}
+          buttonName={'Create staff user'}
+          buttonAction={console.log}
+        />
         : <>
           <FilterRow>
             <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
@@ -145,6 +149,16 @@ const Stuff = () => {
               }
               <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
             </FilterRow>
+          }
+          {
+            userList &&
+              <FilterRow>
+                { (selectedRole || selectedStatus || searchValue) &&
+                  <HintText>
+                    { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}
+                  </HintText>
+                }
+              </FilterRow>
           }
           <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
             <>
@@ -176,18 +190,18 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
-          <Grid item xs={3} style={{ display: 'flex', alignItems: 'center' }}>
+          <Grid item xs={2} style={{ display: 'flex', alignItems: 'center' }}>
             <Logo>{user.first_name.charAt(0) + user.last_name.charAt(0)}</Logo>
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
             <Name>{user.first_name + ' ' + user.last_name}</Name>
             <BasicText>{roles.find(item => item.id === user.role)?.name || ''}</BasicText>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <BasicText>{user.phone_number}</BasicText>
-        <BasicText>{user.phone_number}</BasicText>
+        <BasicText>{user.email}</BasicText>
       </Grid>
       <Grid item xs={3}>
         {

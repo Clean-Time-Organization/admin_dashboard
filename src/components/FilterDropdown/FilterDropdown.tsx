@@ -23,7 +23,7 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
 
   useEffect(() => {
     setSelectedPoint(
-      selectedProperty ? properties.find(item => item.id === selectedProperty) : undefined
+      selectedProperty !== undefined ? properties.find(item => item.id === selectedProperty) : undefined
     )
   }, [selectedProperty]);
 
@@ -60,7 +60,7 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
   return (
     <DropdownBody
       ref={dropdownComponent}
-      selected={!!selectedPoint || isOpen}
+      selected={(selectedPoint !== undefined) || isOpen}
       onClick={() => setOpen(true)}
     >
       {name}
@@ -80,7 +80,7 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
                     key={item.id + item.name}
                     control={<Radio />}
                     label={item.name}
-                    checked={selectedPoint && item.id === selectedPoint.id}
+                    checked={selectedPoint !== undefined && item.id === selectedPoint.id}
                   />
                 )
               }
