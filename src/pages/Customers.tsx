@@ -22,6 +22,7 @@ import { Search } from '../components/Search/Search';
 import { LinkButton } from '../components/Button/Buttons';
 import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
+import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 
 interface IStaffRowProps {
   user: User;
@@ -91,6 +92,7 @@ const Customers = () => {
   };
 
   return <ContentBody>
+    <Breadcrumbs />
     <PageTitle
       name={'Customers'}
       exportButtonName={'Export to .xls'}
@@ -123,7 +125,7 @@ const Customers = () => {
             {
               userList &&
                 <FilterRow>
-                  {(selectedStatus || searchValue) &&
+                  {(selectedStatus !== undefined || searchValue) &&
                     <HintText>
                       { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}
                     </HintText>
