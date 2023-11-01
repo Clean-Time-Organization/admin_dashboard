@@ -80,3 +80,10 @@ export const ChipsButton = styled('div')`
   display: flex;
   cursor: pointer;
 `;
+
+export const HintText = styled('div')`
+  color: #656873;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+`;
