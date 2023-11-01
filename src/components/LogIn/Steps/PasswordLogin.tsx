@@ -317,6 +317,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
             type="submit"
             variant="contained"
             disableElevation={true}
+            disabled={loginMutation.isLoading}
             style={{
               backgroundColor: "#2E8DC8",
               borderRadius: "4px",

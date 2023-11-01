@@ -215,6 +215,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
             type="submit"
             variant="contained"
             disableElevation={true}
+            disabled={resetPasswordNextMutation.isLoading}
             style={{
               backgroundColor: "#2E8DC8",
               borderRadius: "4px",

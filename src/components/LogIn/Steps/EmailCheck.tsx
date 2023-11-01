@@ -160,6 +160,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
             type="submit"
             variant="contained"
             disableElevation={true}
+            disabled={checkEmailMutation.isLoading}
             style={{
               backgroundColor: "#2E8DC8",
               borderRadius: "4px",
