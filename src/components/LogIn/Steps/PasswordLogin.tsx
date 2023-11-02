@@ -101,7 +101,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
         setParentTmpToken(jsonData.tmp_token)
       }
     }).catch(err => {
-      response.details = 'Server is unavailable, try again later'
+      response.details = 'Server is unavailable, please try again later'
     })
 
     return response
@@ -117,11 +117,11 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
           localStorage.setItem('refreshToken', response.refreshToken ? response.refreshToken : '')
           localStorage.setItem('tokenType', response.tokenType ? response.tokenType : '')
 
-          navigate('/')
+          navigate('/customers')
           break
 
         case 400:
-          setPasswordError(response.details)
+          setErrorMessage(response.details)
           break
 
         case 403:
@@ -303,6 +303,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
           />
           {passwordError ?
             <Alert
+              variant="support"
               severity="error"
             >
               {passwordError}
