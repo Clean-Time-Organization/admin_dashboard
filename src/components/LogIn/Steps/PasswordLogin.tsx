@@ -117,7 +117,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
           localStorage.setItem('refreshToken', response.refreshToken ? response.refreshToken : '')
           localStorage.setItem('tokenType', response.tokenType ? response.tokenType : '')
 
-          navigate('/')
+          navigate('/customers')
           break
 
         case 400:
