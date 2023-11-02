@@ -43,7 +43,7 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
         setTmpToken(jsonData.tmp_token)
       }
     }).catch(err => {
-      response.details = 'Server is unavailable, try again later'
+      response.details = 'Server is unavailable, please try again later'
     })
 
     return response
@@ -134,14 +134,19 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
               }}
             >
               {email}.
+              <span
+                style={{
+                  fontWeight: "400",
+                }}>
+                 Please follow the link to confirm your identity
+              </span>
             </Typography>
-            Please follow the link to confirm your identity
           </Typography>
         </Box>
         <Box>
           <Divider light />
         </Box>
-        {env.MODE && env.MODE === 'development' ?
+        {/*{env.MODE && env.MODE === 'development' ?*/}
           <Box
             display="flex"
             justifyContent="flex-end"
@@ -170,7 +175,7 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
               Go to password reset
             </Button>
           </Box>
-          : null}
+          {/*: null}*/}
         <Box>
           <Link
             component="button"
