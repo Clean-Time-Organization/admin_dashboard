@@ -146,7 +146,7 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
         <Box>
           <Divider light />
         </Box>
-        {env.MODE && env.MODE === 'development' ?
+        {/*{env.MODE && env.MODE === 'development' ?*/}
           <Box
             display="flex"
             justifyContent="flex-end"
@@ -175,7 +175,7 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
               Go to password reset
             </Button>
           </Box>
-          : null}
+          {/*: null}*/}
         <Box>
           <Link
             component="button"
