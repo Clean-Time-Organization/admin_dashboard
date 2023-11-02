@@ -41,7 +41,7 @@ const circle1Props: CircleIconProps = {
   viewBox: '0 0 1460 1460',
   circle: {
     stroke: '#62A6DB',
-    cx: 730,
+    cx: 732.3,
     cy: 730,
     r: 730
   }
@@ -54,7 +54,7 @@ const circle2Props: CircleIconProps = {
   viewBox: '0 0 1460 1460',
   circle: {
     stroke: '#6ABF5C',
-    cx: 730,
+    cx: 732.3,
     cy: 730,
     r: 730
   }
@@ -77,5 +77,5 @@ export const BackGround: FC = memo(function BackGround(props = {}) {
       </Box>
       <Box className={classes.rectangle}></Box>
     </Box>
-  );
-});
+  )
+})

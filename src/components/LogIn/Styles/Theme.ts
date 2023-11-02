@@ -6,6 +6,12 @@ declare module '@mui/material/Paper' {
   }
 }
 
+declare module '@mui/material/Alert' {
+  interface AlertPropsVariantOverrides {
+    support: true;
+  }
+}
+
 const theme = createTheme({
   typography: {
     fontFamily: ["Anek Latin"].join(','),
@@ -43,27 +49,30 @@ const theme = createTheme({
       ]
     },
     MuiAlert: {
-      styleOverrides: {
-        standardError: {
-          width: "349px",
-          backgroundColor: "white",
-          color: "#B91C1C",
-          padding: "0",
-          "& .MuiAlert-icon": {
-            padding: "4px 0",
-            marginRight: "3px",
-            fontSize: "16px",
-          },
-          "& .MuiAlert-message": {
-            fontFamily: ["Anek Latin"].join(','),
-            padding: "4px 0",
-            fontSize: "12px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "16px",
-          },
+      variants: [
+        {
+          props: { variant: 'support' },
+          style: {
+            width: "349px",
+            backgroundColor: "white",
+            color: "#B91C1C",
+            padding: "0",
+            "& .MuiAlert-icon": {
+              padding: "4px 0",
+              marginRight: "3px",
+              fontSize: "16px",
+            },
+            "& .MuiAlert-message": {
+              fontFamily: ["Anek Latin"].join(','),
+              padding: "4px 0",
+              fontSize: "12px",
+              fontStyle: "normal",
+              fontWeight: "400",
+              lineHeight: "16px",
+            },
+          }
         }
-      }
+      ]
     },
   },
 })

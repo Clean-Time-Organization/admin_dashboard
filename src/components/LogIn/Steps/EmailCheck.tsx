@@ -33,7 +33,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
       return resp.json()
     }).then(jsonData => {})
       .catch(err => {
-        response.details = 'Server is unavailable, try again later'
+        response.details = 'Server is unavailable, please try again later'
       })
 
     return response
@@ -48,7 +48,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
           break
 
         case 400:
-          setEmailError(response.details)
+          setErrorMessage(response.details)
           break
 
         case 404:
@@ -146,6 +146,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
           />
           {emailError ?
             <Alert
+              variant="support"
               severity="error"
             >
               {emailError}
