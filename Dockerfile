@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . /app/
 RUN npm install -f
 RUN npm install serve --save
-RUN node node_modules/esbuild/install.js
+#RUN node node_modules/esbuild/install.js
 RUN npm run $NPM_MODE
 
 EXPOSE 3000
