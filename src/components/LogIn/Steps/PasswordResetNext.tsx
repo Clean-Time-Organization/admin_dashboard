@@ -71,7 +71,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
         }
       }
     }).catch(err => {
-      response.details = 'Server is unavailable, try again later'
+      response.details = 'Server is unavailable, please try again later'
     })
 
     return response
@@ -93,6 +93,9 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
           break
 
         case 400:
+          setErrorMessage(response.details)
+          break
+
         case 422:
           setPasswordError(response.details)
           break
@@ -201,6 +204,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
           />
           {passwordError ?
             <Alert
+              variant="support"
               severity="error"
             >
               {passwordError}

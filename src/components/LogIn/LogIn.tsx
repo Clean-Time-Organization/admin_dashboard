@@ -46,6 +46,16 @@ export const LogIn: FC = memo(function LogIn() {
     }
   }, [token])
 
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setErrorMessage('')
+    }, 3000)
+
+    return () => {
+      clearTimeout(timeId)
+    }
+  }, [errorMessage]);
+
   const onGoToPasswordReset = (tmpToken: string) => {
     navigate(`/login/${tmpToken}`)
   }
@@ -70,9 +80,8 @@ export const LogIn: FC = memo(function LogIn() {
           spacing={2}
           style={{
             position: "absolute",
-            left: "4.5%",
-            top: "30%",
-            transform: "translateX-50%",
+            top: "50%",
+            transform: "translateY(-50%)",
             gap: "291px",
             width: "100%",
             justifyContent: "center",
@@ -126,7 +135,20 @@ export const LogIn: FC = memo(function LogIn() {
               setStep={setStep} />
             : null}
         </Stack>
-        {errorMessage && <Alert severity="error" onClose={() => setErrorMessage('')}>{errorMessage}</Alert>}
+        {errorMessage ?
+          <Box
+            style={{
+              position: "absolute",
+              top: "3%",
+              left: "calc(50% - 300px)",
+              width: "600px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Alert severity="error" onClose={() => setErrorMessage('')}>{errorMessage}</Alert>
+          </Box>
+          : null}
       </Box>
     </ThemeProvider>
   );
