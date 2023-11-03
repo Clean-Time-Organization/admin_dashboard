@@ -24,6 +24,7 @@ import { LinkButton } from '../components/Button/Buttons';
 import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
+import { useNavigate } from 'react-router-dom';
 
 interface IStaffRowProps {
   user: User;
@@ -31,6 +32,7 @@ interface IStaffRowProps {
 
 const Stuff = () => {
   const env = import.meta.env;
+  const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [selectedRole, setSelectedRole] = useState<number | string | boolean>();
   const [userList, setUserList] = useState<UsersList>();
@@ -107,12 +109,16 @@ const Stuff = () => {
     setCurrentPage(1);
   };
 
+  const createUser = () => {
+    navigate('/staff/create');
+  };
+
   return <ContentBody>
     <Breadcrumbs />
     <PageTitle
       name={'Staff'}
       createButtonName={'Create staff user'}
-      createButtonClick={console.log}
+      createButtonClick={createUser}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />

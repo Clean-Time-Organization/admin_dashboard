@@ -40,7 +40,7 @@ const Breadcrumbs = () => {
         {
           index + 1 < list.length ?
             <BreadcrumbsLink key={item.link} to={item.link}>{item.name}</BreadcrumbsLink> :
-            <BreadcrumbsElement>{item.name}</BreadcrumbsElement>
+            <BreadcrumbsElement key={item.link + 'el'}>{item.name}</BreadcrumbsElement>
         }
         { index + 1 < list.length &&
           <div key={item.link+'slash'}>/</div>
