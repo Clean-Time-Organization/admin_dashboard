@@ -1,0 +1,29 @@
+import { styled } from '@mui/system';
+
+export const ButtonBase = styled('div')<{selected?: boolean}>`
+  padding: 20px 16px;
+  height: 166px;
+  border-radius: 4px;
+  border: 1px solid ${({selected}) => selected ? '#2E8DC8' : '#E5E7EB'};
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const ButtonBaseHeader = styled('div')`
+  color: #1F2937;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 130%;
+`;
+
+export const ButtonBaseDescription = styled('div')`
+  overflow: hidden;
+  color: #1F2937;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 140%;
+`;
