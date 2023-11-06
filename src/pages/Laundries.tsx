@@ -25,13 +25,30 @@ import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
 
-interface IStaffRowProps {
-  user: User;
+export type Laundry = {
+  id: number
+  name_en: string
+  name_ar: string
+  is_active: boolean
+  address: string
+  owner: User
+}
+
+export type LaundryList = {
+  items: Array<Laundry>;
+  total: number;
+  page: number;
+  size: number;
+  pages: number;
+}
+
+interface ILaundryRowProps {
+  laundry: Laundry
 }
 
 const Laundries = () => {
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
-  const [userList, setUserList] = useState<UsersList>();
+  const [entityList, setEntityList] = useState<LaundryList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isListLoading, setIsListLoading] = useState(false);
@@ -72,8 +89,8 @@ const Laundries = () => {
     if (currentPage && !page) {
       params.append('page', currentPage + '');
     }
-    await httpClient.get('/user/customer?' + new URLSearchParams(params)).then(response => {
-      setUserList(response.data);
+    await httpClient.get('/laundry/?' + new URLSearchParams(params)).then(response => {
+      setEntityList(response.data);
       setIsListLoading(false);
     })
   };
@@ -90,75 +107,75 @@ const Laundries = () => {
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
-      {/*{*/}
-      {/*  (!userList && !selectedStatus && !searchValue && !isListLoading) ?*/}
-      {/*    <EmptyState*/}
-      {/*      title={'There are no staff users yet'}*/}
-      {/*      subtitle={'You don\'t have any staff users created yet'}*/}
-      {/*      buttonName={'Create staff user'}*/}
-      {/*      buttonAction={console.log}*/}
-      {/*    />*/}
-      {/*    : <>*/}
-      {/*      <FilterRow>*/}
-      {/*        <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />*/}
-      {/*        <Search value={searchValue} setValue={setSearchValue} />*/}
-      {/*      </FilterRow>*/}
-      {/*      {*/}
-      {/*        (selectedStatus !== undefined) && <FilterRow>*/}
-      {/*          <Chips>*/}
-      {/*            {statusProperties.find(item => item.id === selectedStatus)?.name}*/}
-      {/*            <ChipsButton onClick={() => setSelectedStatus(undefined)}>*/}
-      {/*              <Close />*/}
-      {/*            </ChipsButton>*/}
-      {/*          </Chips>*/}
-      {/*          <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>*/}
-      {/*        </FilterRow>*/}
-      {/*      }*/}
-      {/*      {*/}
-      {/*        userList &&*/}
-      {/*          <FilterRow>*/}
-      {/*            {(selectedStatus !== undefined || searchValue) &&*/}
-      {/*              <HintText>*/}
-      {/*                { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}*/}
-      {/*              </HintText>*/}
-      {/*            }*/}
-      {/*          </FilterRow>*/}
-      {/*      }*/}
-      {/*      <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>*/}
-      {/*        <>*/}
-      {/*          {*/}
-      {/*            userList?.items.map((user: User) => (*/}
-      {/*              <CustomerRow user={user} key={'user' + user.id} />*/}
-      {/*            ))*/}
-      {/*          }*/}
-      {/*        </>*/}
-      {/*      </Table>*/}
-      {/*    </>*/}
-      {/*}*/}
+      {
+        (!entityList && !selectedStatus && !searchValue && !isListLoading) ?
+          <EmptyState
+            title={'There are no laundries yet'}
+            subtitle={'You don\'t have any laundries created yet'}
+            buttonName={'Create laundry'}
+            buttonAction={console.log}
+          />
+          : <>
+            <FilterRow>
+              <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
+              <Search value={searchValue} setValue={setSearchValue} />
+            </FilterRow>
+            {
+              (selectedStatus !== undefined) && <FilterRow>
+                <Chips>
+                  {statusProperties.find(item => item.id === selectedStatus)?.name}
+                  <ChipsButton onClick={() => setSelectedStatus(undefined)}>
+                    <Close />
+                  </ChipsButton>
+                </Chips>
+                <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
+              </FilterRow>
+            }
+            {
+                entityList &&
+                <FilterRow>
+                  {(selectedStatus !== undefined || searchValue) &&
+                    <HintText>
+                      { entityList.total + ' ' + (entityList.total === 1 ? 'result' : 'results') + ' found'}
+                    </HintText>
+                  }
+                </FilterRow>
+            }
+            <Table totalPages={entityList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
+              <>
+                {
+                  entityList?.items.map((laundry: Laundry) => (
+                    <LaundryRow laundry={laundry} key={'laundry' + laundry.id} />
+                  ))
+                }
+              </>
+            </Table>
+          </>
+      }
   </ContentBody>
 };
 
-const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
-  return <TableRow active={user.is_active}>
+const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
+  return <TableRow active={laundry.is_active}>
     <Grid container>
       <Grid item xs={6} style={{ display: 'flex' }}>
         <Grid container>
           <Grid item xs={1} style={{ display: 'flex', alignItems: 'center'}}>
-            <Logo>{user.first_name.charAt(0) + user.last_name.charAt(0)}</Logo>
+            <Logo>{laundry.name_en.charAt(0) + laundry.name_en.charAt(0)}</Logo>
           </Grid>
           <Grid item xs={11} style={{ display: 'flex', alignItems: 'center'}}>
-            <Name>{user.first_name + ' ' + user.last_name}</Name>
+            <Name>{laundry.name_en}</Name>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-        <BasicText>{user.phone_number}</BasicText>
-        <BasicText>{user.email}</BasicText>
+        <BasicText>{laundry.owner.phone_number}</BasicText>
+        <BasicText>{laundry.address}</BasicText>
       </Grid>
       <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <BasicText>
-          <ColoredText color={user.is_active ? '#005E1B' : '#AE2121'}>{user.id}</ColoredText>&nbsp;
-          {user.is_active ? <Active /> : <Inactive />}
+          <ColoredText color={laundry.is_active ? '#005E1B' : '#AE2121'}>{laundry.id}</ColoredText>&nbsp;
+          {laundry.is_active ? <Active /> : <Inactive />}
         </BasicText>
       </Grid>
     </Grid>
