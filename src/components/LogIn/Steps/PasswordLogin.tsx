@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import type { FC } from 'react';
 import {
   Alert,
@@ -17,6 +17,7 @@ import {LoginApiReponse, Steps} from "../LogIn";
 import {useMutation} from "react-query";
 import {useNavigate} from "react-router-dom";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useAuth} from "../../Auth/AuthProvider";
 
 interface Props {
   setStep: (value: Steps) => void
@@ -33,6 +34,11 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
   const [showPassword, setShowPassword] = useState(false)
   const { handleSubmit, control } = useForm()
   const navigate = useNavigate()
+  const { setAuthData } = useAuth()
+
+  useEffect(() => {
+    setPasswordError('')
+  }, [password])
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -111,11 +117,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          localStorage.setItem('accessLifetime', response.accessLifetime ? response.accessLifetime.toString() : '')
-          localStorage.setItem('accessToken', response.accessToken ? response.accessToken : '')
-          localStorage.setItem('refreshLifetime', response.refreshLifetime ? response.refreshLifetime.toString() : '')
-          localStorage.setItem('refreshToken', response.refreshToken ? response.refreshToken : '')
-          localStorage.setItem('tokenType', response.tokenType ? response.tokenType : '')
+          setAuthData(response)
 
           navigate('/customers')
           break
@@ -259,6 +261,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
                     fontStyle: "normal",
                     fontWeight: "400",
                     width: "385px",
+                    transform: "translate(15px, -9px) scale(0.75)",
                   }
                 }}
                 fullWidth
@@ -266,7 +269,6 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
                 error={!!passwordError}
                 defaultValue={password}
                 onChange={e => setPassword(e.target.value)}
-                onFocus={e => setPasswordError('')}
                 variant="outlined"
                 InputProps={{
                   endAdornment:

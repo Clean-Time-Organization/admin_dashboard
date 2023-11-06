@@ -29,14 +29,13 @@ interface IStaffRowProps {
   user: User;
 }
 
-const Customers = () => {
+const Laundries = () => {
   const env = import.meta.env;
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [userList, setUserList] = useState<UsersList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isListLoading, setIsListLoading] = useState(false);
-
   const statusProperties = [
     {
       id: true,
@@ -88,55 +87,55 @@ const Customers = () => {
   return <ContentBody>
     <Breadcrumbs />
     <PageTitle
-      name={'Customers'}
+      name={'Laundries'}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
-      {
-        (!userList && !selectedStatus && !searchValue && !isListLoading) ?
-          <EmptyState
-            title={'There are no staff users yet'}
-            subtitle={'You don\'t have any staff users created yet'}
-            buttonName={'Create staff user'}
-            buttonAction={console.log}
-          />
-          : <>
-            <FilterRow>
-              <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />
-              <Search value={searchValue} setValue={setSearchValue} />
-            </FilterRow>
-            {
-              (selectedStatus !== undefined) && <FilterRow>
-                <Chips>
-                  {statusProperties.find(item => item.id === selectedStatus)?.name}
-                  <ChipsButton onClick={() => setSelectedStatus(undefined)}>
-                    <Close />
-                  </ChipsButton>
-                </Chips>
-                <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
-              </FilterRow>
-            }
-            {
-              userList &&
-                <FilterRow>
-                  {(selectedStatus !== undefined || searchValue) &&
-                    <HintText>
-                      { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}
-                    </HintText>
-                  }
-                </FilterRow>
-            }
-            <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
-              <>
-                {
-                  userList?.items.map((user: User) => (
-                    <CustomerRow user={user} key={'user' + user.id} />
-                  ))
-                }
-              </>
-            </Table>
-          </>
-      }
+      {/*{*/}
+      {/*  (!userList && !selectedStatus && !searchValue && !isListLoading) ?*/}
+      {/*    <EmptyState*/}
+      {/*      title={'There are no staff users yet'}*/}
+      {/*      subtitle={'You don\'t have any staff users created yet'}*/}
+      {/*      buttonName={'Create staff user'}*/}
+      {/*      buttonAction={console.log}*/}
+      {/*    />*/}
+      {/*    : <>*/}
+      {/*      <FilterRow>*/}
+      {/*        <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} />*/}
+      {/*        <Search value={searchValue} setValue={setSearchValue} />*/}
+      {/*      </FilterRow>*/}
+      {/*      {*/}
+      {/*        (selectedStatus !== undefined) && <FilterRow>*/}
+      {/*          <Chips>*/}
+      {/*            {statusProperties.find(item => item.id === selectedStatus)?.name}*/}
+      {/*            <ChipsButton onClick={() => setSelectedStatus(undefined)}>*/}
+      {/*              <Close />*/}
+      {/*            </ChipsButton>*/}
+      {/*          </Chips>*/}
+      {/*          <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>*/}
+      {/*        </FilterRow>*/}
+      {/*      }*/}
+      {/*      {*/}
+      {/*        userList &&*/}
+      {/*          <FilterRow>*/}
+      {/*            {(selectedStatus !== undefined || searchValue) &&*/}
+      {/*              <HintText>*/}
+      {/*                { userList.total + ' ' + (userList.total === 1 ? 'result' : 'results') + ' found'}*/}
+      {/*              </HintText>*/}
+      {/*            }*/}
+      {/*          </FilterRow>*/}
+      {/*      }*/}
+      {/*      <Table totalPages={userList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>*/}
+      {/*        <>*/}
+      {/*          {*/}
+      {/*            userList?.items.map((user: User) => (*/}
+      {/*              <CustomerRow user={user} key={'user' + user.id} />*/}
+      {/*            ))*/}
+      {/*          }*/}
+      {/*        </>*/}
+      {/*      </Table>*/}
+      {/*    </>*/}
+      {/*}*/}
   </ContentBody>
 };
 
@@ -167,4 +166,4 @@ const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
   </TableRow>;
 };
 
-export { Customers };
+export { Laundries };
