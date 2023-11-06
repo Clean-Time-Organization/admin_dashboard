@@ -14,7 +14,7 @@ import {
   ChipsButton,
   HintText,
 } from './styled';
-import { User, UsersList } from '../types/user';
+import { User } from '../types/user';
 import { Grid } from '@mui/material';
 import { Inactive } from '../components/Icons/Inactive';
 import { Active } from '../components/Icons/Active';
