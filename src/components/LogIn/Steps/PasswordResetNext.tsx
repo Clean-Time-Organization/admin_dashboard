@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import type { FC } from 'react';
 import {
   Alert,
@@ -28,6 +28,10 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
   const [passwordError, setPasswordError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const { handleSubmit, control } = useForm()
+
+  useEffect(() => {
+    setPasswordError('')
+  }, [password])
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -160,6 +164,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
                     fontFamily: "Anek Latin",
                     fontStyle: "normal",
                     fontWeight: "400",
+                    transform: "translate(15px, -9px) scale(0.75)",
                   }
                 }}
                 fullWidth
@@ -167,7 +172,6 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
                 error={!!passwordError}
                 defaultValue={password}
                 onChange={e => setPassword(e.target.value)}
-                onFocus={e => setPasswordError('')}
                 variant="outlined"
                 InputProps={{
                   endAdornment:

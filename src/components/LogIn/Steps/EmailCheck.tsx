@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import type { FC } from 'react';
 import {Alert, Box, Button, CircularProgress, Paper, Stack, TextField, Typography} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
@@ -17,6 +17,10 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const { handleSubmit, control } = useForm()
+
+  useEffect(() => {
+    setEmailError('')
+  }, [email])
 
   const checkEmail = async (): Promise<LoginApiReponse> => {
     let response: LoginApiReponse = {
@@ -115,13 +119,13 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
                     fontFamily: "Anek Latin",
                     fontStyle: "normal",
                     fontWeight: "400",
+                    transform: "translate(15px, -9px) scale(0.75)",
                   }
                 }}
                 fullWidth
                 error={!!emailError}
                 defaultValue={email}
                 onChange={e => setEmail(e.target.value)}
-                onFocus={e => setEmailError('')}
                 variant="outlined"
                 inputProps={{
                   style: {

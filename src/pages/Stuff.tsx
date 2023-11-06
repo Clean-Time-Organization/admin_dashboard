@@ -24,6 +24,7 @@ import { LinkButton } from '../components/Button/Buttons';
 import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
+import httpClient from "../services/HttpClient";
 
 interface IStaffRowProps {
   user: User;
@@ -87,18 +88,10 @@ const Stuff = () => {
     if (currentPage && !page) {
       params.append('page', currentPage + '');
     }
-    await fetch(`${env.VITE_API_BASE_URL}/user/staff?` + new URLSearchParams(params), {
-      method: 'GET',
-      headers: {
-          'Authorization':
-          `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    }).then((response) => {
-      return response.json();
-    }).then(jsonData => {
-      setUserList(jsonData);
+    await httpClient.get('/user/staff?' + new URLSearchParams(params)).then(response => {
+      setUserList(response.data);
       setIsListLoading(false);
-    });
+    })
   };
 
   const clearFilters = () => {
