@@ -31,7 +31,6 @@ interface IStaffRowProps {
 }
 
 const Stuff = () => {
-  const env = import.meta.env;
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [selectedRole, setSelectedRole] = useState<number | string | boolean>();
   const [userList, setUserList] = useState<UsersList>();
