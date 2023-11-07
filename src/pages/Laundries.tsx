@@ -35,11 +35,11 @@ export type Laundry = {
 }
 
 export type LaundryList = {
-  items: Array<Laundry>;
-  total: number;
-  page: number;
-  size: number;
-  pages: number;
+  items: Array<Laundry>
+  total: number
+  page: number
+  size: number
+  pages: number
 }
 
 interface ILaundryRowProps {
@@ -47,11 +47,11 @@ interface ILaundryRowProps {
 }
 
 const Laundries = () => {
-  const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
-  const [entityList, setEntityList] = useState<LaundryList>();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isListLoading, setIsListLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>()
+  const [entityList, setEntityList] = useState<LaundryList>()
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isListLoading, setIsListLoading] = useState(false)
   const statusProperties = [
     {
       id: true,
@@ -61,43 +61,43 @@ const Laundries = () => {
       id: false,
       name: 'Inactive',
     },
-  ];
+  ]
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList(1);
-  }, [selectedStatus, searchValue]);
+    setIsListLoading(true)
+    resetList(1)
+  }, [selectedStatus, searchValue])
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList();
-  }, [currentPage]);
+    setIsListLoading(true)
+    resetList()
+  }, [currentPage])
 
   const resetList = async (page?: number) => {
-    const params = new URLSearchParams();
-    params.append('size', '8');
+    const params = new URLSearchParams()
+    params.append('size', '8')
     if (page && page !== currentPage) {
-      setCurrentPage(page);
-      return;
+      setCurrentPage(page)
+      return
     }
     if (selectedStatus !== undefined) {
-      params.append('status', selectedStatus + '');
+      params.append('status', selectedStatus + '')
     }
     if (searchValue) {
-      params.append('value', searchValue);
+      params.append('value', searchValue)
     }
     if (currentPage && !page) {
-      params.append('page', currentPage + '');
+      params.append('page', currentPage + '')
     }
     await httpClient.get('/laundry/?' + new URLSearchParams(params)).then(response => {
-      setEntityList(response.data);
-      setIsListLoading(false);
+      setEntityList(response.data)
+      setIsListLoading(false)
     })
   };
 
   const clearFilters = () => {
-    setSelectedStatus(undefined);
-    setCurrentPage(1);
+    setSelectedStatus(undefined)
+    setCurrentPage(1)
   };
 
   return <ContentBody>
@@ -153,12 +153,12 @@ const Laundries = () => {
           </>
       }
   </ContentBody>
-};
+}
 
 const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
   return <TableRow active={laundry.is_active}>
     <Grid container>
-      <Grid item xs={6} style={{ display: 'flex' }}>
+      <Grid item xs={5} style={{ display: 'flex' }}>
         <Grid container>
           <Grid item xs={1} style={{ display: 'flex', alignItems: 'center'}}>
             <Logo>{laundry.name_en.charAt(0) + laundry.name_en.charAt(0)}</Logo>
@@ -168,9 +168,15 @@ const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <BasicText>{laundry.owner.phone_number}</BasicText>
         <BasicText>{laundry.address}</BasicText>
+      </Grid>
+      <Grid item xs={2} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+        <BasicText>
+          Owner:&nbsp;
+          <ColoredText color='#2E8DC8'>{laundry.owner.first_name} {laundry.owner.last_name}</ColoredText>
+        </BasicText>
       </Grid>
       <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <BasicText>
@@ -179,7 +185,7 @@ const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
         </BasicText>
       </Grid>
     </Grid>
-  </TableRow>;
-};
+  </TableRow>
+}
 
-export { Laundries };
+export { Laundries }
