@@ -25,13 +25,13 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import { useNavigate } from 'react-router-dom';
+import httpClient from "../services/HttpClient";
 
 interface IStaffRowProps {
   user: User;
 }
 
 const Stuff = () => {
-  const env = import.meta.env;
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [selectedRole, setSelectedRole] = useState<number | string | boolean>();
@@ -52,7 +52,7 @@ const Stuff = () => {
   const roleProperties = [
     {
       id: 'POS',
-      name: 'Operator POS',
+      name: 'POS Operator',
     },
     {
       id: 'Admin',
@@ -89,18 +89,10 @@ const Stuff = () => {
     if (currentPage && !page) {
       params.append('page', currentPage + '');
     }
-    await fetch(`${env.VITE_API_BASE_URL}/user/staff?` + new URLSearchParams(params), {
-      method: 'GET',
-      headers: {
-          'Authorization':
-          `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    }).then((response) => {
-      return response.json();
-    }).then(jsonData => {
-      setUserList(jsonData);
+    await httpClient.get('/user/staff?' + new URLSearchParams(params)).then(response => {
+      setUserList(response.data);
       setIsListLoading(false);
-    });
+    })
   };
 
   const clearFilters = () => {
@@ -186,7 +178,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
   const roles = [
     {
       id: 'POS',
-      name: 'Operator POS',
+      name: 'POS Operator',
     },
     {
       id: 'Admin',

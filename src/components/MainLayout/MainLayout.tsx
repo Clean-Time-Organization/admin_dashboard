@@ -6,14 +6,10 @@ import {
 import {useLocation} from "react-router-dom";
 import {ReactNode} from "react";
 
-interface Props {
-  children: ReactNode;
-}
+const MainLayout = ({children}: {children: ReactNode}) => {
+  const location = useLocation()
 
-const MainLayout = ({ children }: Props) => {
-  const location = useLocation();
-
-  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>;
+  if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>
 
   return <Main>
     <Header />
@@ -23,4 +19,4 @@ const MainLayout = ({ children }: Props) => {
   </Main>
 }
 
-export { MainLayout };
+export { MainLayout }

@@ -13,9 +13,9 @@ const ellipse1Props: EllipseIconProps = {
   viewBox: '0 0 504 505',
   ellipse: {
     stroke: '#62A6DB',
-    cx: 252,
+    cx: 250.5,
     cy: 252.5,
-    rx: 252,
+    rx: 250.5,
     ry: 252.5
   }
 };
