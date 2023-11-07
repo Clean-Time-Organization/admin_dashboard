@@ -50,7 +50,7 @@ const Stuff = () => {
   const roleProperties = [
     {
       id: 'POS',
-      name: 'Operator POS',
+      name: 'POS Operator',
     },
     {
       id: 'Admin',
@@ -172,7 +172,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
   const roles = [
     {
       id: 'POS',
-      name: 'Operator POS',
+      name: 'POS Operator',
     },
     {
       id: 'Admin',
