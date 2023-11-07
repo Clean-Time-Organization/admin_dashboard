@@ -2,6 +2,8 @@ import { styled } from '@mui/system';
 
 export const CreationPanelBase = styled('div')`
   width: 100%;
+  max-width: 608px;
+  margin: auto;
   height: fit-content;
   display: flex;
   flex-direction: column;
