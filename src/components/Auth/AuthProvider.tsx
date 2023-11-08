@@ -11,32 +11,36 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
     refreshToken: localStorage.getItem("refreshToken") || '',
     tokenType: localStorage.getItem("tokenType") || ''
   }
+
   const [authData, setAuthDataState] = useState(initialState)
 
-  const setAuthData = (authData: AuthData) => {
+  const signIn = (authData: AuthData) => {
+    if (authData.accessToken) {
+      localStorage.setItem("accessLifetime", authData.accessLifetime.toString())
+      localStorage.setItem("accessToken", authData.accessToken)
+      localStorage.setItem("refreshLifetime", authData.refreshLifetime.toString())
+      localStorage.setItem("refreshToken", authData.refreshToken)
+      localStorage.setItem("tokenType", authData.tokenType)
+    }
+
     setAuthDataState(authData)
   }
 
-  useEffect(() => {
-    if (authData.accessToken) {
-      localStorage.setItem('accessLifetime', authData.accessLifetime.toString())
-      localStorage.setItem('accessToken', authData.accessToken)
-      localStorage.setItem('refreshLifetime', authData.refreshLifetime.toString())
-      localStorage.setItem('refreshToken', authData.refreshToken)
-      localStorage.setItem('tokenType', authData.tokenType)
-    } else {
-      localStorage.removeItem("accessLifetime")
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("refreshLifetime")
-      localStorage.removeItem("refreshToken")
-      localStorage.removeItem("tokenType")
-    }
-  }, [authData])
+  const signOut = () => {
+    localStorage.removeItem("accessLifetime")
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshLifetime")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("tokenType")
+
+    setAuthDataState(initialState)
+  }
 
   const contextValue = useMemo(
     () => ({
       authData,
-      setAuthData,
+      signIn,
+      signOut,
     }),
     [authData]
   )

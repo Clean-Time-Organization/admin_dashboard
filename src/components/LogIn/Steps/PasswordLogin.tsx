@@ -34,7 +34,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
   const [showPassword, setShowPassword] = useState(false)
   const { handleSubmit, control } = useForm()
   const navigate = useNavigate()
-  const { setAuthData } = useAuth()
+  const { signIn } = useAuth()
 
   useEffect(() => {
     setPasswordError('')
@@ -117,7 +117,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          setAuthData(response)
+          signIn(response)
 
           navigate('/customers')
           break
