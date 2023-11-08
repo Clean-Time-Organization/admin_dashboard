@@ -11,6 +11,7 @@ interface IStepUserDetailsProps {
   readonly watch: UseFormWatch<UserForm>;
   readonly setValue: UseFormSetValue<UserForm>;
   toPreviousStep: () => void;
+  onCreate: () => void;
   // readonly getValues: UseFormGetValues<AgreementForm>;
   // readonly setError: UseFormSetError<AgreementForm>;
   // readonly clearError: UseFormClearErrors<AgreementForm>;
@@ -21,6 +22,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
   watch,
   setValue,
   toPreviousStep,
+  onCreate,
 }) => {
   const watchPassword = watch('password');
 
@@ -34,7 +36,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
       <BlockSubtitle>Provide Personal Data of User</BlockSubtitle>
       <Controller
         control={control}
-        name="name"
+        name="full_name"
         render={({ field, fieldState: { error } }) => (
             <InputBase
                 label={'Full Name'}
@@ -124,7 +126,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
     </StepBaseInternal>
     <ButtonLine>
       <LinkButton onClick={toPreviousStep}>Previous step</LinkButton>
-      <BasicButton>Create staff user</BasicButton>
+      <BasicButton onClick={onCreate}>Create staff user</BasicButton>
     </ButtonLine>
   </StepBase>;
 }

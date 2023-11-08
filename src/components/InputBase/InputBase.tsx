@@ -1,7 +1,7 @@
 import { FormControl, IconButton, InputAdornment, TextField, TextFieldProps, styled } from "@mui/material";
 import { FC } from "react";
 import { Alert } from "../Icons/Alert";
-import { CopyAll } from "@mui/icons-material";
+import { ContentCopy } from "@mui/icons-material";
 
 export type IInputBaseProps = TextFieldProps & {
   label?: string;
@@ -51,8 +51,9 @@ const InputBase: FC<IInputBaseProps> = ({
                 onClick={copyData}
                 onMouseDown={copyData}
                 edge="end"
+                style={{ color: '#2E8DC8' }}
               >
-                <CopyAll />
+                <ContentCopy />
               </IconButton>
             </InputAdornment> : <></>,
       }}

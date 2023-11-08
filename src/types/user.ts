@@ -13,7 +13,7 @@ export type User = {
 }
 
 export type UserForm = {
-  name: string;
+  full_name: string;
   phone_number: string;
   role: 'Admin' | 'POS';
   email?: string;

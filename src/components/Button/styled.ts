@@ -10,6 +10,11 @@ export const ButtonBase = styled('div')<{selected?: boolean}>`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  cursor: pointer;
+
+  :hover {
+    border: 1px solid ${({selected}) => selected ? '#2E8DC8' : '#1F2937'};
+  }
 `;
 
 export const ButtonBaseHeader = styled('div')`
