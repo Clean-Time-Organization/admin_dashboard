@@ -4,19 +4,24 @@ import {AuthData} from "./AuthData";
 const AuthContext = createContext(null as any)
 
 const AuthProvider = ({children}: {children: ReactNode}) => {
-  // State to hold the authentication data
-  const [authData, setAuthDataState] = useState(null as any)
+  const initialState: AuthData = {
+    accessLifetime: Number(localStorage.getItem("accessLifetime")) || 0,
+    accessToken: localStorage.getItem("accessToken") || '',
+    refreshLifetime: Number(localStorage.getItem("refreshLifetime")) || 0,
+    refreshToken: localStorage.getItem("refreshToken") || '',
+    tokenType: localStorage.getItem("tokenType") || ''
+  }
+  const [authData, setAuthDataState] = useState(initialState)
 
-  // Function to set the authentication data
   const setAuthData = (authData: AuthData) => {
     setAuthDataState(authData)
   }
 
   useEffect(() => {
-    if (authData) {
-      localStorage.setItem('accessLifetime', authData.accessLifetime)
+    if (authData.accessToken) {
+      localStorage.setItem('accessLifetime', authData.accessLifetime.toString())
       localStorage.setItem('accessToken', authData.accessToken)
-      localStorage.setItem('refreshLifetime', authData.refreshLifetime)
+      localStorage.setItem('refreshLifetime', authData.refreshLifetime.toString())
       localStorage.setItem('refreshToken', authData.refreshToken)
       localStorage.setItem('tokenType', authData.tokenType)
     } else {
@@ -28,7 +33,6 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
     }
   }, [authData])
 
-  // Memoized value of the authentication context
   const contextValue = useMemo(
     () => ({
       authData,
@@ -37,7 +41,6 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
     [authData]
   )
 
-  // Provide the authentication context to the children components
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   )
