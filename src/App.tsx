@@ -10,6 +10,7 @@ import { Home } from './pages/Home';
 import {Laundries} from "./pages/Laundries";
 import RequireAuth from "./components/Auth/RequireAuth";
 import {PageNotFound} from "./pages/PageNotFound";
+import SignOut from "./components/Auth/SignOut";
 
 const queryClient = new QueryClient()
 
@@ -20,6 +21,7 @@ export const App: FC = memo(function App() {
         <Routes>
           <Route path={'/login'} element={<LogIn />} />
           <Route path={'/login/:token'} element={<LogIn />} />
+          <Route path={'/logout'} element={<SignOut />} />
           <Route path={'/'} element={<RequireAuth><Home /></RequireAuth>} />
           <Route path={'/home'} element={<RequireAuth><Home /></RequireAuth>} />
           <Route path={'/staff'} element={<RequireAuth><Stuff /></RequireAuth>} />
