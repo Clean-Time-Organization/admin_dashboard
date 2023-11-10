@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import type { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import { LogIn } from './components/LogIn/LogIn';
 import { MainLayout } from './components/MainLayout/MainLayout';
 import { Stuff } from './pages/Stuff';
@@ -10,27 +10,29 @@ import { Home } from './pages/Home';
 import {Laundries} from "./pages/Laundries";
 import RequireAuth from "./components/Auth/RequireAuth";
 import {PageNotFound} from "./pages/PageNotFound";
-import SignOut from "./components/Auth/SignOut";
+import {CustomerDetails} from "./pages/CustomerDetails";
 
 const queryClient = new QueryClient()
 
 export const App: FC = memo(function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <MainLayout>
-        <Routes>
-          <Route path={'/login'} element={<LogIn />} />
-          <Route path={'/login/:token'} element={<LogIn />} />
-          <Route path={'/logout'} element={<SignOut />} />
-          <Route path={'/'} element={<RequireAuth><Home /></RequireAuth>} />
-          <Route path={'/home'} element={<RequireAuth><Home /></RequireAuth>} />
-          <Route path={'/staff'} element={<RequireAuth><Stuff /></RequireAuth>} />
-          <Route path={'/customers'} element={<RequireAuth><Customers /></RequireAuth>} />
-          <Route path={'/laundries'} element={<RequireAuth><Laundries /></RequireAuth>} />
-          <Route path={'/orders'} element={<RequireAuth><Home /></RequireAuth>} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </MainLayout>
+      <BrowserRouter>
+        <MainLayout>
+          <Routes>
+            <Route path={'/login'} element={<LogIn />} />
+            <Route path={'/login/:token'} element={<LogIn />} />
+            <Route path={'/'} element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path={'/home'} element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path={'/staff'} element={<RequireAuth><Stuff /></RequireAuth>} />
+            <Route path={'/customers'} element={<RequireAuth><Customers /></RequireAuth>} />
+            <Route path={'/customers/:id'} element={<RequireAuth><CustomerDetails /></RequireAuth>} />
+            <Route path={'/laundries'} element={<RequireAuth><Laundries /></RequireAuth>} />
+            <Route path={'/orders'} element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </MainLayout>
+      </BrowserRouter>
     </QueryClientProvider>
-  );
-});
+  )
+})

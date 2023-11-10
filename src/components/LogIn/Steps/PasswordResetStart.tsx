@@ -147,34 +147,34 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
           <Divider light />
         </Box>
         {/*{env.MODE && env.MODE === 'development' ?*/}
-        {/*  <Box*/}
-        {/*    display="flex"*/}
-        {/*    justifyContent="flex-end"*/}
-        {/*  >*/}
-        {/*    <Button*/}
-        {/*      variant="contained"*/}
-        {/*      disableElevation={true}*/}
-        {/*      style={{*/}
-        {/*        backgroundColor: "#2E8DC8",*/}
-        {/*        borderRadius: "4px",*/}
-        {/*        padding: "0px",*/}
-        {/*        margin: "0px",*/}
-        {/*        maxWidth: "185px",*/}
-        {/*        maxHeight: "40px",*/}
-        {/*        minWidth: "185px",*/}
-        {/*        minHeight: "40px",*/}
-        {/*        fontFamily: "Anek Latin",*/}
-        {/*        fontSize: "16px",*/}
-        {/*        fontStyle: "normal",*/}
-        {/*        fontWeight: "500",*/}
-        {/*        lineHeight: "24px",*/}
-        {/*        textTransform: "capitalize",*/}
-        {/*      }}*/}
-        {/*      onClick={onGoToPasswordReset}*/}
-        {/*    >*/}
-        {/*      Go to password reset*/}
-        {/*    </Button>*/}
-        {/*  </Box>*/}
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+          >
+            <Button
+              variant="contained"
+              disableElevation={true}
+              style={{
+                backgroundColor: "#2E8DC8",
+                borderRadius: "4px",
+                padding: "0px",
+                margin: "0px",
+                maxWidth: "185px",
+                maxHeight: "40px",
+                minWidth: "185px",
+                minHeight: "40px",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "24px",
+                textTransform: "capitalize",
+              }}
+              onClick={onGoToPasswordReset}
+            >
+              Go to password reset
+            </Button>
+          </Box>
           {/*: null}*/}
         <Box>
           <Link
