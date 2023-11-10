@@ -21,6 +21,7 @@ import {AccountCircle} from "@mui/icons-material";
 import MailIcon from '@mui/icons-material/Mail';
 import {useAuth} from "../Auth/AuthProvider";
 import theme from "../../styles/Theme";
+import {ArrowDown} from "../Icons/ArrowDown";
 
 
 const MainLayout = ({children}: {children: ReactNode}) => {
@@ -122,7 +123,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                 <Tab label={(<Typography variant="nav">Home</Typography>)} value="/home" to="/home" component={Link} />
                 <Tab label={(<Typography variant="nav">Staff</Typography>)} value="/staff" to="/staff" component={Link} />
                 <Tab label={(<Typography variant="nav">Customers</Typography>)} value="/customers" to="/customers" component={Link} />
-                <Tab label={(<Typography variant="nav">Laundries</Typography>)} value="/laundries" to="/laundries" component={Link} />
+                <Tab label={(<Typography variant="nav">Laundries</Typography>)} icon={<ArrowDown />} iconPosition="end" value="/laundries" to="/laundries" component={Link} />
                 <Tab label={(<Typography variant="nav">Orders</Typography>)} value="/orders" to="/orders" component={Link} />
               </Tabs>
             </Box>
