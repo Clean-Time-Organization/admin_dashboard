@@ -6,13 +6,14 @@ import { UserForm } from "../../types/user";
 import { StepRole } from "./StepRole";
 import { StepUserDetails } from "./StepUserData";
 import httpClient from "../../services/HttpClient";
+import { StepLaundryInfo } from "./StepLaundryInfo";
 
 const CreateStuffUser = () => {
   const navigate = useNavigate();
   const [totalSteps, setTotalSteps] = useState(3);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const { control, watch, setValue, handleSubmit } = useForm<UserForm>({
+  const { control, watch, setValue, handleSubmit, setError } = useForm<UserForm>({
     mode: 'onTouched',
     defaultValues: {
         role: 'POS',
@@ -51,13 +52,21 @@ const CreateStuffUser = () => {
 
   const handleCreate: SubmitHandler<UserForm> = async (values) => {
     await httpClient.post(
-      '/user/admin?',
+      watchRole === 'Admin' ? '/user/admin?' : '/user/operator',
       values
     ).then(response => {
       if (response.status === 200) {
         navigate('/staff');
+      } else {
+        if (Object.keys(response.data.detail)[0] === 'email') {
+          setError('email', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
+        } else if (Object.keys(response.data.detail)[0] === 'full_name') {
+          setError('full_name', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
+        } else if (Object.keys(response.data.detail)[0] === 'phone') {
+          setError('phone_number', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
+        }
       }
-    })
+    });
   };
 
   return <CreationPanel
@@ -81,7 +90,13 @@ const CreateStuffUser = () => {
               toPreviousStep={() => setCurrentStep(currentStep - 1)}
               onCreate={handleSubmit(handleCreate)}
             /> :
-            <></>
+            <StepLaundryInfo
+              control={control}
+              watch={watch}
+              setValue={setValue}
+              toPreviousStep={() => setCurrentStep(currentStep - 1)}
+              toNextStep={() => setCurrentStep(currentStep + 1)}
+            /> 
           )
       }
       {
