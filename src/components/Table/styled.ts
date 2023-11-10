@@ -48,7 +48,7 @@ export const PaginationBlock = styled('div')`
   }
 `;
 
-export const TableRowLayout = styled('div')<{ active: boolean }>`
+export const TableRowLayout = styled('div')<{ active: boolean, cursor: string}>`
   width: 100%;
   height: 37px;
   padding: 16px;
@@ -57,4 +57,5 @@ export const TableRowLayout = styled('div')<{ active: boolean }>`
   display: flex;
   justify-content: space-between;
   opacity: ${({active}) => active ? '1' : '0.64'};
+  cursor: ${({cursor}) => cursor ? cursor : 'inherit'};
 `;

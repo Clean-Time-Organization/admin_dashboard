@@ -1,16 +1,5 @@
 import { styled } from '@mui/system';
 
-const Main = styled('div')`
-  padding: 0;
-  margin: 0;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  background: #F7F8FA;
-`;
-
 const Content = styled('div')`
   padding-top: 32px;
   padding-bottom: 75px;
@@ -19,4 +8,4 @@ const Content = styled('div')`
   position: relative;
 `;
 
-export { Main, Content };
+export { Content };

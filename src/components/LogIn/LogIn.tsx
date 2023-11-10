@@ -37,8 +37,8 @@ export const LogIn: FC = memo(function LogIn() {
   const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [tmpToken, setTmpToken] = useState('')
-  const navigate = useNavigate();
-  const { token } = useParams();
+  const navigate = useNavigate()
+  const { token } = useParams()
 
   useEffect(() => {
     if (token) {
