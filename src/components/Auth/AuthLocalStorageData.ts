@@ -1,4 +1,4 @@
-export type AuthData = {
+export type AuthLocalStorageData = {
   accessLifetime: number
   accessToken: string
   refreshLifetime: number

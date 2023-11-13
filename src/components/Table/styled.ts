@@ -1,4 +1,6 @@
 import { styled } from '@mui/system';
+import {MouseEventHandler} from "react";
+import {User} from "../../types/user";
 
 export const TableBody = styled('div')`
   height: 100%;

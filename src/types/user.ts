@@ -4,7 +4,7 @@ export type User = {
   phone_number: string;
   id: number;
   is_active: boolean;
-  role: 'Admin' | 'POS';
+  role: 'Admin' | 'POS' | 'Customer';
   email?: string;
   staff?: {
     laundry?: Laundry;
