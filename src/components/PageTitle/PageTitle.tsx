@@ -31,7 +31,7 @@ const PageTitle: FC<IPageTitleProps> = ({
     <TitleRightSide>
       {
         (exportButtonName && exportButtonClick) &&
-          <LinkButton onClick={exportButtonClick} preTextIcon={<Export />} pretext="true">
+          <LinkButton>
             {exportButtonName}
           </LinkButton>
       }

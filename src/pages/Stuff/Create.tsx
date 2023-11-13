@@ -53,19 +53,20 @@ const CreateStuffUser = () => {
   const handleCreate: SubmitHandler<UserForm> = async (values) => {
     await httpClient.post(
       watchRole === 'Admin' ? '/user/admin?' : '/user/operator',
-      values
+      {...values, phone_number: '+966' + values.phone_number}
     ).then(response => {
       if (response.status === 200) {
         navigate('/staff');
-      } else {
-        if (Object.keys(response.data.detail)[0] === 'email') {
-          setError('email', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
-        } else if (Object.keys(response.data.detail)[0] === 'full_name') {
-          setError('full_name', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
-        } else if (Object.keys(response.data.detail)[0] === 'phone') {
-          setError('phone_number', { type: 'validate', message: Object.values(response.data.detail)[0] + ''} );
-        }
       }
+    }).catch(error => {
+      if (Object.keys(error.response.data.detail)[0] === 'email') {
+        setError('email', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
+      } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
+        setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
+      } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
+        setError('phone_number', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
+      }
+      // then - else => set global error message if smth went wrong, otherwise - success
     });
   };
 

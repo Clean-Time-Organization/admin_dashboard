@@ -15,30 +15,14 @@ const PasswordGeneration: FC<IPasswordGenerationProps> = ({
   currentValue,
   ...props
 }) => {
-  const inputRef = useRef<HTMLDivElement>(null);
-  const [focused, setFocused] = useState(false);
-
   const generatePassword = () => {
     if (setValue) {
-      setFocused(true);
-      
       setValue((Math.random() + 1).toString(36).substring(2, 10));
     }
   };
 
-  function handleClickOutside(e: any) {
-    if (inputRef.current && !inputRef.current.contains(e.target)) {
-      if (focused) {
-        setFocused(false);
-      }
-    }
-  }
-
-  document.addEventListener("mousedown", handleClickOutside);
-
   return <PasswordGenerationBody>
     <InputBase
-      inputRef={inputRef}
       copyData={() => copyFunction && copyFunction()}
       value={currentValue}
       {...props}

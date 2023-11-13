@@ -4,7 +4,7 @@ import { InputBase } from "../../components/InputBase/InputBase";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { UserForm } from "../../types/user";
-import { PasswordGeneration } from "../../components/PasswordGeneration/PAsswordGeneration";
+import { PasswordGeneration } from "../../components/PasswordGeneration/PasswordGeneration";
 
 interface IStepUserDetailsProps {
   readonly control: Control<UserForm>;
@@ -37,7 +37,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
       <Controller
         control={control}
         name="full_name"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <InputBase
                 label={'Full Name'}
                 error={error !== undefined}
@@ -50,13 +50,14 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
-            minLength: 1,
+            minLength: 2,
+            maxLength: 80,
         }}
       />
       <Controller
         control={control}
         name="email"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <InputBase
                 label={'Email'}
                 error={error !== undefined}
@@ -78,7 +79,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
       <Controller
         control={control}
         name="phone_number"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <InputBase
                 label={'Phone Number'}
                 error={error !== undefined}
@@ -93,7 +94,11 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
             required: true,
             minLength: {
               value: 9,
-              message: 'Too short value'
+              message: 'Invalid phone'
+            },
+            maxLength: {
+              value: 9,
+              message: 'Invalid phone'
             },
         }}
       />
@@ -104,14 +109,16 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
       <Controller
         control={control}
         name="password"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
           <PasswordGeneration
             label={'Password'}
             error={!!error}
             copyFunction={() => navigator.clipboard.writeText(watchPassword)}
             currentValue={watchPassword}
             setValue={(val: string) => setValue('password', val)}
-            errorText={error?.message || ''}
+            errorText={error?.type === 'required' && 'Field is required' ||
+              error?.message || ''
+            }
             {...field}
           />
         )}

@@ -127,7 +127,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
       <Controller
         control={control}
         name="laundry_id"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <Autocomplete
                 label={'Laundry'}
                 error={error !== undefined}
@@ -153,7 +153,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
       <Controller
         control={control}
         name="branch_id"
-        render={({ field, fieldState: { error } }) => (
+        render={({ field: { ref, ...field }, fieldState: { error } }) => (
           <Autocomplete
               label={'Branch'}
               error={error !== undefined}
