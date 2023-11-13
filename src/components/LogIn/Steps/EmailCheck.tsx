@@ -113,6 +113,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
               <TextField
                 id={field.name}
                 label="Email"
+                autoFocus
                 InputLabelProps={{
                   shrink: true,
                   style: {

@@ -4,7 +4,8 @@ import {useAuth} from "./AuthProvider";
 
 const RequireAuth = ({children}: {children: ReactNode}) => {
   const { authData } = useAuth()
-  if (!authData) {
+
+  if (!authData.accessToken) {
     return <Navigate to="/login" replace />
   }
   return <>{children}</>

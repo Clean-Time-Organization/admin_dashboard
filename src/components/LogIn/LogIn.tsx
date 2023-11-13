@@ -6,7 +6,7 @@ import {
   Box, CssBaseline,
   Stack, ThemeProvider
 } from "@mui/material";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {EmailCheck} from "./Steps/EmailCheck";
 import {PasswordLogin} from "./Steps/PasswordLogin";
 import {PasswordResetStart} from "./Steps/PasswordResetStart";
@@ -36,9 +36,7 @@ export const LogIn: FC = memo(function LogIn() {
   const [step, setStep] = useState(Steps.EmailCheck)
   const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [tmpToken, setTmpToken] = useState('')
-  const navigate = useNavigate();
-  const { token } = useParams();
+  const { token } = useParams()
 
   useEffect(() => {
     if (token) {
@@ -55,10 +53,6 @@ export const LogIn: FC = memo(function LogIn() {
       clearTimeout(timeId)
     }
   }, [errorMessage]);
-
-  const onGoToPasswordReset = (tmpToken: string) => {
-    navigate(`/login/${tmpToken}`)
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -113,15 +107,12 @@ export const LogIn: FC = memo(function LogIn() {
             <PasswordLogin
               setStep={setStep}
               email={email}
-              setParentTmpToken={setTmpToken}
               setErrorMessage={setErrorMessage} />
             : null}
           {step === Steps.PasswordResetStart ?
             <PasswordResetStart
-              parentTmpToken={tmpToken}
               email={email}
               setStep={setStep}
-              onParentGoToPasswordReset={onGoToPasswordReset}
               setErrorMessage={setErrorMessage} />
             : null}
           {step === Steps.PasswordResetNext ?

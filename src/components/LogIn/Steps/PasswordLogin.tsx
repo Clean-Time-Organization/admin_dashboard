@@ -22,11 +22,10 @@ import {useAuth} from "../../Auth/AuthProvider";
 interface Props {
   setStep: (value: Steps) => void
   email: string
-  setParentTmpToken: (value: string) => void
   setErrorMessage: (value: string) => void
 }
 
-export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, email, setParentTmpToken, setErrorMessage}) {
+export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, email, setErrorMessage}) {
   const env = import.meta.env
 
   const [password, setPassword] = useState('')
@@ -34,7 +33,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
   const [showPassword, setShowPassword] = useState(false)
   const { handleSubmit, control } = useForm()
   const navigate = useNavigate()
-  const { setAuthData } = useAuth()
+  const { signIn } = useAuth()
 
   useEffect(() => {
     setPasswordError('')
@@ -89,7 +88,6 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
 
     setPassword('')
     setPasswordError('')
-    setParentTmpToken('')
 
     await fetch(`${env.VITE_API_BASE_URL}/auth/send-email`, {
       method: 'POST',
@@ -104,7 +102,6 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
       return resp.json()
     }).then(jsonData => {
       if (response.status === 200) {
-        setParentTmpToken(jsonData.tmp_token)
       }
     }).catch(err => {
       response.details = 'Server is unavailable, please try again later'
@@ -117,8 +114,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          setAuthData(response)
-
+          signIn(response)
           navigate('/customers')
           break
 
@@ -254,6 +250,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
               <TextField
                 id={field.name}
                 label="Password"
+                autoFocus
                 InputLabelProps={{
                   shrink: true,
                   style: {
@@ -417,3 +414,9 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
     </form>
   )
 })
+
+// const mapStateToProps = (state: RootState) => {
+//   return { authData: state.authData }
+// }
+//
+// export default connect(mapStateToProps)(memo(PasswordLogin))
