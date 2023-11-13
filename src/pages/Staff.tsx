@@ -25,12 +25,13 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
+import {useNavigate} from "react-router-dom";
 
 interface IStaffRowProps {
   user: User;
 }
 
-const Stuff = () => {
+const Staff = () => {
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [selectedRole, setSelectedRole] = useState<number | string | boolean>();
   const [userList, setUserList] = useState<UsersList>();
@@ -169,6 +170,13 @@ const Stuff = () => {
 };
 
 const StaffRow: FC<IStaffRowProps> = ({ user }) => {
+  const navigate = useNavigate()
+
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: User) => {
+    const id = entityData ? entityData.id : ''
+    navigate(`/staff/${id}`)
+  }
+
   const roles = [
     {
       id: 'POS',
@@ -178,9 +186,9 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
       id: 'Admin',
       name: 'Admin',
     },
-  ];
+  ]
 
-  return <TableRow active={user.is_active}>
+  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: User) => onTableRowClick(event, entityData)}>
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
@@ -209,7 +217,6 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
                 user?.staff?.branch &&
                   <BasicText>Branch:&nbsp;<BasicTextName>{user?.staff?.branch?.address}</BasicTextName></BasicText>
               }
-              
             </>
         }
       </Grid>
@@ -223,4 +230,4 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
   </TableRow>;
 };
 
-export { Stuff };
+export { Staff };

@@ -4,10 +4,10 @@ import {
 } from '../styles/styled';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
 import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography} from "@mui/material";
-import {DeleteOutline, MoreVert} from "@mui/icons-material";
+import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
 import {User} from "../types/user";
 import {AxiosResponse} from "axios";
 import {getUserFL} from "../services/common";
@@ -15,7 +15,7 @@ import {useAppDispatch} from "../store/hooks";
 import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
 
-const CustomerDetails = () => {
+const StaffDetails = () => {
   const { id } = useParams()
   const init: User = {
     first_name: '',
@@ -23,12 +23,13 @@ const CustomerDetails = () => {
     phone_number: '',
     id: 0,
     is_active: false,
-    role: 'Customer',
+    role: 'POS',
     email: '',
   }
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [data, setData] = useState(init)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -38,16 +39,17 @@ const CustomerDetails = () => {
     setAnchorEl(null)
   }
 
+  const handleEdit = () => {
+    setAnchorEl(null)
+    navigate(`/staff/edit/${id}`)
+  }
+
   const handleDelete = () => {
     setAnchorEl(null)
   }
 
-  const handleDeactivate = () => {
-    setAnchorEl(null)
-  }
-
   const getEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.get(`/user/customer/${id}`)
+    return await httpClient.get(`/user/staff/${id}`)
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -237,7 +239,7 @@ const CustomerDetails = () => {
                   />
                 </Fab>
                 <Menu
-                  id="menu-customerDetails"
+                  id="menu-StaffDetails"
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: 'top',
@@ -251,17 +253,17 @@ const CustomerDetails = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
+                  <MenuItem onClick={handleEdit}>
+                    <ListItemIcon>
+                      <EditOutlined />
+                    </ListItemIcon>
+                    <ListItemText>Edit info</ListItemText>
+                  </MenuItem>
                   <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
                       <DeleteOutline />
                     </ListItemIcon>
                     <ListItemText>Delete user</ListItemText>
-                  </MenuItem>
-                  <MenuItem onClick={handleDeactivate}>
-                    <ListItemIcon>
-                      <DeleteOutline />
-                    </ListItemIcon>
-                    <ListItemText>Deactivate user</ListItemText>
                   </MenuItem>
                 </Menu>
               </Box>
@@ -390,4 +392,4 @@ const CustomerDetails = () => {
   )
 }
 
-export { CustomerDetails }
+export { StaffDetails }
