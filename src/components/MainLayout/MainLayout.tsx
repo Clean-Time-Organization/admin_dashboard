@@ -113,7 +113,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
         }}
       >
         <AppBar
-          position="fixed"
+          position="relative"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
             background: "#FFF",
