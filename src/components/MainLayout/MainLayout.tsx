@@ -126,6 +126,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
             <Box
               component="img"
               sx={{
+                paddingRight: "48px",
                 width: "62px",
                 display: "flex",
                 alignItems: "center",
@@ -146,6 +147,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         width: 'fit-content',
                         height: "64px",
                         alignItems: "center",
+                        gap: '24px',
                       },
                     }}
                     TabIndicatorProps={{
@@ -162,7 +164,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       to="/home"
                       component={Link}
                       sx={{
-                        height: "64px"
+                        height: "64px",
+                        padding: "4px",
+                        minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -171,7 +175,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       to="/staff"
                       component={Link}
                       sx={{
-                        height: "64px"
+                        height: "64px",
+                        padding: "4px",
+                        minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -180,7 +186,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       to="/customers"
                       component={Link}
                       sx={{
-                        height: "64px"
+                        height: "64px",
+                        padding: "4px",
+                        minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -190,6 +198,11 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       value="/laundries"
                       to="/laundries"
                       component={Link}
+                      sx={{
+                        height: "64px",
+                        padding: "4px",
+                        minWidth: 'fit-content',
+                      }}
                     />
                     <Tab
                       label={(<Typography variant="nav">Orders</Typography>)}
@@ -197,7 +210,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       to="/orders"
                       component={Link}
                       sx={{
-                        height: "64px"
+                        height: "64px",
+                        padding: "4px",
+                        minWidth: 'fit-content',
                       }}
                     />
                   </Tabs>

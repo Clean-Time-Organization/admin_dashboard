@@ -1,6 +1,4 @@
 import { styled } from '@mui/system';
-import {MouseEventHandler} from "react";
-import {User} from "../../types/user";
 
 export const TableBody = styled('div')`
   height: 100%;
@@ -51,7 +49,7 @@ export const PaginationBlock = styled('div')`
 `;
 
 export const TableRowLayout = styled('div')<{ active: boolean, cursor: string}>`
-  width: 100%;
+  width: calc(100% - 32px);
   height: 37px;
   padding: 16px;
   background: #fff;

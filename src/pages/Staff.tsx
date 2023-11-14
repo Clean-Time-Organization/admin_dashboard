@@ -189,7 +189,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
   ]
 
   return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: User) => onTableRowClick(event, entityData)}>
-    <Grid container>
+    <Grid container style={{ alignItems: 'center' }}>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
           <Grid item xs={2} style={{ display: 'flex', alignItems: 'center' }}>
@@ -205,7 +205,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
         <BasicText>{user.phone_number}</BasicText>
         <BasicText>{user.email}</BasicText>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         {
           user.staff &&
             <>
@@ -220,7 +220,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
             </>
         }
       </Grid>
-      <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end', height: '100%' }}>
         <BasicText>
           <ColoredText color={user.is_active ? '#005E1B' : '#AE2121'}>{user.id}</ColoredText>&nbsp;
           {user.is_active ? <Active /> : <Inactive />}

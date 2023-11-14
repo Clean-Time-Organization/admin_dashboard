@@ -1,7 +1,7 @@
 import { styled } from '@mui/system';
 
 const Content = styled('div')`
-  padding-top: 32px;
+  padding: 32px 0;
   height: calc(100% - 64px);
   width: 1024px;
   position: relative;

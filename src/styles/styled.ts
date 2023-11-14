@@ -45,8 +45,6 @@ export const Name = styled('div')`
 
 export const BasicText = styled('div')`
   color: #0E1019;
-  leading-trim: both;
-  text-edge: cap;
   font-size: 14px;
   font-weight: 400;
   line-height: 150%;
@@ -59,6 +57,9 @@ export const BasicText = styled('div')`
 
 export const BasicTextName = styled(BasicText)`
   color: #2E8DC8;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 export const ColoredText = styled('div')<{color: string}>`
