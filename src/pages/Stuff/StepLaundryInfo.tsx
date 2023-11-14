@@ -1,13 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { BasicButton, LinkButton } from "../../components/Button/Buttons";
-import { InputBase } from "../../components/InputBase/InputBase";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { Branch, Laundry, UserForm } from "../../types/user";
-import { PasswordGeneration } from "../../components/PasswordGeneration/PAsswordGeneration";
 import { Autocomplete } from "../../components/Autocomplete/Autocomplete";
 import httpClient from "../../services/HttpClient";
-import { LocalLaundryServiceOutlined } from "@mui/icons-material";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<UserForm>;
