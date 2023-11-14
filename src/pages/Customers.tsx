@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import {FC, useEffect, useState} from 'react';
 import { FilterDropdown } from '../components/FilterDropdown/FilterDropdown';
 import { PageTitle } from '../components/PageTitle/PageTitle';
 import { Table } from '../components/Table/Table';
@@ -13,7 +13,7 @@ import {
   Chips,
   ChipsButton,
   HintText,
-} from './styled';
+} from '../styles/styled';
 import { User, UsersList } from '../types/user';
 import { Grid } from '@mui/material';
 import { Inactive } from '../components/Icons/Inactive';
@@ -24,6 +24,7 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
+import {useNavigate} from "react-router-dom";
 
 interface IStaffRowProps {
   user: User;
@@ -140,7 +141,14 @@ const Customers = () => {
 };
 
 const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
-  return <TableRow active={user.is_active}>
+  const navigate = useNavigate()
+
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: User) => {
+    const id = entityData ? entityData.id : ''
+    navigate(`/customers/${id}`)
+  }
+
+  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: User) => onTableRowClick(event, entityData)}>
     <Grid container>
       <Grid item xs={6} style={{ display: 'flex' }}>
         <Grid container>
@@ -163,7 +171,7 @@ const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
         </BasicText>
       </Grid>
     </Grid>
-  </TableRow>;
+  </TableRow>
 };
 
-export { Customers };
+export { Customers }

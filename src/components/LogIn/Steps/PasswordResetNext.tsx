@@ -158,6 +158,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
               <TextField
                 id={field.name}
                 label="New password"
+                autoFocus
                 InputLabelProps={{
                   shrink: true,
                   style: {

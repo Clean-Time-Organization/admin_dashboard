@@ -6,17 +6,14 @@ import {LoginApiReponse, Steps} from "../LogIn";
 import {useMutation} from "react-query";
 
 interface Props {
-  parentTmpToken: string
   email: string
   setStep: (value: Steps) => void
-  onParentGoToPasswordReset: (value: string) => void
   setErrorMessage: (value: string) => void
 }
 
-export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({parentTmpToken, email, setStep, onParentGoToPasswordReset, setErrorMessage}) {
+export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({email, setStep, setErrorMessage}) {
   const env = import.meta.env
 
-  const [tmpToken, setTmpToken] = useState('')
   const { handleSubmit } = useForm()
 
   const resetPasswordStart = async (): Promise<LoginApiReponse> => {
@@ -24,8 +21,6 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
       status: 400,
       details: 'Server error'
     }
-
-    setTmpToken('')
 
     await fetch(`${env.VITE_API_BASE_URL}/auth/send-email`, {
       method: 'POST',
@@ -40,7 +35,6 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
       return resp.json()
     }).then(jsonData => {
       if (response.status === 200) {
-        setTmpToken(jsonData.tmp_token)
       }
     }).catch(err => {
       response.details = 'Server is unavailable, please try again later'
@@ -81,10 +75,6 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
 
   const onResetPassword = () => {
     resetPasswordStartMutation.mutate()
-  }
-
-  const onGoToPasswordReset = () => {
-    onParentGoToPasswordReset(tmpToken ? tmpToken : parentTmpToken)
   }
 
   const onSubmit = () => {
@@ -146,36 +136,6 @@ export const PasswordResetStart: FC<Props> = memo(function PasswordResetStart({p
         <Box>
           <Divider light />
         </Box>
-        {/*{env.MODE && env.MODE === 'development' ?*/}
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-          >
-            <Button
-              variant="contained"
-              disableElevation={true}
-              style={{
-                backgroundColor: "#2E8DC8",
-                borderRadius: "4px",
-                padding: "0px",
-                margin: "0px",
-                maxWidth: "185px",
-                maxHeight: "40px",
-                minWidth: "185px",
-                minHeight: "40px",
-                fontFamily: "Anek Latin",
-                fontSize: "16px",
-                fontStyle: "normal",
-                fontWeight: "500",
-                lineHeight: "24px",
-                textTransform: "capitalize",
-              }}
-              onClick={onGoToPasswordReset}
-            >
-              Go to password reset
-            </Button>
-          </Box>
-          {/*: null}*/}
         <Box>
           <Link
             component="button"

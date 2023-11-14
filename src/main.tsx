@@ -1,16 +1,17 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import './resets.css';
 import AuthProvider from "./components/Auth/AuthProvider";
+import {Provider} from "react-redux";
+import store from "./store/store";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
+    <Provider store={store}>
+      <AuthProvider>
         <App />
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </Provider>
   </StrictMode>,
 )
