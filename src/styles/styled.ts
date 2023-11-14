@@ -51,6 +51,7 @@ export const BasicText = styled('div')`
   display: flex;
   height: fit-content;
   align-items: center;
+  // font-family: Anek Latin;
 `;
 
 export const BasicTextName = styled('span')`

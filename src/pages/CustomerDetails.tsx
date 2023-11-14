@@ -250,6 +250,17 @@ const CustomerDetails = () => {
                   }}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  MenuListProps={{
+                    sx: {
+                      paddingTop: "8px",
+                      paddingBottom: "8px",
+                    }
+                  }}
+                  sx={{
+                    "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
+                      boxShadow: "none",
+                    },
+                  }}
                 >
                   <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
