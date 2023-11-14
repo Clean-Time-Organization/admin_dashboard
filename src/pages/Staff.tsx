@@ -210,7 +210,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
         <BasicText>{user.phone_number}</BasicText>
         <BasicText>{user.email}</BasicText>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         {
           user.staff &&
             <>
@@ -225,7 +225,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
             </>
         }
       </Grid>
-      <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <BasicText>
           <ColoredText color={user.is_active ? '#005E1B' : '#AE2121'}>{user.id}</ColoredText>&nbsp;
           {user.is_active ? <Active /> : <Inactive />}

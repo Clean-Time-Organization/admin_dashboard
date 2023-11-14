@@ -46,19 +46,23 @@ export const Name = styled('div')`
 
 export const BasicText = styled('div')`
   color: #0E1019;
-  leading-trim: both;
-  text-edge: cap;
   font-size: 14px;
   font-weight: 400;
   line-height: 150%;
-  text-overflow: ellipsis;
   display: flex;
   height: fit-content;
   align-items: center;
 `;
 
-export const BasicTextName = styled(BasicText)`
+export const BasicTextName = styled('span')`
   color: #2E8DC8;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  // width: 290px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export const ColoredText = styled('div')<{color: string}>`
