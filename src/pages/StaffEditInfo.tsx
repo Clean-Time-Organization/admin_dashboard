@@ -3,23 +3,20 @@ import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
 import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select, Stack,
-    TextField,
-    Typography
+  Alert,
+  Box,
+  Button,
+  CircularProgress, MenuItem, Paper,
+  Stack,
+  TextField,
+  Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
 
 enum Status {
-  Active,
-  Inactive,
+  Active = 1,
+  Inactive = 2,
 }
 
 const StaffEditInfo = () => {
@@ -304,16 +301,45 @@ const StaffEditInfo = () => {
                   paddingBottom: "28px",
                 }}
               >
-                <InputLabel id="statusSelectLabel">Status</InputLabel>
-                <Select
-                  labelId="statusSelectLabel"
+                <TextField
+                  id="outlined-select-currency"
+                  select
+                  label="Select"
                   value={status}
-                  label="Status"
-                  // onChange={handleChange}
+                  fullWidth
+                  onChange={e => setStatus(e.target.value === "1" ? Status.Active : Status.Inactive)}
+                  InputLabelProps={{
+                    shrink: true,
+                    style: {
+                      fontFamily: "Anek Latin",
+                      fontStyle: "normal",
+                      fontWeight: "400",
+                      transform: "translate(15px, -9px) scale(0.75)",
+                    }
+                  }}
+                  variant="outlined"
+                  inputProps={{
+                    style: {
+                      WebkitBoxShadow: "0 0 0 1000px white inset"
+                    }
+                  }}
+                  sx={{
+                    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                      width: "357px"
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#D1D5DB",
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: "#2E8DC8",
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value={Status.Active}>Active</MenuItem>
                   <MenuItem value={Status.Inactive}>Inactive</MenuItem>
-                </Select>
+                </TextField>
                 {statusError ?
                   <Alert
                     variant="support"
