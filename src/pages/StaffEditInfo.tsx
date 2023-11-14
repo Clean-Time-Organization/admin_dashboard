@@ -3,17 +3,16 @@ import httpClient from "../services/HttpClient";
 import {useParams} from "react-router-dom";
 import {useMutation} from "react-query";
 import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Stack,
-  TextField,
-  Typography
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select, Stack,
+    TextField,
+    Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
@@ -48,6 +47,7 @@ const StaffEditInfo = () => {
       full_name: userName,
       email: email,
       phone_number: phone,
+      is_active: status === Status.Active,
     })
   }
 
@@ -80,7 +80,6 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error) => {
-      setUserName('')
       // setErrorMessage('Error occurred while communicating server')
       console.warn(error)
     },
@@ -88,8 +87,6 @@ const StaffEditInfo = () => {
 
   const updateEntityMutation = useMutation(updateEntity, {
     onSuccess: response => {
-      setUserName('')
-
       switch (response.status) {
         case 200:
           console.dir(response)
@@ -114,7 +111,6 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error) => {
-      setUserName('')
       // setErrorMessage('Error occurred while communicating server')
       console.warn(error)
     },
@@ -393,7 +389,7 @@ const StaffEditInfo = () => {
                   type="submit"
                   variant="contained"
                   disableElevation={true}
-                  // disabled={checkEmailMutation.isLoading}
+                  disabled={updateEntityMutation.isLoading}
                   style={{
                     backgroundColor: "#2E8DC8",
                     borderRadius: "4px",
@@ -410,24 +406,23 @@ const StaffEditInfo = () => {
                     lineHeight: "24px",
                     textTransform: "capitalize",
                   }}
-                  // startIcon={
-                  //   checkEmailMutation.isLoading ? (
-                  //     <Stack
-                  //       alignItems="center"
-                  //       style={{
-                  //         paddingLeft: "15px"
-                  //       }}>
-                  //       <CircularProgress
-                  //         size={25}
-                  //         style={{
-                  //           color: "white",
-                  //         }} />
-                  //     </Stack>
-                  //   ) : null
-                  // }
+                  startIcon={
+                      updateEntityMutation.isLoading ? (
+                      <Stack
+                        alignItems="center"
+                        style={{
+                          paddingLeft: "15px"
+                        }}>
+                        <CircularProgress
+                          size={25}
+                          style={{
+                            color: "white",
+                          }} />
+                      </Stack>
+                    ) : null
+                  }
                 >
-                  {/*{checkEmailMutation.isLoading ? '' : 'Continue'}*/}
-                  Save
+                  {updateEntityMutation.isLoading ? '' : 'Save'}
                 </Button>
               </Box>
             </Box>
