@@ -12,6 +12,18 @@ export type User = {
   }
 }
 
+export interface UserForm {
+  full_name: string;
+  phone_number: string;
+  role: 'Admin' | 'POS';
+  email?: string;
+  password: string;
+  laundry_id?: number;
+  branch_id?: number;
+  laundry_name?: string;
+  branch_name?: string;
+}
+
 export type UsersList = {
   items: Array<User>;
   total: number;
@@ -22,11 +34,11 @@ export type UsersList = {
 
 export type Laundry = {
  id: number;
- name_en: string;
- name_ar: string;
+ name_en?: string;
+ name_ar?: string;
 }
 
 export type Branch = {
  id: number;
- address: string;
+ address?: string;
 }

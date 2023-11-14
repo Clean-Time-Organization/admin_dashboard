@@ -18,37 +18,57 @@ import theme from "../../styles/Theme";
 import {ArrowDown} from "../Icons/ArrowDown";
 import {getUserFL} from "../../services/common";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import { Snackbar } from '../Snackbar/Snackbar';
+import { setNotification } from '../../store/features/notification';
 import {setBreadCrumbsData} from "../../store/features/breadCrumbsDataSlice";
 
 const MainLayout = ({children}: {children: ReactNode}) => {
+  const dispatch = useAppDispatch()
   const location = useLocation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const {signOut} = useAuth()
   const navigate = useNavigate()
   const authData = useAppSelector(state => state.authData)
   const drawerData = useAppSelector(state => state.drawerData)
+  const {notificationMessage, notificationType} = useAppSelector(state => state.notification)
   const [showToolBar, setShowToolBar] = useState(true)
   const [showDrawer, setShowDrawer] = useState(false)
-  const dispatch = useAppDispatch()
+  let timeout: any = null;
+
+  useEffect(() => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+
+    if (notificationMessage) {
+      timeout = setTimeout(() => {
+        dispatch(setNotification({
+          notificationMessage: '',
+          notificationType: undefined,
+        }))
+      }, 8000);
+    }
+  }, [notificationMessage]);
 
   useEffect(() => {
     dispatch(setBreadCrumbsData({
       title: '',
     }))
 
-    let patterns = ['/staff/edit/:id']
+    let patterns = ['/customers/:id', '/staff/:id']
     let match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
+      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
       const possibleMatch = matchPath({path: pattern}, location.pathname)
-      if (possibleMatch !== null) {
+      if (possibleMatch !== null && lastPiece !== 'create') {
         match = true
         break
       }
     }
-    setShowToolBar(!match)
+    setShowDrawer(match)
 
-    patterns = ['/customers/:id', '/staff/:id']
+    patterns = ['/staff/edit/:id']
     match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
@@ -58,7 +78,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
         break
       }
     }
-    setShowDrawer(match)
+    setShowToolBar(!match)
   }, [location])
 
   if (location.pathname.toLowerCase().slice(0, 6) === '/login') return <>{children}</>
@@ -67,7 +87,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
       const possibleMatch = matchPath(pattern, location.pathname)
-      if (possibleMatch !== null) {
+      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
+      if (possibleMatch !== null && lastPiece !== 'create') {
         return possibleMatch
       }
     }
@@ -113,20 +134,20 @@ const MainLayout = ({children}: {children: ReactNode}) => {
         }}
       >
         <AppBar
-          position="relative"
+          position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
             background: "#FFF",
             boxShadow: "none",
             borderBottom: "1px solid #E5E7EB",
             height: "64px",
+            position: 'relative',
           }}
         >
           <Toolbar>
             <Box
               component="img"
               sx={{
-                paddingRight: "48px",
                 width: "62px",
                 display: "flex",
                 alignItems: "center",
@@ -396,6 +417,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
           <Content>
             {children}
           </Content>
+          { notificationMessage && notificationType &&
+            <Snackbar text={notificationMessage} type={notificationType} />
+          }
         </Box>
       </Box>
     </ThemeProvider>

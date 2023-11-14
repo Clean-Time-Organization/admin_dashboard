@@ -7,6 +7,7 @@ import { Staff } from './pages/Staff';
 import {QueryClient, QueryClientProvider} from "react-query";
 import { Customers } from './pages/Customers';
 import { Home } from './pages/Home';
+import { CreateStuffUser } from './pages/Stuff/Create';
 import {Laundries} from "./pages/Laundries";
 import RequireAuth from "./components/Auth/RequireAuth";
 import {PageNotFound} from "./pages/PageNotFound";
@@ -27,6 +28,7 @@ export const App: FC = memo(function App() {
             <Route path={'/'} element={<RequireAuth><Home /></RequireAuth>} />
             <Route path={'/home'} element={<RequireAuth><Home /></RequireAuth>} />
             <Route path={'/staff'} element={<RequireAuth><Staff /></RequireAuth>} />
+            <Route path={'/staff/create'} element={<RequireAuth><CreateStuffUser /></RequireAuth>} />
             <Route path={'/staff/:id'} element={<RequireAuth><StaffDetails /></RequireAuth>} />
             <Route path={'/staff/edit/:id'} element={<RequireAuth><StaffEditInfo /></RequireAuth>} />
             <Route path={'/customers'} element={<RequireAuth><Customers /></RequireAuth>} />

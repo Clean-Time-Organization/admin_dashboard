@@ -48,18 +48,21 @@ export const BasicText = styled('div')`
   font-size: 14px;
   font-weight: 400;
   line-height: 150%;
-  text-overflow: ellipsis;
   display: flex;
   height: fit-content;
   align-items: center;
-  font-family: Anek Latin;
+  // font-family: Anek Latin;
 `;
 
-export const BasicTextName = styled(BasicText)`
+export const BasicTextName = styled('span')`
   color: #2E8DC8;
-  display: block;
-  overflow: hidden;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  // width: 290px;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export const ColoredText = styled('div')<{color: string}>`
