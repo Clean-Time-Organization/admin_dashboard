@@ -7,9 +7,12 @@ import { StepRole } from "./StepRole";
 import { StepUserDetails } from "./StepUserData";
 import httpClient from "../../services/HttpClient";
 import { StepLaundryInfo } from "./StepLaundryInfo";
+import { useAppDispatch } from "../../store/hooks";
+import { setNotification } from "../../store/features/notification";
 
 const CreateStuffUser = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [totalSteps, setTotalSteps] = useState(3);
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -57,6 +60,10 @@ const CreateStuffUser = () => {
     ).then(response => {
       if (response.status === 200) {
         navigate('/staff');
+        dispatch(setNotification({
+          notificationMessage: 'User is successfully created',
+          notificationType: 'success',
+        }));
       }
     }).catch(error => {
       if (Object.keys(error.response.data.detail)[0] === 'email') {
@@ -65,6 +72,11 @@ const CreateStuffUser = () => {
         setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
       } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
         setError('phone_number', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
+      } else {
+        dispatch(setNotification({
+          notificationMessage: error.response.data.detail + '',
+          notificationType: 'error',
+        }));
       }
       // then - else => set global error message if smth went wrong, otherwise - success
     });

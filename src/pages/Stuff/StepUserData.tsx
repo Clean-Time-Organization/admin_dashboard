@@ -5,6 +5,8 @@ import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, Step
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { UserForm } from "../../types/user";
 import { PasswordGeneration } from "../../components/PasswordGeneration/PasswordGeneration";
+import { useAppDispatch } from "../../store/hooks";
+import { setNotification } from "../../store/features/notification";
 
 interface IStepUserDetailsProps {
   readonly control: Control<UserForm>;
@@ -24,6 +26,7 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
   toPreviousStep,
   onCreate,
 }) => {
+  const dispatch = useAppDispatch();
   const watchPassword = watch('password');
 
   return <StepBase>
@@ -113,7 +116,13 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
           <PasswordGeneration
             label={'Password'}
             error={!!error}
-            copyFunction={() => navigator.clipboard.writeText(watchPassword)}
+            copyFunction={() => {
+              navigator.clipboard.writeText(watchPassword);
+              dispatch(setNotification({
+                notificationMessage: 'Password copied',
+                notificationType: 'success',
+              }));
+            }}
             currentValue={watchPassword}
             setValue={(val: string) => setValue('password', val)}
             errorText={error?.type === 'required' && 'Field is required' ||

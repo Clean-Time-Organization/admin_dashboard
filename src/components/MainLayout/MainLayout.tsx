@@ -17,16 +17,36 @@ import {useAuth} from "../Auth/AuthProvider";
 import theme from "../../styles/Theme";
 import {ArrowDown} from "../Icons/ArrowDown";
 import {getUserFL} from "../../services/common";
-import {useAppSelector} from "../../store/hooks";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import { Snackbar } from '../Snackbar/Snackbar';
+import { setNotification } from '../../store/features/notification';
 
 const MainLayout = ({children}: {children: ReactNode}) => {
+  const dispatch = useAppDispatch();
   const location = useLocation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const {signOut} = useAuth()
   const navigate = useNavigate()
   const authData = useAppSelector(state => state.authData)
   const drawerData = useAppSelector(state => state.drawerData)
+  const {notificationMessage, notificationType} = useAppSelector(state => state.notification)
   const [showDrawer, setShowDrawer] = useState(false)
+  let timeout: any = null;
+
+  useEffect(() => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+
+    if (notificationMessage) {
+      timeout = setTimeout(() => {
+        dispatch(setNotification({
+          notificationMessage: '',
+          notificationType: undefined,
+        }))
+      }, 8000);
+    }
+  }, [notificationMessage]);
 
   useEffect(() => {
     const patterns = ['/customers/:id']
@@ -354,6 +374,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
           <Content>
             {children}
           </Content>
+          { notificationMessage && notificationType &&
+            <Snackbar text={notificationMessage} type={notificationType} />
+          }
         </Box>
       </Box>
     </ThemeProvider>
