@@ -168,7 +168,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         width: 'fit-content',
                         height: "64px",
                         alignItems: "center",
-                        gap: '24px',
+                        // gap: '24px',
                       },
                     }}
                     TabIndicatorProps={{
@@ -186,8 +186,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       component={Link}
                       sx={{
                         height: "64px",
-                        padding: "4px",
-                        minWidth: 'fit-content',
+                        // padding: "4px",
+                        // minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -197,8 +197,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       component={Link}
                       sx={{
                         height: "64px",
-                        padding: "4px",
-                        minWidth: 'fit-content',
+                        // padding: "4px",
+                        // minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -208,8 +208,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       component={Link}
                       sx={{
                         height: "64px",
-                        padding: "4px",
-                        minWidth: 'fit-content',
+                        // padding: "4px",
+                        // minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -221,8 +221,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       component={Link}
                       sx={{
                         height: "64px",
-                        padding: "4px",
-                        minWidth: 'fit-content',
+                        // padding: "4px",
+                        // minWidth: 'fit-content',
                       }}
                     />
                     <Tab
@@ -232,8 +232,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       component={Link}
                       sx={{
                         height: "64px",
-                        padding: "4px",
-                        minWidth: 'fit-content',
+                        // padding: "4px",
+                        // minWidth: 'fit-content',
                       }}
                     />
                   </Tabs>
