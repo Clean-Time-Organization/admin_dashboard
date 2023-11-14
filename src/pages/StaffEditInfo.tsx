@@ -1,64 +1,65 @@
 import {useEffect, useState} from 'react';
-import {
-  ContentBody,
-} from '../styles/styled';
 import httpClient from "../services/HttpClient";
 import {useParams} from "react-router-dom";
 import {useMutation} from "react-query";
-import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography} from "@mui/material";
-import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
-import {User} from "../types/user";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
 import {AxiosResponse} from "axios";
-import {getUserFL} from "../services/common";
-import {useAppDispatch} from "../store/hooks";
-import {setDrawerData} from "../store/features/drawerDataSlice";
+import {Controller, useForm} from "react-hook-form";
+
+enum Status {
+  Active,
+  Inactive,
+}
 
 const StaffEditInfo = () => {
   const { id } = useParams()
-  const init: User = {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    id: 0,
-    is_active: false,
-    role: 'POS',
-    email: '',
-  }
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [data, setData] = useState(init)
-  const dispatch = useAppDispatch()
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+  const [userName, setUserName] = useState('')
+  const [userNameError, setUserNameError] = useState('')
 
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  const [email, setEmail] = useState('')
 
-  const handleEdit = () => {
-    setAnchorEl(null)
-  }
+  const [status, setStatus] = useState(Status.Inactive)
+  const [statusError, setStatusError] = useState('')
 
-  const handleDelete = () => {
-    setAnchorEl(null)
-  }
+  const [phone, setPhone] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+
+  const { handleSubmit, control } = useForm()
 
   const getEntity = async (): Promise<AxiosResponse> => {
     return await httpClient.get(`/user/staff/${id}`)
   }
 
+  const updateEntity = async (): Promise<AxiosResponse> => {
+    return await httpClient.put(`/user/staff/${id}`, {
+      full_name: userName,
+      email: email,
+      phone_number: phone,
+    })
+  }
+
   const getEntityMutation = useMutation(getEntity, {
     onSuccess: response => {
-      setData(init)
       switch (response.status) {
         case 200:
-          setData(response.data)
-          dispatch(setDrawerData({
-            roundTitle: getUserFL(response.data.first_name, response.data.last_name),
-            title: [response.data.first_name, response.data.last_name].join(' '),
-            subTitle: response.data.role,
-          }))
+          setUserName([response.data.first_name, response.data.last_name].join(' '))
+          setEmail(response.data.email)
+          setStatus(response.data.is_active ? Status.Active : Status.Inactive)
+          setPhone(response.data.phone_number)
+
           break
 
         // case 400:
@@ -79,7 +80,41 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error) => {
-      setData(init)
+      setUserName('')
+      // setErrorMessage('Error occurred while communicating server')
+      console.warn(error)
+    },
+  })
+
+  const updateEntityMutation = useMutation(updateEntity, {
+    onSuccess: response => {
+      setUserName('')
+
+      switch (response.status) {
+        case 200:
+          console.dir(response)
+          // show ok toast
+          break
+
+        // case 400:
+        //   setErrorMessage(response.details)
+        //   break
+        //
+        // case 404:
+        //   setEmailError("Couldn't find your account")
+        //   break
+        //
+        // case 422:
+        //   setEmailError('Please enter a valid email address')
+        //   break
+
+        default:
+          // setErrorMessage('Unknown server response')
+          break
+      }
+    },
+    onError: (error) => {
+      setUserName('')
       // setErrorMessage('Error occurred while communicating server')
       console.warn(error)
     },
@@ -89,205 +124,69 @@ const StaffEditInfo = () => {
     getEntityMutation.mutate()
   }, [])
 
+  useEffect(() => {
+    setUserNameError('')
+  }, [userName])
+
+  useEffect(() => {
+    setPhoneError('')
+  }, [phone])
+
+  const onSubmit = () => {
+    if (userName.trim() === '') {
+      setUserNameError('Please enter user name')
+    }
+    if (phone.trim() === '') {
+      setUserNameError('Please enter phone')
+    }
+
+    if (!userNameError && !phoneError) {
+      updateEntityMutation.mutate()
+    }
+  }
+
   return (
-    <ContentBody>
+    <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
+          width: "672px",
         }}
       >
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={{ xs: 1, sm: 2, md: 4 }}
-          marginBottom={"20px"}
+        <Box
+          sx={{
+            width: "672px",
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "32px",
+          }}
         >
-          <Box
-            component="span"
+          <Typography
             sx={{
-              backgroundColor: "#EEF5FB",
-              width: "96px",
-              height: "96px",
-              flexShrink: "0",
-              borderRadius: '50%',
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              color: "#2E8DC8",
+              leadingTrim: "both",
+              textEdge: "cap",
+              fontFamily: "Anek Latin",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: "500",
+              lineHeight: "130%",
+              padding: "10px 24px 10px 16px",
             }}
           >
-            <Typography
-              sx={{
-                color: "#1A4C73",
-                textAlign: "center",
-                leadingTrim: "both",
-                textEdge: "cap",
-                fontFamily: "Anek Latin",
-                fontSize: "40px",
-                fontStyle: "normal",
-                fontWeight: "600",
-                lineHeight: "43.429px",
-              }}
-            >
-              {getUserFL(data.first_name, data.last_name)}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Box
-              sx={{
-                width: "912px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  marginLeft: "-20px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#1F2937",
-                    leadingTrim: "both",
-                    textEdge: "cap",
-                    fontFamily: "Anek Latin",
-                    fontSize: "28px",
-                    fontStyle: "normal",
-                    fontWeight: "600",
-                    lineHeight: "120%",
-                    padding: "10px 8px",
-                  }}
-                >
-                  {[data.first_name, data.last_name].join(' ')}
-                </Typography>
-                {data.last_name ?
-                  data.is_active ?
-                    <Chip
-                      label="Active"
-                      color="error"
-                      sx={{
-                        height: "24px",
-                        borderRadius: "4px",
-                        background: "#E6F3E9",
-                        color: "#005E1B",
-                        textAlign: "center",
-                        leadingTrim: "both",
-                        textEdge: "cap",
-                        fontFamily: "Anek Latin",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: "500",
-                        lineHeight: "150%",
-                      }}
-                    />
-                    :
-                    <Chip
-                      label="Inactive"
-                      color="error"
-                      sx={{
-                        height: "24px",
-                        borderRadius: "4px",
-                        background: "#B91C1C",
-                        color: "#005E1B",
-                        textAlign: "center",
-                        leadingTrim: "both",
-                        textEdge: "cap",
-                        fontFamily: "Anek Latin",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: "500",
-                        lineHeight: "150%",
-                      }}
-                    />
-                  : null
-                }
-              </Box>
-              <Box>
-                <Fab
-                  // size="small"
-                  onClick={handleMenu}
-                  sx={{
-                    color: "#2E8DC8",
-                    boxShadow: 0,
-                    backgroundColor: "transparent",
-                    width: "36px",
-                    height: "36px",
-                  }}
-                >
-                  <MoreVert
-                    sx={{
-                      transform: "scale(0.9)"
-                    }}
-                  />
-                </Fab>
-                <Menu
-                  id="menu-StaffEditInfo"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleEdit}>
-                    <ListItemIcon>
-                      <EditOutlined />
-                    </ListItemIcon>
-                    <ListItemText>Edit info</ListItemText>
-                  </MenuItem>
-                  <MenuItem onClick={handleDelete}>
-                    <ListItemIcon>
-                      <DeleteOutline />
-                    </ListItemIcon>
-                    <ListItemText>Delete user</ListItemText>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                marginLeft: "-20px",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#0E1019",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "400",
-                  lineHeight: "150%",
-                  padding: "8px",
-                }}
-              >
-                {data.role}
-              </Typography>
-            </Box>
-          </Box>
-        </Stack>
+            Close
+          </Typography>
+        </Box>
           <Paper
             sx={{
-              boxShadow: "none",
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              padding: "20px",
+              gap: "28px",
+              padding: "32px",
+              borderRadius: "8px",
+              background: "#fff",
+              // boxShadow: "none",
             }}
           >
             <Typography
@@ -296,13 +195,13 @@ const StaffEditInfo = () => {
                 leadingTrim: "both",
                 textEdge: "cap",
                 fontFamily: "Anek Latin",
-                fontSize: "18px",
+                fontSize: "28px",
                 fontStyle: "normal",
                 fontWeight: "600",
                 lineHeight: "120%",
               }}
             >
-              Contact Info
+              Edit Info
             </Typography>
             <Box
               sx={{
@@ -313,32 +212,100 @@ const StaffEditInfo = () => {
             >
               <Typography
                 sx={{
-                  color: "#656873",
+                  color: "#0E1019",
                   leadingTrim: "both",
                   textEdge: "cap",
                   fontFamily: "Anek Latin",
-                  fontSize: "14px",
+                  fontSize: "18px",
                   fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  fontWeight: "600",
+                  lineHeight: "120%",
                 }}
               >
-                Phone Number
+                Basic Info
               </Typography>
-              <Typography
+              <Box
                 sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  marginBottom: "32px",
                 }}
               >
-                {data.phone_number}
-              </Typography>
+                <Controller
+                  control={control}
+                  name="userName"
+                  defaultValue={userName}
+                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                    <TextField
+                      id={field.name}
+                      label="User name"
+                      value={userName || ''}
+                      autoFocus
+                      InputLabelProps={{
+                        shrink: true,
+                        style: {
+                          fontFamily: "Anek Latin",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          transform: "translate(15px, -9px) scale(0.75)",
+                        }
+                      }}
+                      fullWidth
+                      error={!!userNameError}
+                      onChange={e => setUserName(e.target.value)}
+                      variant="outlined"
+                      inputProps={{
+                        style: {
+                          WebkitBoxShadow: "0 0 0 1000px white inset"
+                        }
+                      }}
+                      sx={{
+                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                          width: "357px"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "#D1D5DB",
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: "#2E8DC8",
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+                {userNameError ?
+                  <Alert
+                    variant="support"
+                    severity="error"
+                  >
+                    {userNameError}
+                  </Alert>
+                  : null}
+              </Box>
+              <Box
+                sx={{
+                  marginBottom: "32px",
+                }}
+              >
+                <InputLabel id="statusSelectLabel">Status</InputLabel>
+                <Select
+                  labelId="statusSelectLabel"
+                  value={status}
+                  label="Status"
+                  // onChange={handleChange}
+                >
+                  <MenuItem value={Status.Active}>Active</MenuItem>
+                  <MenuItem value={Status.Inactive}>Inactive</MenuItem>
+                </Select>
+                {statusError ?
+                  <Alert
+                    variant="support"
+                    severity="error"
+                  >
+                    {statusError}
+                  </Alert>
+                  : null}
+              </Box>
             </Box>
             <Box
               sx={{
@@ -349,36 +316,124 @@ const StaffEditInfo = () => {
             >
               <Typography
                 sx={{
-                  color: "#656873",
+                  color: "#0E1019",
                   leadingTrim: "both",
                   textEdge: "cap",
                   fontFamily: "Anek Latin",
-                  fontSize: "14px",
+                  fontSize: "18px",
                   fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  fontWeight: "600",
+                  lineHeight: "120%",
                 }}
               >
-                Email
+                Contact Info
               </Typography>
-              <Typography
+              <Box
                 sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  marginBottom: "32px",
                 }}
               >
-                {data.email}
-              </Typography>
+                <Controller
+                  control={control}
+                  name="phone"
+                  defaultValue={phone}
+                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                    <TextField
+                      id={field.name}
+                      label="Phone"
+                      value={phone || ''}
+                      InputLabelProps={{
+                        shrink: true,
+                        style: {
+                          fontFamily: "Anek Latin",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          transform: "translate(15px, -9px) scale(0.75)",
+                        }
+                      }}
+                      fullWidth
+                      error={!!phoneError}
+                      onChange={e => setPhone(e.target.value)}
+                      variant="outlined"
+                      inputProps={{
+                        style: {
+                          WebkitBoxShadow: "0 0 0 1000px white inset"
+                        }
+                      }}
+                      sx={{
+                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                          width: "357px"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "#D1D5DB",
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: "#2E8DC8",
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+                {phoneError ?
+                  <Alert
+                    variant="support"
+                    severity="error"
+                  >
+                    {phoneError}
+                  </Alert>
+                  : null}
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disableElevation={true}
+                  // disabled={checkEmailMutation.isLoading}
+                  style={{
+                    backgroundColor: "#2E8DC8",
+                    borderRadius: "4px",
+                    padding: "0px",
+                    margin: "0px",
+                    maxWidth: "135px",
+                    maxHeight: "40px",
+                    minWidth: "135px",
+                    minHeight: "40px",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "24px",
+                    textTransform: "capitalize",
+                  }}
+                  // startIcon={
+                  //   checkEmailMutation.isLoading ? (
+                  //     <Stack
+                  //       alignItems="center"
+                  //       style={{
+                  //         paddingLeft: "15px"
+                  //       }}>
+                  //       <CircularProgress
+                  //         size={25}
+                  //         style={{
+                  //           color: "white",
+                  //         }} />
+                  //     </Stack>
+                  //   ) : null
+                  // }
+                >
+                  {/*{checkEmailMutation.isLoading ? '' : 'Continue'}*/}
+                  Save
+                </Button>
+              </Box>
             </Box>
           </Paper>
       </Box>
-    </ContentBody>
+    </form>
   )
 }
 

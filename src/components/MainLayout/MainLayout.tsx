@@ -27,6 +27,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
   const navigate = useNavigate()
   const authData = useAppSelector(state => state.authData)
   const drawerData = useAppSelector(state => state.drawerData)
+  const [showToolBar, setShowToolBar] = useState(true)
   const [showDrawer, setShowDrawer] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -35,8 +36,20 @@ const MainLayout = ({children}: {children: ReactNode}) => {
       title: '',
     }))
 
-    const patterns = ['/customers/:id', '/staff/:id']
+    let patterns = ['/staff/edit/:id']
     let match = false
+    for (let i = 0; i < patterns.length; i += 1) {
+      const pattern = patterns[i]
+      const possibleMatch = matchPath({path: pattern}, location.pathname)
+      if (possibleMatch !== null) {
+        match = true
+        break
+      }
+    }
+    setShowToolBar(!match)
+
+    patterns = ['/customers/:id', '/staff/:id']
+    match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
       const possibleMatch = matchPath({path: pattern}, location.pathname)
@@ -124,68 +137,72 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                 width: '100%',
               }}
             >
-              <Tabs
-                value={currentTab}
-                sx={{
-                  '& .MuiTabs-flexContainer': {
-                    width: 'fit-content',
-                    height: "64px",
-                    alignItems: "center",
-                  },
-                }}
-                TabIndicatorProps={{
-                  sx: {
-                    height: "4px",
-                    borderRadius: "1px 1px 0px 0px",
-                    background: "#2E8DC8",
-                  }
-                }}
-              >
-                <Tab
-                  label={(<Typography variant="nav">Home</Typography>)}
-                  value="/home"
-                  to="/home"
-                  component={Link}
-                  sx={{
-                    height: "64px"
-                  }}
-                />
-                <Tab
-                  label={(<Typography variant="nav">Staff</Typography>)}
-                  value="/staff"
-                  to="/staff"
-                  component={Link}
-                  sx={{
-                    height: "64px"
-                  }}
-                />
-                <Tab
-                  label={(<Typography variant="nav">Customers</Typography>)}
-                  value="/customers"
-                  to="/customers"
-                  component={Link}
-                  sx={{
-                    height: "64px"
-                  }}
-                />
-                <Tab
-                  label={(<Typography variant="nav">Laundries</Typography>)}
-                  icon={<ArrowDown />}
-                  iconPosition="end"
-                  value="/laundries"
-                  to="/laundries"
-                  component={Link}
-                />
-                <Tab
-                  label={(<Typography variant="nav">Orders</Typography>)}
-                  value="/orders"
-                  to="/orders"
-                  component={Link}
-                  sx={{
-                    height: "64px"
-                  }}
-                />
-              </Tabs>
+              {
+                showToolBar ?
+                  <Tabs
+                    value={currentTab}
+                    sx={{
+                      '& .MuiTabs-flexContainer': {
+                        width: 'fit-content',
+                        height: "64px",
+                        alignItems: "center",
+                      },
+                    }}
+                    TabIndicatorProps={{
+                      sx: {
+                        height: "4px",
+                        borderRadius: "1px 1px 0px 0px",
+                        background: "#2E8DC8",
+                      }
+                    }}
+                  >
+                    <Tab
+                      label={(<Typography variant="nav">Home</Typography>)}
+                      value="/home"
+                      to="/home"
+                      component={Link}
+                      sx={{
+                        height: "64px"
+                      }}
+                    />
+                    <Tab
+                      label={(<Typography variant="nav">Staff</Typography>)}
+                      value="/staff"
+                      to="/staff"
+                      component={Link}
+                      sx={{
+                        height: "64px"
+                      }}
+                    />
+                    <Tab
+                      label={(<Typography variant="nav">Customers</Typography>)}
+                      value="/customers"
+                      to="/customers"
+                      component={Link}
+                      sx={{
+                        height: "64px"
+                      }}
+                    />
+                    <Tab
+                      label={(<Typography variant="nav">Laundries</Typography>)}
+                      icon={<ArrowDown />}
+                      iconPosition="end"
+                      value="/laundries"
+                      to="/laundries"
+                      component={Link}
+                    />
+                    <Tab
+                      label={(<Typography variant="nav">Orders</Typography>)}
+                      value="/orders"
+                      to="/orders"
+                      component={Link}
+                      sx={{
+                        height: "64px"
+                      }}
+                    />
+                  </Tabs>
+                  : null
+              }
             </Box>
             <IconButton
               size="medium"
