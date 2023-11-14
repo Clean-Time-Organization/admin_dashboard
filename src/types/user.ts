@@ -12,6 +12,18 @@ export type User = {
   }
 }
 
+export type UserForm = {
+  full_name: string;
+  phone_number: string;
+  role: 'Admin' | 'POS';
+  email?: string;
+  password: string;
+  staff?: {
+    laundry?: Laundry;
+    branch?: Branch | null;
+  }
+}
+
 export type UsersList = {
   items: Array<User>;
   total: number;

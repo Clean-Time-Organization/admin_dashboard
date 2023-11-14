@@ -24,6 +24,7 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
 export const LinkButton = styled(BasicButton)`
   background: transparent;
   color: #2E8DC8;
+  line-height: 100%;
 
   &:hover {
     background: rgba(0, 0, 0, 0.08);
