@@ -58,8 +58,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     let match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
+      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
       const possibleMatch = matchPath({path: pattern}, location.pathname)
-      if (possibleMatch !== null) {
+      if (possibleMatch !== null && lastPiece !== 'create') {
         match = true
         break
       }
@@ -73,7 +74,8 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
       const possibleMatch = matchPath(pattern, location.pathname)
-      if (possibleMatch !== null) {
+      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
+      if (possibleMatch !== null && lastPiece !== 'create') {
         return possibleMatch
       }
     }
@@ -126,6 +128,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
             boxShadow: "none",
             borderBottom: "1px solid #E5E7EB",
             height: "64px",
+            position: 'relative',
           }}
         >
           <Toolbar>

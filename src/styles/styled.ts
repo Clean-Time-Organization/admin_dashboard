@@ -5,7 +5,6 @@ export const ContentBody = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 63px;
 `;
 
 export const FilterRow = styled('div')`
