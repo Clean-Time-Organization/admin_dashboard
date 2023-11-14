@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import httpClient from "../services/HttpClient";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
 import {
     Alert,
@@ -24,6 +24,7 @@ enum Status {
 
 const StaffEditInfo = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const [userName, setUserName] = useState('')
   const [userNameError, setUserNameError] = useState('')
@@ -37,6 +38,10 @@ const StaffEditInfo = () => {
   const [phoneError, setPhoneError] = useState('')
 
   const { handleSubmit, control } = useForm()
+
+  const handleClose = () => {
+    navigate(`/staff/${id}`)
+  }
 
   const getEntity = async (): Promise<AxiosResponse> => {
     return await httpClient.get(`/user/staff/${id}`)
@@ -89,7 +94,7 @@ const StaffEditInfo = () => {
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          console.dir(response)
+          navigate(`/staff/${id}`)
           // show ok toast
           break
 
@@ -155,34 +160,49 @@ const StaffEditInfo = () => {
             width: "672px",
             display: "flex",
             justifyContent: "flex-end",
-            marginTop: "32px",
+            paddingBottom: "32px",
           }}
         >
-          <Typography
-            sx={{
+          <Button
+            startIcon={
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_653_1102" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                  <rect width="20" height="20" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_653_1102)">
+                  <path d="M9.99999 10.8782L5.77241 15.1057C5.65703 15.2211 5.512 15.2802 5.33732 15.2828C5.16266 15.2855 5.01496 15.2265 4.89424 15.1057C4.7735 14.985 4.71313 14.8387 4.71313 14.6667C4.71313 14.4947 4.7735 14.3483 4.89424 14.2276L9.1218 9.99999L4.89424 5.77241C4.77885 5.65703 4.71982 5.512 4.71716 5.33732C4.71447 5.16266 4.7735 5.01496 4.89424 4.89424C5.01496 4.7735 5.16132 4.71313 5.33332 4.71313C5.50532 4.71313 5.65168 4.7735 5.77241 4.89424L9.99999 9.1218L14.2276 4.89424C14.3429 4.77885 14.488 4.71982 14.6627 4.71716C14.8373 4.71447 14.985 4.7735 15.1057 4.89424C15.2265 5.01496 15.2868 5.16132 15.2868 5.33332C15.2868 5.50532 15.2265 5.65168 15.1057 5.77241L10.8782 9.99999L15.1057 14.2276C15.2211 14.3429 15.2802 14.488 15.2828 14.6627C15.2855 14.8373 15.2265 14.985 15.1057 15.1057C14.985 15.2265 14.8387 15.2868 14.6667 15.2868C14.4947 15.2868 14.3483 15.2265 14.2276 15.1057L9.99999 10.8782Z" fill="#2E8DC8"/>
+                </g>
+              </svg>
+            }
+            style={{
+              borderRadius: "4px",
+              maxWidth: "105px",
+              maxHeight: "40px",
+              minWidth: "105px",
+              minHeight: "40px",
               color: "#2E8DC8",
-              leadingTrim: "both",
-              textEdge: "cap",
+              textAlign: "center",
+              textTransform: "none",
               fontFamily: "Anek Latin",
               fontSize: "16px",
               fontStyle: "normal",
               fontWeight: "500",
               lineHeight: "130%",
-              padding: "10px 24px 10px 16px",
+              letterSpacing: "0.32px",
             }}
+            onClick={handleClose}
           >
             Close
-          </Typography>
+          </Button>
         </Box>
           <Paper
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "28px",
               padding: "32px",
               borderRadius: "8px",
               background: "#fff",
-              // boxShadow: "none",
+              boxShadow: "none",
             }}
           >
             <Typography
@@ -195,6 +215,7 @@ const StaffEditInfo = () => {
                 fontStyle: "normal",
                 fontWeight: "600",
                 lineHeight: "120%",
+                paddingBottom: "28px",
               }}
             >
               Edit Info
@@ -203,7 +224,6 @@ const StaffEditInfo = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "3px",
               }}
             >
               <Typography
@@ -216,13 +236,14 @@ const StaffEditInfo = () => {
                   fontStyle: "normal",
                   fontWeight: "600",
                   lineHeight: "120%",
+                  paddingBottom: "32px",
                 }}
               >
                 Basic Info
               </Typography>
               <Box
                 sx={{
-                  marginBottom: "32px",
+                  paddingBottom: "24px",
                 }}
               >
                 <Controller
@@ -280,7 +301,7 @@ const StaffEditInfo = () => {
               </Box>
               <Box
                 sx={{
-                  marginBottom: "32px",
+                  paddingBottom: "28px",
                 }}
               >
                 <InputLabel id="statusSelectLabel">Status</InputLabel>
@@ -307,7 +328,6 @@ const StaffEditInfo = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "3px",
               }}
             >
               <Typography
@@ -320,13 +340,14 @@ const StaffEditInfo = () => {
                   fontStyle: "normal",
                   fontWeight: "600",
                   lineHeight: "120%",
+                  paddingBottom: "32px",
                 }}
               >
                 Contact Info
               </Typography>
               <Box
                 sx={{
-                  marginBottom: "32px",
+                  paddingBottom: "28px",
                 }}
               >
                 <Controller
