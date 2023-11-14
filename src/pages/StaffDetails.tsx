@@ -222,7 +222,6 @@ const StaffDetails = () => {
               </Box>
               <Box>
                 <Fab
-                  // size="small"
                   onClick={handleMenu}
                   sx={{
                     color: "#2E8DC8",
@@ -252,6 +251,17 @@ const StaffDetails = () => {
                   }}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  MenuListProps={{
+                    sx: {
+                      paddingTop: "8px",
+                      paddingBottom: "8px",
+                    }
+                  }}
+                  sx={{
+                    "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
+                      boxShadow: "none",
+                    },
+                  }}
                 >
                   <MenuItem onClick={handleEdit}>
                     <ListItemIcon>
