@@ -12,7 +12,11 @@ const Snackbar: FC<ISnackbarProps> = ({
   text,
   type,
 }) => {
-  return <SnackbarBase>
+  return <SnackbarBase
+    sx={{
+      zIndex: 5000,
+    }}
+  >
     {
       type === 'success' ?
         <Success /> :

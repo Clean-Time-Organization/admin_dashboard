@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
+import {useAppDispatch} from "../store/hooks";
+import {setNotification} from "../store/features/notification";
 
 enum Status {
   Active = 1,
@@ -35,6 +37,7 @@ const StaffEditInfo = () => {
   const [phoneError, setPhoneError] = useState('')
 
   const { handleSubmit, control } = useForm()
+  const dispatch = useAppDispatch()
 
   const handleClose = () => {
     navigate(`/staff/${id}`)
@@ -64,18 +67,6 @@ const StaffEditInfo = () => {
 
           break
 
-        // case 400:
-        //   setErrorMessage(response.details)
-        //   break
-        //
-        // case 404:
-        //   setEmailError("Couldn't find your account")
-        //   break
-        //
-        // case 422:
-        //   setEmailError('Please enter a valid email address')
-        //   break
-
         default:
           // setErrorMessage('Unknown server response')
           break
@@ -92,29 +83,34 @@ const StaffEditInfo = () => {
       switch (response.status) {
         case 200:
           navigate(`/staff/${id}`)
-          // show ok toast
-          break
 
-        // case 400:
-        //   setErrorMessage(response.details)
-        //   break
-        //
-        // case 404:
-        //   setEmailError("Couldn't find your account")
-        //   break
-        //
-        // case 422:
-        //   setEmailError('Please enter a valid email address')
-        //   break
+          dispatch(setNotification({
+            notificationMessage: 'User successfully updated',
+            notificationType: 'success',
+          }))
+          break
 
         default:
           // setErrorMessage('Unknown server response')
           break
       }
     },
-    onError: (error) => {
-      // setErrorMessage('Error occurred while communicating server')
-      console.warn(error)
+    onError: (error: any) => {
+      if (Object.keys(error.response.data.detail)[0] === 'email') {
+        dispatch(setNotification({
+          notificationMessage: 'Incorrect user email',
+          notificationType: 'error',
+        }))
+      } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
+        setUserNameError(Object.values(error.response.data.detail)[0] + '')
+      } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
+        setPhoneError(Object.values(error.response.data.detail)[0] + '');
+      } else {
+        dispatch(setNotification({
+          notificationMessage: error.response.data.detail + '',
+          notificationType: 'error',
+        }))
+      }
     },
   })
 
@@ -135,7 +131,7 @@ const StaffEditInfo = () => {
       setUserNameError('Please enter user name')
     }
     if (phone.trim() === '') {
-      setUserNameError('Please enter phone')
+      setPhoneError('Please enter phone')
     }
 
     if (!userNameError && !phoneError) {

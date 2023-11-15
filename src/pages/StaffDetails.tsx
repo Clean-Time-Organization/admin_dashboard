@@ -105,6 +105,8 @@ const StaffDetails = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
         }}
       >
         <Stack
@@ -301,102 +303,105 @@ const StaffDetails = () => {
             </Box>
           </Box>
         </Stack>
-          <Paper
+        <Paper
+          sx={{
+            boxShadow: "none",
+            display: "flex",
+            flexDirection: "column",
+            // justifyContent: "flex-end",
+            justifyContent: "center",
+            gap: "10px",
+            padding: "20px",
+            width: "1024px",
+          }}
+        >
+          <Typography
             sx={{
-              boxShadow: "none",
+              color: "#0E1019",
+              leadingTrim: "both",
+              textEdge: "cap",
+              fontFamily: "Anek Latin",
+              fontSize: "18px",
+              fontStyle: "normal",
+              fontWeight: "600",
+              lineHeight: "120%",
+            }}
+          >
+            Contact Info
+          </Typography>
+          <Box
+            sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              padding: "20px",
+              gap: "3px",
             }}
           >
             <Typography
               sx={{
-                color: "#0E1019",
+                color: "#656873",
                 leadingTrim: "both",
                 textEdge: "cap",
                 fontFamily: "Anek Latin",
-                fontSize: "18px",
+                fontSize: "14px",
                 fontStyle: "normal",
-                fontWeight: "600",
-                lineHeight: "120%",
+                fontWeight: "500",
+                lineHeight: "150%",
               }}
             >
-              Contact Info
+              Phone Number
             </Typography>
-            <Box
+            <Typography
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "3px",
+                color: "#1F2937",
+                leadingTrim: "both",
+                textEdge: "cap",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "150%",
               }}
             >
-              <Typography
-                sx={{
-                  color: "#656873",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "14px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
-                }}
-              >
-                Phone Number
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
-                }}
-              >
-                {data.phone_number}
-              </Typography>
-            </Box>
-            <Box
+              {data.phone_number}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "3px",
+            }}
+          >
+            <Typography
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "3px",
+                color: "#656873",
+                leadingTrim: "both",
+                textEdge: "cap",
+                fontFamily: "Anek Latin",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "150%",
               }}
             >
-              <Typography
-                sx={{
-                  color: "#656873",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "14px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
-                }}
-              >
-                Email
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
-                }}
-              >
-                {data.email}
-              </Typography>
-            </Box>
-          </Paper>
+              Email
+            </Typography>
+            <Typography
+              sx={{
+                color: "#1F2937",
+                leadingTrim: "both",
+                textEdge: "cap",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "150%",
+              }}
+            >
+              {data.email}
+            </Typography>
+          </Box>
+        </Paper>
       </Box>
     </ContentBody>
   )
