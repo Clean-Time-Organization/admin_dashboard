@@ -161,10 +161,10 @@ const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
-          <Grid item xs={1} style={{ display: 'flex', alignItems: 'center'}}>
+          <Grid item xs={2} style={{ display: 'flex', alignItems: 'center'}}>
             <Logo>{laundry.name_en.charAt(0) + laundry.name_en.charAt(0)}</Logo>
           </Grid>
-          <Grid item xs={11} style={{ display: 'flex', alignItems: 'center'}}>
+          <Grid item xs={10} style={{ display: 'flex', alignItems: 'center'}}>
             <Name>{laundry.name_en}</Name>
           </Grid>
         </Grid>
