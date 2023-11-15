@@ -10,7 +10,7 @@ import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack
 import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
 import {User} from "../types/user";
 import {AxiosResponse} from "axios";
-import {getUserFL} from "../services/common";
+import {getUserFL, getUserRole} from "../services/common";
 import {useAppDispatch} from "../store/hooks";
 import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
@@ -62,7 +62,7 @@ const StaffDetails = () => {
           dispatch(setDrawerData({
             roundTitle: getUserFL(response.data.first_name, response.data.last_name),
             title: [response.data.first_name, response.data.last_name].join(' '),
-            subTitle: response.data.role,
+            subTitle: getUserRole(response.data.role),
           }))
 
           dispatch(setBreadCrumbsData({
@@ -284,7 +284,7 @@ const StaffDetails = () => {
                   padding: "8px",
                 }}
               >
-                {data.role}
+                {getUserRole(data.role)}
               </Typography>
             </Box>
           </Box>

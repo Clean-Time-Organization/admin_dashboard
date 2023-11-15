@@ -6,4 +6,11 @@ const getUserFL = (firstName: string, lastName: string) => {
   return result.join('')
 }
 
-export {getUserFL}
+const getUserRole = (role: string) => {
+  if (role === "POS") {
+    return "POS Operator"
+  }
+  return role
+}
+
+export {getUserFL, getUserRole}
