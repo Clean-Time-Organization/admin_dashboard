@@ -23,12 +23,6 @@ enum Status {
   Inactive = 2,
 }
 
-interface IStepLaundryInfoProps {
-  readonly control: Control<UserForm>;
-  readonly watch: UseFormWatch<UserForm>;
-  readonly setValue: UseFormSetValue<UserForm>;
-}
-
 const StaffEditInfo = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -53,6 +47,7 @@ const StaffEditInfo = () => {
   const [branches, setBranches] = useState<Array<Branch>>()
 
   const [laundryError, setLaundryError] = useState('')
+  const [branchError, setBranch] = useState('')
 
   const [userName, setUserName] = useState('')
   const [userNameError, setUserNameError] = useState('')
@@ -140,6 +135,16 @@ const StaffEditInfo = () => {
           setEmail(response.data.email)
           setStatus(response.data.is_active ? Status.Active : Status.Inactive)
           setPhone(response.data.phone_number)
+
+          setSelectedLaundry({
+            id: response.data.staff.laundry.id,
+            name: response.data.staff.laundry.name_en,
+          })
+
+          setSelectedBranch({
+            id: response.data.staff.branch.id,
+            name: response.data.staff.branch.address,
+          })
 
           break
 
@@ -605,9 +610,6 @@ const StaffEditInfo = () => {
                     <Autocomplete
                       label="Laundry"
                       error={!!laundryError}
-                      errorText={error?.type === 'required' && 'Field is required' ||
-                        error && error?.message
-                      }
                       selectedValue={selectedLaundry}
                       selectValue={setSelectedLaundry}
                       inputValue={inputLaundry}
@@ -649,7 +651,63 @@ const StaffEditInfo = () => {
                   </Alert>
                   : null}
               </Box>
-
+              <Box
+                sx={{
+                  paddingBottom: "24px",
+                }}
+              >
+                <Controller
+                  control={control}
+                  name="branch_id"
+                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                    <Autocomplete
+                      label="Branch"
+                      error={!!branchError}
+                      selectedValue={selectedBranch}
+                      selectValue={setSelectedBranch}
+                      inputValue={inputBranch}
+                      setInputValue={setInputBranch}
+                      disabled={!selectedLaundry || !selectedLaundry.id}
+                      options={selectedLaundry && selectedLaundry.id ?
+                        branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
+                        []
+                      }
+                      {...field}
+                      InputLabelProps={{
+                        shrink: true,
+                        style: {
+                          color: "#6B7280",
+                          fontFamily: "Anek Latin",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          transform: "translate(15px, -9px) scale(0.75)",
+                        }
+                      }}
+                      sx={{
+                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                          width: "357px"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "#D1D5DB",
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: "#2E8DC8",
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+                {branchError ?
+                  <Alert
+                    variant="support"
+                    severity="error"
+                  >
+                    {branchError}
+                  </Alert>
+                  : null}
+              </Box>
             </Box>
 
 
