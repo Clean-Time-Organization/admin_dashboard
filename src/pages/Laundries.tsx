@@ -9,6 +9,7 @@ import {
   Logo,
   Name,
   BasicText,
+  BasicTextName,
   ColoredText,
   Chips,
   ChipsButton,
@@ -158,7 +159,7 @@ const Laundries = () => {
 const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
   return <TableRow active={laundry.is_active}>
     <Grid container>
-      <Grid item xs={5} style={{ display: 'flex' }}>
+      <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
           <Grid item xs={1} style={{ display: 'flex', alignItems: 'center'}}>
             <Logo>{laundry.name_en.charAt(0) + laundry.name_en.charAt(0)}</Logo>
@@ -168,9 +169,9 @@ const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+      <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <BasicText>{laundry.owner.phone_number}</BasicText>
-        <BasicText>{laundry.address}</BasicText>
+        <BasicText><BasicTextName style={{color: "#0E1019"}}>{laundry.address}</BasicTextName></BasicText>
       </Grid>
       <Grid item xs={2} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <BasicText>

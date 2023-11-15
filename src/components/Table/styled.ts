@@ -51,7 +51,7 @@ export const PaginationBlock = styled('div')`
 export const TableRowLayout = styled('div')<{ active: boolean, cursor: string}>`
   width: calc(100% - 32px);
   height: 37px;
-  padding: 16px;
+  padding: 12px 16px;
   background: #fff;
   border-radius: 8px;
   display: flex;

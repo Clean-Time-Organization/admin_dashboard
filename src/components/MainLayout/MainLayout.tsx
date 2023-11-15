@@ -280,6 +280,17 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              MenuListProps={{
+                sx: {
+                  paddingTop: "8px",
+                  paddingBottom: "8px",
+                }
+              }}
+              sx={{
+                "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
+                  boxShadow: "none",
+                },
+              }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
