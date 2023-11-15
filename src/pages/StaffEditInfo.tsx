@@ -121,12 +121,23 @@ const StaffEditInfo = () => {
   }
 
   const updateEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.put(`/user/staff/${id}`, {
+    let apiData = {
       full_name: userName,
       email: email,
       phone_number: phone,
       is_active: status === Status.Active,
-    })
+      laundry_id: 0,
+      branch_id: 0,
+    }
+    if (data.role === "POS") {
+      if (selectedLaundry) {
+        apiData.laundry_id = selectedLaundry.id
+      }
+      if (selectedBranch) {
+        apiData.branch_id = selectedBranch.id
+      }
+    }
+    return await httpClient.put(`/user/staff/${id}`, apiData)
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -214,14 +225,28 @@ const StaffEditInfo = () => {
   }, [phone])
 
   const onSubmit = () => {
+    let errors = false
+
     if (userName.trim() === '') {
       setUserNameError('Please enter user name')
+      errors = true
     }
     if (phone.trim() === '') {
       setPhoneError('Please enter phone')
+      errors = true
+    }
+    if (data.role === "POS") {
+      if (selectedLaundry) {
+        setLaundryError('Please select laundry')
+        errors = true
+      }
+      if (selectedBranch) {
+        setLaundryError('Please select branch')
+        errors = true
+      }
     }
 
-    if (!userNameError && !phoneError) {
+    if (!errors) {
       updateEntityMutation.mutate()
     }
   }
