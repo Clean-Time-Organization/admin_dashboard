@@ -47,7 +47,7 @@ const StaffEditInfo = () => {
   const [branches, setBranches] = useState<Array<Branch>>()
 
   const [laundryError, setLaundryError] = useState('')
-  const [branchError, setBranch] = useState('')
+  const [branchError, setBranchError] = useState('')
 
   const [userName, setUserName] = useState('')
   const [userNameError, setUserNameError] = useState('')
@@ -236,12 +236,16 @@ const StaffEditInfo = () => {
       errors = true
     }
     if (data.role === "POS") {
+      // if (!selectedLaundry || !selectedLaundry.id) {
+      //   setLaundryError('Please select laundry')
+      //   errors = true
+      // }
       if (selectedLaundry) {
         setLaundryError('Please select laundry')
         errors = true
       }
       if (selectedBranch) {
-        setLaundryError('Please select branch')
+        setBranchError('Please select branch')
         errors = true
       }
     }
@@ -639,6 +643,7 @@ const StaffEditInfo = () => {
                     name="laundry_id"
                     render={({ field: { ref, ...field }, fieldState: { error } }) => (
                       <Autocomplete
+                        id={field.name}
                         label="Laundry"
                         error={!!laundryError}
                         selectedValue={selectedLaundry}
@@ -673,14 +678,13 @@ const StaffEditInfo = () => {
                       />
                     )}
                   />
-                  {laundryError ?
+                  {laundryError &&
                     <Alert
                       variant="support"
                       severity="error"
                     >
                       {laundryError}
-                    </Alert>
-                    : null}
+                    </Alert>}
                 </Box>
                 <Box
                   sx={{
@@ -730,14 +734,13 @@ const StaffEditInfo = () => {
                       />
                     )}
                   />
-                  {branchError ?
+                  {branchError &&
                     <Alert
                       variant="support"
                       severity="error"
                     >
                       {branchError}
-                    </Alert>
-                    : null}
+                    </Alert>}
                 </Box>
               </Box>
             }
