@@ -106,7 +106,7 @@ const StaffEditInfo = () => {
     if (selectedLaundry && selectedLaundry.id) {
       const searchParams = new URLSearchParams()
       if (inputBranch) {
-        searchParams.append('name', inputBranch)
+        searchParams.append('name', inputBranch.substring(0, 39))
       }
       searchParams.append('laundry_id', selectedLaundry.id + '')
       await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
@@ -229,6 +229,14 @@ const StaffEditInfo = () => {
     setEmailError('')
   }, [email])
 
+  useEffect(() => {
+    setLaundryError('')
+  }, [selectedLaundry])
+
+  useEffect(() => {
+    setBranchError('')
+  }, [selectedBranch])
+
   const onSubmit = () => {
     let errors = false
 
@@ -245,15 +253,11 @@ const StaffEditInfo = () => {
         setEmailError('Please enter email')
         errors = true
       }
-      // if (!selectedLaundry || !selectedLaundry.id) {
-      //   setLaundryError('Please select laundry')
-      //   errors = true
-      // }
-      if (selectedLaundry) {
+      if (!selectedLaundry || !selectedLaundry.id) {
         setLaundryError('Please select laundry')
         errors = true
       }
-      if (selectedBranch) {
+      if (!selectedBranch || !selectedBranch.id) {
         setBranchError('Please select branch')
         errors = true
       }
