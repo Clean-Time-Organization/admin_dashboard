@@ -12,10 +12,10 @@ import {
   Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
-import {Control, Controller, useForm, UseFormSetValue, UseFormWatch} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {useAppDispatch} from "../store/hooks";
 import {setNotification} from "../store/features/notification";
-import {Branch, Laundry, User, UserForm} from "../types/user";
+import {Branch, Laundry, User} from "../types/user";
 import {Autocomplete} from "../components/Autocomplete/Autocomplete";
 
 enum Status {
@@ -69,7 +69,9 @@ const StaffEditInfo = () => {
   }
 
   useEffect(() => {
-    getLaundryData()
+    if (data && data.role === "POS") {
+      getLaundryData()
+    }
   }, [inputLaundry])
 
   const getLaundryData = async () => {
@@ -94,7 +96,9 @@ const StaffEditInfo = () => {
   }
 
   useEffect(() => {
-    getBranchesData();
+    if (data && data.role === "POS") {
+      getBranchesData()
+    }
   }, [inputBranch, inputLaundry])
 
   const getBranchesData = async () => {
@@ -136,15 +140,17 @@ const StaffEditInfo = () => {
           setStatus(response.data.is_active ? Status.Active : Status.Inactive)
           setPhone(response.data.phone_number)
 
-          setSelectedLaundry({
-            id: response.data.staff.laundry.id,
-            name: response.data.staff.laundry.name_en,
-          })
+          if (response.data.role === "POS") {
+            setSelectedLaundry({
+              id: response.data.staff.laundry.id,
+              name: response.data.staff.laundry.name_en,
+            })
 
-          setSelectedBranch({
-            id: response.data.staff.branch.id,
-            name: response.data.staff.branch.address,
-          })
+            setSelectedBranch({
+              id: response.data.staff.branch.id,
+              name: response.data.staff.branch.address,
+            })
+          }
 
           break
 
@@ -519,9 +525,9 @@ const StaffEditInfo = () => {
               </Box>
               {data.role === "POS" &&
                 <Box
-                    sx={{
-                      paddingBottom: "28px",
-                    }}
+                  sx={{
+                    paddingBottom: "28px",
+                  }}
                 >
                   <Controller
                     control={control}
@@ -576,142 +582,140 @@ const StaffEditInfo = () => {
                     </Alert>}
                 </Box>}
             </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#0E1019",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "18px",
-                  fontStyle: "normal",
-                  fontWeight: "600",
-                  lineHeight: "120%",
-                  paddingBottom: "32px",
-                }}
-              >
-                Laundry Info
-              </Typography>
+            {data.role === "POS" &&
               <Box
                 sx={{
-                  paddingBottom: "24px",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <Controller
-                  control={control}
-                  name="laundry_id"
-                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                    <Autocomplete
-                      label="Laundry"
-                      error={!!laundryError}
-                      selectedValue={selectedLaundry}
-                      selectValue={setSelectedLaundry}
-                      inputValue={inputLaundry}
-                      setInputValue={setLaundryName}
-                      options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
-                      {...field}
-                      InputLabelProps={{
-                        shrink: true,
-                        style: {
-                          color: "#6B7280",
-                          fontFamily: "Anek Latin",
-                          fontStyle: "normal",
-                          fontWeight: "400",
-                          transform: "translate(15px, -9px) scale(0.75)",
+                <Typography
+                  sx={{
+                    color: "#0E1019",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "18px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "120%",
+                    paddingBottom: "32px",
+                  }}
+                >
+                  Laundry Info
+                </Typography>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
+                    name="laundry_id"
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <Autocomplete
+                        label="Laundry"
+                        error={!!laundryError}
+                        selectedValue={selectedLaundry}
+                        selectValue={setSelectedLaundry}
+                        inputValue={inputLaundry}
+                        setInputValue={setLaundryName}
+                        options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
+                        {...field}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {laundryError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {laundryError}
+                    </Alert>
+                    : null}
+                </Box>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
+                    name="branch_id"
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <Autocomplete
+                        label="Branch"
+                        error={!!branchError}
+                        selectedValue={selectedBranch}
+                        selectValue={setSelectedBranch}
+                        inputValue={inputBranch}
+                        setInputValue={setInputBranch}
+                        disabled={!selectedLaundry || !selectedLaundry.id}
+                        options={selectedLaundry && selectedLaundry.id ?
+                          branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
+                          []
                         }
-                      }}
-                      sx={{
-                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                          width: "357px"
-                        },
-                        "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            borderColor: "#D1D5DB",
+                        {...field}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
                           },
-                          '&.Mui-focused fieldset': {
-                            borderColor: "#2E8DC8",
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
                           },
-                        },
-                      }}
-                    />
-                  )}
-                />
-                {laundryError ?
-                  <Alert
-                    variant="support"
-                    severity="error"
-                  >
-                    {laundryError}
-                  </Alert>
-                  : null}
+                        }}
+                      />
+                    )}
+                  />
+                  {branchError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {branchError}
+                    </Alert>
+                    : null}
+                </Box>
               </Box>
-              <Box
-                sx={{
-                  paddingBottom: "24px",
-                }}
-              >
-                <Controller
-                  control={control}
-                  name="branch_id"
-                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                    <Autocomplete
-                      label="Branch"
-                      error={!!branchError}
-                      selectedValue={selectedBranch}
-                      selectValue={setSelectedBranch}
-                      inputValue={inputBranch}
-                      setInputValue={setInputBranch}
-                      disabled={!selectedLaundry || !selectedLaundry.id}
-                      options={selectedLaundry && selectedLaundry.id ?
-                        branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
-                        []
-                      }
-                      {...field}
-                      InputLabelProps={{
-                        shrink: true,
-                        style: {
-                          color: "#6B7280",
-                          fontFamily: "Anek Latin",
-                          fontStyle: "normal",
-                          fontWeight: "400",
-                          transform: "translate(15px, -9px) scale(0.75)",
-                        }
-                      }}
-                      sx={{
-                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                          width: "357px"
-                        },
-                        "& .MuiOutlinedInput-root": {
-                          "& fieldset": {
-                            borderColor: "#D1D5DB",
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: "#2E8DC8",
-                          },
-                        },
-                      }}
-                    />
-                  )}
-                />
-                {branchError ?
-                  <Alert
-                    variant="support"
-                    severity="error"
-                  >
-                    {branchError}
-                  </Alert>
-                  : null}
-              </Box>
-            </Box>
-
-
-
+            }
             <Box
               sx={{
                 display: "flex",
