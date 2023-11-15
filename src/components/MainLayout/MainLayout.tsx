@@ -425,9 +425,21 @@ const MainLayout = ({children}: {children: ReactNode}) => {
               </Drawer>
               : null
           }
-          <Content>
-            {children}
-          </Content>
+          {
+            showDrawer ?
+              <Content
+                style={{
+                  // paddingLeft: "`${drawerWidth}px`",
+                  paddingLeft: "255px",
+                }}
+              >
+                {children}
+              </Content>
+              :
+              <Content>
+                {children}
+              </Content>
+          }
           { notificationMessage && notificationType &&
             <Snackbar text={notificationMessage} type={notificationType} />
           }
