@@ -15,6 +15,7 @@ import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
 import {useAppDispatch} from "../store/hooks";
 import {setNotification} from "../store/features/notification";
+import {User} from "../types/user";
 
 enum Status {
   Active = 1,
@@ -25,16 +26,29 @@ const StaffEditInfo = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  const init: User = {
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    id: 0,
+    is_active: false,
+    role: 'POS',
+    email: '',
+  }
+
+  const [data, setData] = useState(init)
+
   const [userName, setUserName] = useState('')
   const [userNameError, setUserNameError] = useState('')
-
-  const [email, setEmail] = useState('')
 
   const [status, setStatus] = useState(Status.Inactive)
   const [statusError, setStatusError] = useState('')
 
   const [phone, setPhone] = useState('')
   const [phoneError, setPhoneError] = useState('')
+
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState('')
 
   const { handleSubmit, control } = useForm()
   const dispatch = useAppDispatch()
@@ -60,6 +74,8 @@ const StaffEditInfo = () => {
     onSuccess: response => {
       switch (response.status) {
         case 200:
+          setData(response.data)
+
           setUserName([response.data.first_name, response.data.last_name].join(' '))
           setEmail(response.data.email)
           setStatus(response.data.is_active ? Status.Active : Status.Inactive)
@@ -217,7 +233,7 @@ const StaffEditInfo = () => {
                 fontStyle: "normal",
                 fontWeight: "600",
                 lineHeight: "120%",
-                paddingBottom: "28px",
+                paddingBottom: "24px",
               }}
             >
               Edit Info
@@ -380,7 +396,7 @@ const StaffEditInfo = () => {
               </Typography>
               <Box
                 sx={{
-                  paddingBottom: "28px",
+                  paddingBottom: "24px",
                 }}
               >
                 <Controller
@@ -436,6 +452,211 @@ const StaffEditInfo = () => {
                   </Alert>
                   : null}
               </Box>
+              {data.role === "POS" &&
+                <Box
+                    sx={{
+                      paddingBottom: "28px",
+                    }}
+                >
+                  <Controller
+                    control={control}
+                    name="email"
+                    defaultValue={email}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="Email"
+                        value={email || ''}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        fullWidth
+                        error={!!emailError}
+                        onChange={e => setEmail(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {emailError &&
+                    <Alert
+                        variant="support"
+                        severity="error"
+                    >
+                      {emailError}
+                    </Alert>}
+                </Box>}
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#0E1019",
+                  leadingTrim: "both",
+                  textEdge: "cap",
+                  fontFamily: "Anek Latin",
+                  fontSize: "18px",
+                  fontStyle: "normal",
+                  fontWeight: "600",
+                  lineHeight: "120%",
+                  paddingBottom: "32px",
+                }}
+              >
+                Laundry Info
+              </Typography>
+              <Box
+                sx={{
+                  paddingBottom: "24px",
+                }}
+              >
+                <Controller
+                  control={control}
+                  name="phone"
+                  defaultValue={phone}
+                  render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                    <TextField
+                      id={field.name}
+                      label="Phone"
+                      value={phone || ''}
+                      InputLabelProps={{
+                        shrink: true,
+                        style: {
+                          color: "#6B7280",
+                          fontFamily: "Anek Latin",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          transform: "translate(15px, -9px) scale(0.75)",
+                        }
+                      }}
+                      fullWidth
+                      error={!!phoneError}
+                      onChange={e => setPhone(e.target.value)}
+                      variant="outlined"
+                      inputProps={{
+                        style: {
+                          WebkitBoxShadow: "0 0 0 1000px white inset"
+                        }
+                      }}
+                      sx={{
+                        "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                          width: "357px"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "#D1D5DB",
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: "#2E8DC8",
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+                {phoneError ?
+                  <Alert
+                    variant="support"
+                    severity="error"
+                  >
+                    {phoneError}
+                  </Alert>
+                  : null}
+              </Box>
+              {
+                data.role === "POS" &&
+                  <Controller
+                      control={control}
+                      name="email"
+                      defaultValue={email}
+                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                        <TextField
+                          id={field.name}
+                          label="Email"
+                          value={email || ''}
+                          InputLabelProps={{
+                            shrink: true,
+                            style: {
+                              color: "#6B7280",
+                              fontFamily: "Anek Latin",
+                              fontStyle: "normal",
+                              fontWeight: "400",
+                              transform: "translate(15px, -9px) scale(0.75)",
+                            }
+                          }}
+                          fullWidth
+                          error={!!emailError}
+                          onChange={e => setEmail(e.target.value)}
+                          variant="outlined"
+                          inputProps={{
+                            style: {
+                              WebkitBoxShadow: "0 0 0 1000px white inset"
+                            }
+                          }}
+                          sx={{
+                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              width: "357px"
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: "#D1D5DB",
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: "#2E8DC8",
+                              },
+                            },
+                          }}
+                        />
+                      )}
+                  />
+              }
+              {
+                data.role === "POS" && emailError &&
+                  <Alert
+                      variant="support"
+                      severity="error"
+                  >
+                    {emailError}
+                  </Alert>
+              }
+            </Box>
+
+
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               <Box
                 display="flex"
                 justifyContent="flex-end"
