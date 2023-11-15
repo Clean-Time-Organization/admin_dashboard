@@ -12,14 +12,21 @@ import {
   Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
-import {Controller, useForm} from "react-hook-form";
+import {Control, Controller, useForm, UseFormSetValue, UseFormWatch} from "react-hook-form";
 import {useAppDispatch} from "../store/hooks";
 import {setNotification} from "../store/features/notification";
-import {User} from "../types/user";
+import {Branch, Laundry, User, UserForm} from "../types/user";
+import {Autocomplete} from "../components/Autocomplete/Autocomplete";
 
 enum Status {
   Active = 1,
   Inactive = 2,
+}
+
+interface IStepLaundryInfoProps {
+  readonly control: Control<UserForm>;
+  readonly watch: UseFormWatch<UserForm>;
+  readonly setValue: UseFormSetValue<UserForm>;
 }
 
 const StaffEditInfo = () => {
@@ -38,6 +45,15 @@ const StaffEditInfo = () => {
 
   const [data, setData] = useState(init)
 
+  const [selectedLaundry, setSelectedLaundry] = useState<{ id: number; name: string } | null>(null)
+  const [inputLaundry, setInputLaundry] = useState('')
+  const [selectedBranch, setSelectedBranch] = useState<{ id: number; name: string } | null>(null)
+  const [inputBranch, setInputBranch] = useState('')
+  const [laundries, setLaundries] = useState<Array<Laundry>>()
+  const [branches, setBranches] = useState<Array<Branch>>()
+
+  const [laundryError, setLaundryError] = useState('')
+
   const [userName, setUserName] = useState('')
   const [userNameError, setUserNameError] = useState('')
 
@@ -55,6 +71,50 @@ const StaffEditInfo = () => {
 
   const handleClose = () => {
     navigate(`/staff/${id}`)
+  }
+
+  useEffect(() => {
+    getLaundryData()
+  }, [inputLaundry])
+
+  const getLaundryData = async () => {
+    const searchParams = new URLSearchParams()
+    if (inputLaundry) {
+      searchParams.append('name', inputLaundry)
+    }
+    await httpClient.get('/laundry/search?' + new URLSearchParams(searchParams)).then(response => {
+      setLaundries(response.data?.items)
+    })
+  }
+
+  const setLaundryName = (value: string) => {
+    if (value === '') {
+      if (inputLaundry) {
+        setInputLaundry(value)
+        setSelectedBranch(null)
+      }
+    } else {
+      setInputLaundry(value)
+    }
+  }
+
+  useEffect(() => {
+    getBranchesData();
+  }, [inputBranch, inputLaundry])
+
+  const getBranchesData = async () => {
+    if (selectedLaundry && selectedLaundry.id) {
+      const searchParams = new URLSearchParams()
+      if (inputBranch) {
+        searchParams.append('name', inputBranch)
+      }
+      searchParams.append('laundry_id', selectedLaundry.id + '')
+      await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
+        setBranches(response.data?.items)
+      })
+    } else {
+      setBranches(undefined)
+    }
   }
 
   const getEntity = async (): Promise<AxiosResponse> => {
@@ -540,13 +600,20 @@ const StaffEditInfo = () => {
               >
                 <Controller
                   control={control}
-                  name="phone"
-                  defaultValue={phone}
+                  name="laundry_id"
                   render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                    <TextField
-                      id={field.name}
-                      label="Phone"
-                      value={phone || ''}
+                    <Autocomplete
+                      label="Laundry"
+                      error={!!laundryError}
+                      errorText={error?.type === 'required' && 'Field is required' ||
+                        error && error?.message
+                      }
+                      selectedValue={selectedLaundry}
+                      selectValue={setSelectedLaundry}
+                      inputValue={inputLaundry}
+                      setInputValue={setLaundryName}
+                      options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
+                      {...field}
                       InputLabelProps={{
                         shrink: true,
                         style: {
@@ -555,15 +622,6 @@ const StaffEditInfo = () => {
                           fontStyle: "normal",
                           fontWeight: "400",
                           transform: "translate(15px, -9px) scale(0.75)",
-                        }
-                      }}
-                      fullWidth
-                      error={!!phoneError}
-                      onChange={e => setPhone(e.target.value)}
-                      variant="outlined"
-                      inputProps={{
-                        style: {
-                          WebkitBoxShadow: "0 0 0 1000px white inset"
                         }
                       }}
                       sx={{
@@ -582,71 +640,16 @@ const StaffEditInfo = () => {
                     />
                   )}
                 />
-                {phoneError ?
+                {laundryError ?
                   <Alert
                     variant="support"
                     severity="error"
                   >
-                    {phoneError}
+                    {laundryError}
                   </Alert>
                   : null}
               </Box>
-              {
-                data.role === "POS" &&
-                  <Controller
-                      control={control}
-                      name="email"
-                      defaultValue={email}
-                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                        <TextField
-                          id={field.name}
-                          label="Email"
-                          value={email || ''}
-                          InputLabelProps={{
-                            shrink: true,
-                            style: {
-                              color: "#6B7280",
-                              fontFamily: "Anek Latin",
-                              fontStyle: "normal",
-                              fontWeight: "400",
-                              transform: "translate(15px, -9px) scale(0.75)",
-                            }
-                          }}
-                          fullWidth
-                          error={!!emailError}
-                          onChange={e => setEmail(e.target.value)}
-                          variant="outlined"
-                          inputProps={{
-                            style: {
-                              WebkitBoxShadow: "0 0 0 1000px white inset"
-                            }
-                          }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
-                            },
-                          }}
-                        />
-                      )}
-                  />
-              }
-              {
-                data.role === "POS" && emailError &&
-                  <Alert
-                      variant="support"
-                      severity="error"
-                  >
-                    {emailError}
-                  </Alert>
-              }
+
             </Box>
 
 
