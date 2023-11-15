@@ -24,6 +24,15 @@ enum Status {
   Inactive = 2,
 }
 
+type ApiRequest = {
+  full_name: string
+  phone_number: string
+  email: string
+  laundry_id?: number
+  branch_id?: number
+  is_active: boolean
+}
+
 const StaffEditInfo = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -122,13 +131,11 @@ const StaffEditInfo = () => {
   }
 
   const updateEntity = async (): Promise<AxiosResponse> => {
-    let apiData = {
+    let apiData: ApiRequest = {
       full_name: userName,
       email: email,
       phone_number: phone,
       is_active: status === Status.Active,
-      laundry_id: 0,
-      branch_id: 0,
     }
     if (data.role === "POS") {
       if (selectedLaundry) {
