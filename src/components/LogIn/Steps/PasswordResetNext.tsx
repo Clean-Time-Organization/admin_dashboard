@@ -162,6 +162,7 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
                 InputLabelProps={{
                   shrink: true,
                   style: {
+                    color: "#6B7280",
                     fontFamily: "Anek Latin",
                     fontStyle: "normal",
                     fontWeight: "400",
@@ -230,9 +231,9 @@ export const PasswordResetNext: FC<Props> = memo(function PasswordResetNext({tok
               borderRadius: "4px",
               padding: "0px",
               margin: "0px",
-              maxWidth: "135px",
+              maxWidth: "172px",
               maxHeight: "40px",
-              minWidth: "135px",
+              minWidth: "172px",
               minHeight: "40px",
               fontFamily: "Anek Latin",
               fontSize: "16px",

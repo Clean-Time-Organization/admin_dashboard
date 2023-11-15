@@ -117,6 +117,7 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
                 InputLabelProps={{
                   shrink: true,
                   style: {
+                    color: "#6B7280",
                     fontFamily: "Anek Latin",
                     fontStyle: "normal",
                     fontWeight: "400",
@@ -172,9 +173,9 @@ export const EmailCheck: FC<Props> = memo(function EmailCheck({setParentData, se
               borderRadius: "4px",
               padding: "0px",
               margin: "0px",
-              maxWidth: "135px",
+              maxWidth: "141px",
               maxHeight: "40px",
-              minWidth: "135px",
+              minWidth: "141px",
               minHeight: "40px",
               fontFamily: "Anek Latin",
               fontSize: "16px",

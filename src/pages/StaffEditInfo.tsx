@@ -261,6 +261,7 @@ const StaffEditInfo = () => {
                       InputLabelProps={{
                         shrink: true,
                         style: {
+                          color: "#6B7280",
                           fontFamily: "Anek Latin",
                           fontStyle: "normal",
                           fontWeight: "400",
@@ -316,6 +317,7 @@ const StaffEditInfo = () => {
                   InputLabelProps={{
                     shrink: true,
                     style: {
+                      color: "#6B7280",
                       fontFamily: "Anek Latin",
                       fontStyle: "normal",
                       fontWeight: "400",
@@ -393,6 +395,7 @@ const StaffEditInfo = () => {
                       InputLabelProps={{
                         shrink: true,
                         style: {
+                          color: "#6B7280",
                           fontFamily: "Anek Latin",
                           fontStyle: "normal",
                           fontWeight: "400",
