@@ -656,6 +656,7 @@ const StaffEditInfo = () => {
                           id={field.name}
                           label="Laundry"
                           error={!!laundryError}
+                          errorText={laundryError}
                           selectedValue={selectedLaundry}
                           selectValue={setSelectedLaundry}
                           inputValue={inputLaundry}
@@ -688,13 +689,6 @@ const StaffEditInfo = () => {
                         />
                       )}
                     />
-                    {laundryError &&
-                      <Alert
-                        variant="support"
-                        severity="error"
-                      >
-                        {laundryError}
-                      </Alert>}
                   </Box>
                   <Box
                     sx={{
@@ -708,6 +702,7 @@ const StaffEditInfo = () => {
                         <Autocomplete
                           label="Branch"
                           error={!!branchError}
+                          errorText={branchError}
                           selectedValue={selectedBranch}
                           selectValue={setSelectedBranch}
                           inputValue={inputBranch}
@@ -744,13 +739,6 @@ const StaffEditInfo = () => {
                         />
                       )}
                     />
-                    {branchError &&
-                      <Alert
-                        variant="support"
-                        severity="error"
-                      >
-                        {branchError}
-                      </Alert>}
                   </Box>
                 </Box>
               }
