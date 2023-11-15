@@ -254,6 +254,7 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
                 InputLabelProps={{
                   shrink: true,
                   style: {
+                    color: "#6B7280",
                     fontFamily: "Anek Latin",
                     fontStyle: "normal",
                     fontWeight: "400",
@@ -323,9 +324,9 @@ export const PasswordLogin: FC<Props> = memo(function PasswordLogin({setStep, em
               borderRadius: "4px",
               padding: "0px",
               margin: "0px",
-              maxWidth: "135px",
+              maxWidth: "125px",
               maxHeight: "40px",
-              minWidth: "135px",
+              minWidth: "125px",
               minHeight: "40px",
               fontFamily: "Anek Latin",
               fontSize: "16px",
