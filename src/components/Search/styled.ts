@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
 export const SearchBody = styled('div')<{focused: boolean}>`
-  height: calc(100% - 2px);
-  max-height: 34px;
+  height: calc(100% - 4px);
+  max-height: 32px;
   display: flex;
   align-items: center;
   gap: 4px;
