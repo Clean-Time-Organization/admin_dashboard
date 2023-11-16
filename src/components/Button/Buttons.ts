@@ -25,6 +25,7 @@ export const LinkButton = styled(BasicButton)`
   background: transparent;
   color: #2E8DC8;
   line-height: 100%;
+  font-family: "Anek Latin";
 
   &:hover {
     background: rgba(0, 0, 0, 0.08);
