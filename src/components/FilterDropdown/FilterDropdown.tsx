@@ -94,8 +94,8 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
               }
             </RadioGroup>
             <DropdownPanelButtons>
-              <LinkButton onClick={(e) => handleClose(e, false)}>Cancel</LinkButton>
-              <BasicButton onClick={(e) => handleClose(e, true)}>Show results</BasicButton>
+              <LinkButton style={{width: "72px", height: "32px"}} onClick={(e) => handleClose(e, false)}>Cancel</LinkButton>
+              <BasicButton style={{width: "128px", height: "32px"}} onClick={(e) => handleClose(e, true)}>Show results</BasicButton>
             </DropdownPanelButtons>
           </DropdownPanel>
       }
