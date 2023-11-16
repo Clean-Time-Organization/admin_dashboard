@@ -71,6 +71,9 @@ const StaffEditInfo = () => {
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
 
+  const [openLaundries, setOpenLaundries] = useState(false);
+  const [openBranches, setOpenBranches] = useState(false);
+
   const { handleSubmit, control } = useForm()
   const dispatch = useAppDispatch()
 
@@ -672,6 +675,8 @@ const StaffEditInfo = () => {
                           selectValue={setSelectedLaundry}
                           inputValue={inputLaundry}
                           setInputValue={setLaundryName}
+                          open={openLaundries}
+                          setOpen={setOpenLaundries}
                           options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
                           {...field}
                           InputLabelProps={{
@@ -719,6 +724,8 @@ const StaffEditInfo = () => {
                           inputValue={inputBranch}
                           setInputValue={setInputBranch}
                           disabled={!selectedLaundry || !selectedLaundry.id}
+                          open={openBranches}
+                          setOpen={setOpenBranches}
                           options={selectedLaundry && selectedLaundry.id ?
                             branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
                             []

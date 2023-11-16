@@ -5,7 +5,6 @@ import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-f
 import { Branch, Laundry, UserForm } from "../../types/user";
 import { Autocomplete } from "../../components/Autocomplete/Autocomplete";
 import httpClient from "../../services/HttpClient";
-import { debounce } from '@mui/material/utils';
 
 interface IStepLaundryInfoProps {
   readonly control: Control<UserForm>;
@@ -13,9 +12,6 @@ interface IStepLaundryInfoProps {
   readonly setValue: UseFormSetValue<UserForm>;
   toPreviousStep: () => void;
   toNextStep: () => void;
-  // readonly getValues: UseFormGetValues<AgreementForm>;
-  // readonly setError: UseFormSetError<AgreementForm>;
-  // readonly clearError: UseFormClearErrors<AgreementForm>;
 }
 
 const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
