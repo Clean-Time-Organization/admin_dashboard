@@ -1,5 +1,5 @@
-import { FC, } from "react";
-import { Box, FormControl, Autocomplete as MuiAutocomplete, TextField, TextFieldProps, styled } from '@mui/material';
+import { FC, useEffect, useState, } from "react";
+import { FormControl, Autocomplete as MuiAutocomplete, TextField, TextFieldProps, styled } from '@mui/material';
 import { Alert } from "../Icons/Alert";
 
 const ErrorMessage = styled('div')`
@@ -22,6 +22,8 @@ type IAutocompleteProps = TextFieldProps & {
   selectValue: (val: { id: number; name: string } | null) => void;
   inputValue: string;
   setInputValue: (val: string) => void;
+  open: boolean;
+  setOpen: (val: boolean) => void;
 }
 
 const Autocomplete: FC<IAutocompleteProps> = ({
@@ -33,12 +35,31 @@ const Autocomplete: FC<IAutocompleteProps> = ({
   selectValue,
   inputValue,
   setInputValue,
+  open,
+  setOpen,
   ...inputProps
 }) => {
+  const [list, setList] = useState<Array<{ id: number; name: string }>>([]);
+
+  useEffect(() => {
+    if (!open) {
+      setList([]);
+    } else {
+      setList(options);
+    }
+  }, [open]);
+
   return (
     <FormControl error={error} style={{ width: '100%' }}>
       <MuiAutocomplete
         value={selectedValue}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
         style={{ width: '100%', borderColor: error ? 'red' : 'rgba(0, 0, 0, 0.87)' }}
         onChange={(event: any, newValue: { id: number; name: string } | null) => {
           selectValue(newValue);
@@ -48,7 +69,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        options={options}
+        options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
         renderInput={(params) => <TextField {...params} error={error} label={label} {...inputProps} />}
       />

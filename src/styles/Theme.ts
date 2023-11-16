@@ -7,6 +7,12 @@ declare module '@mui/material/Typography' {
 }
 
 const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Anek Latin',
+      'sans-serif',
+    ].join(','),
+  },
   components: {
     MuiTypography: {
       variants: [

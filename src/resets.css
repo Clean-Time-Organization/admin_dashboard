@@ -28,3 +28,7 @@ body label {
   -webkit-user-select: none;
   user-select: none;
 }
+
+button, input, label, div, span {
+  font-family: 'Anek Latin', sans-serif;
+}

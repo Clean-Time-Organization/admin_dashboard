@@ -5,6 +5,7 @@ export const ContentBody = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  font-family: 'Anek Latin', sans-serif;
 `;
 
 export const FilterRow = styled('div')`
@@ -78,6 +79,7 @@ export const Chips = styled('div')`
   gap: 4px;
   align-items: center;
   border-radius: 4px;
+  font-family: 'Anek Latin', sans-serif;
 `;
 
 export const ChipsButton = styled('div')`
@@ -90,4 +92,5 @@ export const HintText = styled('div')`
   font-size: 14px;
   font-weight: 500;
   line-height: 150%;
+  font-family: 'Anek Latin', sans-serif;
 `;

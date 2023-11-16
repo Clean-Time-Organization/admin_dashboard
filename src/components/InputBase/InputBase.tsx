@@ -34,6 +34,9 @@ const InputBase: FC<IInputBaseProps> = ({
       fullWidth
       error={!!error}
       variant="outlined"
+      style={{
+        fontFamily: '\'Anek Latin\', sans-serif',
+      }}
       {...inputProps}
       InputProps={{
         endAdornment:

@@ -5,6 +5,7 @@ import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-f
 import { Branch, Laundry, UserForm } from "../../types/user";
 import { Autocomplete } from "../../components/Autocomplete/Autocomplete";
 import httpClient from "../../services/HttpClient";
+import { debounce } from '@mui/material/utils';
 
 interface IStepLaundryInfoProps {
   readonly control: Control<UserForm>;
@@ -34,6 +35,8 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
   const [inputBranch, setInputBranch] = useState('');
   const [laundries, setLaundries] = useState<Array<Laundry>>();
   const [branches, setBranches] = useState<Array<Branch>>();
+  const [openLaundries, setOpenLaundries] = useState(false);
+  const [openBranches, setOpenBranches] = useState(false);
 
   useEffect(() => {
     getLaundryData();
@@ -44,8 +47,12 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
     if (inputLaundry) {
       searchParams.append('name', inputLaundry);
     }
+    const isOpen = openLaundries;
+    setOpenLaundries(false);
+    setLaundries(undefined);
     await httpClient.get('/laundry/search?' + new URLSearchParams(searchParams)).then(response => {
       setLaundries(response.data?.items);
+      setOpenLaundries(isOpen);
     });
   };
 
@@ -74,8 +81,12 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
         searchParams.append('name', inputBranch);
       }
       searchParams.append('laundry_id', watchLaundry + '');
+      const isOpen = openBranches;
+      setOpenBranches(false);
+      setBranches(undefined);
       await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
         setBranches(response.data?.items);
+        setOpenBranches(isOpen);
       });
     } else {
       setBranches(undefined);
@@ -136,6 +147,8 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
                 inputValue={inputLaundry}
                 setInputValue={setLaundryName}
                 options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
+                open={openLaundries}
+                setOpen={setOpenLaundries}
                 {...field}
             />
         )}
@@ -166,6 +179,8 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
                 branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
                 []
               }
+              open={openBranches}
+              setOpen={setOpenBranches}
               {...field}
           />
         )}
@@ -176,7 +191,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
     </StepBaseInternal>
     <ButtonLine>
       <LinkButton onClick={toPreviousStep}>Previous step</LinkButton>
-      <BasicButton onClick={toNextStep}>Continue</BasicButton>
+      <BasicButton disabled={!watchLaundry || !watchBranch} onClick={toNextStep}>Continue</BasicButton>
     </ButtonLine>
   </StepBase>;
 }
