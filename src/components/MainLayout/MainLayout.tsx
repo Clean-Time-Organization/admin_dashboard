@@ -288,7 +288,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
               }}
               sx={{
                 "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-                  boxShadow: "none",
+                  boxShadow: "0px 2px 6px 2px rgba(100, 116, 142, 0.15), 0px 1px 2px 0px rgba(100, 116, 142, 0.30)",
                 },
               }}
               open={Boolean(anchorEl)}
