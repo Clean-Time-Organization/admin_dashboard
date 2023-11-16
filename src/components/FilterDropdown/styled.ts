@@ -5,6 +5,8 @@ export const DropdownBody = styled('div')<{selected?: boolean}>`
   display: flex;
   align-items: center;
   gap: 4px;
+  width: 59px;
+  height: 18px;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

@@ -17,6 +17,8 @@ export const SearchBody = styled('div')<{focused: boolean}>`
       font-size: 14px; 
       font-weight: 400;
       line-height: 150%;
+      width: 384px;
+      height: 32px;
     }
 
     &::before, &::after {

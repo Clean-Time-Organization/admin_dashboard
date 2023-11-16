@@ -16,6 +16,8 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
   align-items: center;
   text-transform: none;
   font-family: 'Anek Latin', sans-serif;
+  width: 128px;
+  height: 32px;
 
   &:hover {
     background: #2772AC;
@@ -32,6 +34,8 @@ export const LinkButton = styled(BasicButton)`
   color: #2E8DC8;
   line-height: 100%;
   font-family: "Anek Latin";
+  width: 72px;
+  height: 32px;
 
   &:hover {
     color: #2772AC;
