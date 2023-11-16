@@ -42,6 +42,9 @@ export const Name = styled('div')`
   font-size: 18px;
   font-weight: 600;
   line-height: 120%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; 
 `;
 
 export const BasicText = styled('div')`
@@ -52,6 +55,9 @@ export const BasicText = styled('div')`
   display: flex;
   height: fit-content;
   align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;   
 `;
 
 export const BasicTextName = styled('span')`
