@@ -251,17 +251,60 @@ const StaffDetails = () => {
                     },
                   }}
                 >
-                  <MenuItem onClick={handleEdit}>
+                  <MenuItem
+                    onClick={handleEdit}
+                    sx={{
+                      paddingRight: "90.6px",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                    }}
+                  >
                     <ListItemIcon>
                       <EditOutlined />
                     </ListItemIcon>
-                    <ListItemText>Edit info</ListItemText>
+                    <ListItemText>
+                      <Typography
+                        sx={{
+                          color: "#0E1019",
+                          leadingTrim: "both",
+                          textEdge: "cap",
+                          fontFamily: "Anek Latin",
+                          fontSize: "16px",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          lineHeight: "150%",
+                        }}
+                      >
+                        Edit info
+                      </Typography>
+                    </ListItemText>
                   </MenuItem>
-                  <MenuItem onClick={handleDelete}>
+                  <MenuItem
+                    onClick={handleDelete}
+                    sx={{
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                    }}
+                  >
                     <ListItemIcon>
                       <DeleteOutline />
                     </ListItemIcon>
-                    <ListItemText>Delete user</ListItemText>
+                    <ListItemText>
+                      <Typography
+                        sx={{
+                          color: "#0E1019",
+                          leadingTrim: "both",
+                          textEdge: "cap",
+                          fontFamily: "Anek Latin",
+                          fontSize: "16px",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          lineHeight: "150%",
+                        }}
+                      >
+                        Delete user
+                      </Typography>
+                    </ListItemText>
                   </MenuItem>
                 </Menu>
               </Box>
@@ -291,8 +334,10 @@ const StaffDetails = () => {
         </Stack>
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "row",
+            // display: "flex",
+            // flexDirection: "row",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
             alignItems: "center",
             width: "100%",
             gap: "24px",
@@ -301,14 +346,18 @@ const StaffDetails = () => {
           <Paper
             sx={{
               boxShadow: "none",
-              display: "flex",
-              flexDirection: "column",
+              // display: "flex",
+              // flexDirection: "column",
               // justifyContent: "flex-end",
-              justifyContent: "center",
+              display: "grid",
+              gridTemplateRows: "subgrid",
+              gridRow: "1/4",
+              // justifyContent: "center",
+              justifyContent: "start",
               gap: "10px",
               padding: "20px",
             }}
-            style={{ width: data.role === "POS" ? "500px" : "1024px" }}
+            style={{ width: data.role === "POS" ? "460px" : "984px" }}
           >
             <Typography
               sx={{
@@ -402,13 +451,15 @@ const StaffDetails = () => {
               <Paper
                 sx={{
                   boxShadow: "none",
-                  display: "flex",
-                  flexDirection: "column",
+                  // display: "flex",
+                  // flexDirection: "column",
                   // justifyContent: "flex-end",
+                  display: "grid",
+                  gridRow: "1/4",
                   justifyContent: "center",
                   gap: "10px",
                   padding: "20px",
-                  width: "500px",
+                  width: "460px",
                 }}
               >
                 <Typography

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {matchPath, useLocation} from "react-router-dom";
 import { BreadcrumbsBody, BreadcrumbsLink, BreadcrumbsElement } from './styled';
 import {useAppSelector} from "../../store/hooks";
+import {Box} from "@mui/material";
 
 const Breadcrumbs = () => {
   const location = useLocation()
@@ -48,16 +49,24 @@ const Breadcrumbs = () => {
 
   return <BreadcrumbsBody>
     {
-      list.map((item, index) => <>
-        {
-          index + 1 < list.length ?
-            <BreadcrumbsLink key={item.link} to={item.link}>{item.name}</BreadcrumbsLink> :
-            <BreadcrumbsElement>{getTitle(item.name)}</BreadcrumbsElement>
-        }
-        { index + 1 < list.length &&
-          <div key={item.link + 'slash'}>/</div>
-        }
-      </>)
+      list.map((item, index) =>
+        <Box
+          key={item.link}
+          sx={{
+            display: 'flex',
+            gap: '8px',
+          }}
+        >
+          {
+            index + 1 < list.length ?
+              <BreadcrumbsLink key={item.link} to={item.link}>{item.name}</BreadcrumbsLink> :
+              <BreadcrumbsElement>{getTitle(item.name)}</BreadcrumbsElement>
+          }
+          { index + 1 < list.length &&
+            <div key={item.link + 'slash'}>/</div>
+          }
+        </Box>
+      )
     }
   </BreadcrumbsBody>
 }

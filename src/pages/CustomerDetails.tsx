@@ -262,18 +262,40 @@ const CustomerDetails = () => {
                     },
                   }}
                 >
-                  <MenuItem onClick={handleDelete}>
+                  <MenuItem
+                    onClick={handleDelete}
+                    sx={{
+                      paddingRight: "70.4px",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                    }}
+                  >
                     <ListItemIcon>
                       <DeleteOutline />
                     </ListItemIcon>
-                    <ListItemText>Delete user</ListItemText>
+                    <ListItemText>
+                      <Typography
+                        sx={{
+                          color: "#0E1019",
+                          leadingTrim: "both",
+                          textEdge: "cap",
+                          fontFamily: "Anek Latin",
+                          fontSize: "16px",
+                          fontStyle: "normal",
+                          fontWeight: "400",
+                          lineHeight: "150%",
+                        }}
+                      >
+                        Delete user
+                      </Typography>
+                    </ListItemText>
                   </MenuItem>
-                  <MenuItem onClick={handleDeactivate}>
-                    <ListItemIcon>
-                      <DeleteOutline />
-                    </ListItemIcon>
-                    <ListItemText>Deactivate user</ListItemText>
-                  </MenuItem>
+                  {/*<MenuItem onClick={handleDeactivate}>*/}
+                  {/*  <ListItemIcon>*/}
+                  {/*    <DeleteOutline />*/}
+                  {/*  </ListItemIcon>*/}
+                  {/*  <ListItemText>Deactivate user</ListItemText>*/}
+                  {/*</MenuItem>*/}
                 </Menu>
               </Box>
             </Box>

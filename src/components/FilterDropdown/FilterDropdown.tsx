@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { DropdownBody, DropdownPanel, DropdownPanelButtons } from './styled';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {FormControlLabel, Radio, RadioGroup, Typography} from '@mui/material';
 import { BasicButton, LinkButton } from '../Button/Buttons';
 import { ArrowDownSmall, ArrowUpSmall } from '../Icons/ArrowsSmall';
 
@@ -79,7 +79,15 @@ const FilterDropdown: FC<IFilterDropdownProps> = ({
                     value={item.id}
                     key={item.id + item.name}
                     control={<Radio />}
-                    label={item.name}
+                    label={
+                      <Typography
+                        sx={{
+                          fontFamily: "Anek Latin"
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                    }
                     checked={selectedPoint !== undefined && item.id === selectedPoint.id}
                   />
                 )
