@@ -137,9 +137,17 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
           required: true,
+          pattern: {
+            value: /^\S*$/,
+            message: 'Password should not contain spaces',
+          },
           minLength: {
             value: 8,
             message: 'Too short value'
+          },
+          maxLength: {
+            value: 150,
+            message: 'Too long value'
           },
       }}
       />
