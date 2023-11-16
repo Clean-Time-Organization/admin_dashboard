@@ -66,7 +66,11 @@ const CreateStuffUser = () => {
         }));
       }
     }).catch(error => {
-      if (Object.keys(error.response.data.detail)[0] === 'email') {
+      if (error.response.data.detail instanceof Array) {
+        error.response.data.detail.forEach(item => {
+          setError(item.loc[1], { type: 'validate', message: item.msg + ''} );
+        });
+      } else if (Object.keys(error.response.data.detail)[0] === 'email') {
         setError('email', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
       } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
         setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );

@@ -95,6 +95,10 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
+            pattern: {
+              value: /^\d{9}$/,
+              message: 'Incorrect phone format',
+            },
             minLength: {
               value: 9,
               message: 'Invalid phone'

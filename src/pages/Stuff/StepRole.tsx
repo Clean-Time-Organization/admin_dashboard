@@ -4,7 +4,7 @@ import {
 } from 'react-hook-form';
 import { BigButtonGroup } from "../../components/BigButtonGroup/BigButonGroup";
 import { UserForm } from "../../types/user";
-import { ButtonLine, StepBase } from "./styled";
+import { ButtonLine, StepBase, StepTitle } from "./styled";
 import { BasicButton } from "../../components/Button/Buttons";
 
 interface IStepRoleProps {
@@ -24,6 +24,7 @@ const StepRole: FC<IStepRoleProps> = ({ list, setValue, selectedValue, setCurren
   }, [selected]);
 
   return <StepBase>
+    <StepTitle>Role</StepTitle>
     <BigButtonGroup title={'Select Role of User'} list={list} selected={selected} setSelected={(val) => setSelected(val + '')} />
     <ButtonLine>
       <BasicButton onClick={setCurrentStep}>Continue</BasicButton>
