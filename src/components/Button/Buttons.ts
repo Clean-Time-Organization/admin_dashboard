@@ -15,9 +15,15 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
   justify-content: center;
   align-items: center;
   text-transform: none;
+  font-family: 'Anek Latin', sans-serif;
 
   &:hover {
-    background: #2E8DC898;
+    background: #2772AC;
+  }
+
+  &.Mui-disabled {
+    background: #F1F5FF;
+    color:#B9D7EF;
   }
 `;
 
@@ -28,6 +34,11 @@ export const LinkButton = styled(BasicButton)`
   font-family: "Anek Latin";
 
   &:hover {
-    background: rgba(0, 0, 0, 0.08);
+    color: #2772AC;
+  }
+
+  &.Mui-disabled {
+    background: rgba(0, 0, 0, 0.03);
+    color: #1A4C73;
   }
 `;
