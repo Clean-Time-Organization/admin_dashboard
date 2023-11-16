@@ -265,7 +265,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                   lineHeight: "120%",
                 }}
               >
-                {getUserFL(authData.firstName, authData.lastName)}
+                {getUserFL(authData.firstName, authData.lastName) || 'AM'}
               </Typography>
             </IconButton>
             <Menu

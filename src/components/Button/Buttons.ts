@@ -25,6 +25,16 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
     background: #F1F5FF;
     color:#B9D7EF;
   }
+  
+  &.filter {
+    width: 128px;
+    height: 32px;
+  }
+  
+  &.pageTitle {
+    width: 170px;
+    height: 32px;
+  }
 `;
 
 export const LinkButton = styled(BasicButton)`
@@ -40,5 +50,15 @@ export const LinkButton = styled(BasicButton)`
   &.Mui-disabled {
     background: rgba(0, 0, 0, 0.03);
     color: #1A4C73;
+  }
+  
+  &.filter {
+    width: 72px;
+    height: 32px;
+  }
+  
+  &.pageTitle {
+    width: 148px;
+    height: 32px;
   }
 `;
