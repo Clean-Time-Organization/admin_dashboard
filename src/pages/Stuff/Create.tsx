@@ -67,7 +67,7 @@ const CreateStuffUser = () => {
       }
     }).catch(error => {
       if (error.response.data.detail instanceof Array) {
-        error.response.data.detail.forEach(item => {
+        error.response.data.detail.forEach((item: any) => {
           setError(item.loc[1], { type: 'validate', message: item.msg + ''} );
         });
       } else if (Object.keys(error.response.data.detail)[0] === 'email') {
