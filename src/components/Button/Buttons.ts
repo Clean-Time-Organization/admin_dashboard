@@ -31,7 +31,7 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
     height: 32px;
   }
   
-    &.pageTitle {
+  &.pageTitle {
     width: 170px;
     height: 32px;
   }
@@ -57,7 +57,7 @@ export const LinkButton = styled(BasicButton)`
     height: 32px;
   }
   
-    &.pageTitle {
+  &.pageTitle {
     width: 148px;
     height: 32px;
   }
