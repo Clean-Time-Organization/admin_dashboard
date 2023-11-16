@@ -1,8 +1,8 @@
 import { styled } from '@mui/system';
 
 export const SnackbarBase = styled('div')`
-  padding: 16px;
-  width: 344px;
+  padding: 13.5px;
+  width: 317px;
   border-radius: 4px;
   background: #374151;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
