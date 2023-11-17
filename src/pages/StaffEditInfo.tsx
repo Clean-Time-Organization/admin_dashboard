@@ -27,7 +27,6 @@ enum Status {
 type ApiRequest = {
   full_name: string
   phone_number: string
-  email: string
   laundry_id?: number
   branch_id?: number
   is_active: boolean
@@ -136,7 +135,6 @@ const StaffEditInfo = () => {
   const updateEntity = async (): Promise<AxiosResponse> => {
     let apiData: ApiRequest = {
       full_name: userName,
-      email: email,
       phone_number: phone,
       is_active: status === Status.Active,
     }
