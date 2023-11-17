@@ -721,11 +721,7 @@ const StaffEditInfo = () => {
                       )}
                     />
                   </Box>
-                  <Box
-                    sx={{
-                      paddingBottom: "24px",
-                    }}
-                  >
+                  <Box>
                     <Controller
                       control={control}
                       name="branch_id"
@@ -779,59 +775,123 @@ const StaffEditInfo = () => {
                   </Box>
                 </Box>
               }
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
+              {data.role !== "POS" &&
                 <Box
-                  display="flex"
-                  justifyContent="flex-end"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disableElevation={true}
-                    disabled={updateEntityMutation.isLoading}
-                    style={{
-                      backgroundColor: "#2E8DC8",
-                      borderRadius: "4px",
-                      padding: "0px",
-                      margin: "0px",
-                      maxWidth: "113px",
-                      maxHeight: "40px",
-                      minWidth: "113px",
-                      minHeight: "40px",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "24px",
-                      textTransform: "capitalize",
-                    }}
-                    startIcon={
-                      updateEntityMutation.isLoading ? (
-                        <Stack
-                          alignItems="center"
-                          style={{
-                            paddingLeft: "15px"
-                          }}>
-                          <CircularProgress
-                            size={25}
-                            style={{
-                              color: "white",
-                            }} />
-                        </Stack>
-                      ) : null
-                    }
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
                   >
-                    {updateEntityMutation.isLoading ? '' : 'Save'}
-                  </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disableElevation={true}
+                      disabled={updateEntityMutation.isLoading}
+                      style={{
+                        backgroundColor: "#2E8DC8",
+                        borderRadius: "4px",
+                        padding: "0px",
+                        margin: "0px",
+                        maxWidth: "113px",
+                        maxHeight: "40px",
+                        minWidth: "113px",
+                        minHeight: "40px",
+                        fontFamily: "Anek Latin",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: "500",
+                        lineHeight: "24px",
+                        textTransform: "capitalize",
+                      }}
+                      startIcon={
+                        updateEntityMutation.isLoading ? (
+                          <Stack
+                            alignItems="center"
+                            style={{
+                              paddingLeft: "15px"
+                            }}>
+                            <CircularProgress
+                              size={25}
+                              style={{
+                                color: "white",
+                              }} />
+                          </Stack>
+                        ) : null
+                      }
+                    >
+                      {updateEntityMutation.isLoading ? '' : 'Save'}
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
+              }
             </Paper>
           </Box>
+          {data.role === "POS" &&
+            <Box
+                sx={{
+                  width: "calc(100vw - 18px)",
+                  height: "72px",
+                  borderTop: "1px solid #E5E7EB",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "#FFF",
+                }}
+            >
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                sx={{
+                  width: "672px",
+                  maxWidth: "672px",
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disableElevation={true}
+                  disabled={updateEntityMutation.isLoading}
+                  style={{
+                    backgroundColor: "#2E8DC8",
+                    borderRadius: "4px",
+                    padding: "0px",
+                    margin: "0px",
+                    maxWidth: "113px",
+                    maxHeight: "40px",
+                    minWidth: "113px",
+                    minHeight: "40px",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "24px",
+                    textTransform: "capitalize",
+                  }}
+                  startIcon={
+                    updateEntityMutation.isLoading ? (
+                      <Stack
+                        alignItems="center"
+                        style={{
+                          paddingLeft: "15px"
+                        }}>
+                        <CircularProgress
+                          size={25}
+                          style={{
+                            color: "white",
+                          }} />
+                      </Stack>
+                    ) : null
+                  }
+                >
+                  {updateEntityMutation.isLoading ? '' : 'Save'}
+                </Button>
+              </Box>
+            </Box>
+          }
         </Box>
       </form>
     </ThemeProvider>
