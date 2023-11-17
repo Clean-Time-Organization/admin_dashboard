@@ -257,10 +257,6 @@ const StaffEditInfo = () => {
       errors = true
     }
     if (data.role === "POS") {
-      if (email.trim() === '') {
-        setEmailError('Please enter email')
-        errors = true
-      }
       if (!selectedLaundry || !selectedLaundry.id) {
         setLaundryError('Please select laundry')
         errors = true
