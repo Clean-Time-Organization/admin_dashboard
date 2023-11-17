@@ -203,18 +203,20 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error: any) => {
-      console.dir(error)
-
       let userNameErrors: string[] = []
       let phoneErrorrs: string[] = []
 
-      error.response.data.detail.map((errDetail: { loc: string | string[]; msg: string; }) => {
-        if (errDetail.loc.includes('full_name')) {
-          userNameErrors.push(errDetail.msg)
-        } else if (errDetail.loc.includes('phone_number')) {
-          phoneErrorrs.push(errDetail.msg)
-        }
-      })
+      if (Array.isArray(error.response.data.detail)) {
+        error.response.data.detail.map((errDetail: { loc: string | string[]; msg: string; }) => {
+          if (errDetail.loc.includes('full_name')) {
+            userNameErrors.push(errDetail.msg)
+          } else if (errDetail.loc.includes('phone_number')) {
+            phoneErrorrs.push(errDetail.msg)
+          }
+        })
+      } else {
+        userNameErrors = [error.response.data.detail]
+      }
 
       if (userNameErrors.length) {
         setUserNameError(userNameErrors.join(', '))
