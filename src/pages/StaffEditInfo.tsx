@@ -606,6 +606,7 @@ const StaffEditInfo = () => {
                           onChange={e => setEmail(e.target.value)}
                           variant="outlined"
                           inputProps={{
+                            readOnly: true,
                             style: {
                               WebkitBoxShadow: "0 0 0 1000px white inset"
                             }
