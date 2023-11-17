@@ -149,6 +149,7 @@ const StaffDetails = () => {
                   alignItems: "center",
                   gap: "12px",
                   marginLeft: "-20px",
+                  maxWidth: "320px",
                 }}
               >
                 <Typography
@@ -162,6 +163,9 @@ const StaffDetails = () => {
                     fontWeight: "600",
                     lineHeight: "120%",
                     padding: "10px 8px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
                   }}
                 >
                   {[data.first_name, data.last_name].join(' ')}
@@ -430,20 +434,29 @@ const StaffDetails = () => {
               >
                 Email
               </Typography>
-              <Typography
+              <Box
                 sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  maxWidth: "440px",
                 }}
               >
-                {data.email}
-              </Typography>
+                <Typography
+                  sx={{
+                    color: "#1F2937",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                  }}
+                >
+                  {data.email}
+                </Typography>
+              </Box>
             </Box>
           </Paper>
           {
@@ -456,7 +469,7 @@ const StaffDetails = () => {
                   // justifyContent: "flex-end",
                   display: "grid",
                   gridRow: "1/4",
-                  justifyContent: "center",
+                  justifyContent: "start",
                   gap: "10px",
                   padding: "20px",
                   width: "460px",
