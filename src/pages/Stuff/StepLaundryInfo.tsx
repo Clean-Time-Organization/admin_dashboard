@@ -137,7 +137,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
             <Autocomplete
                 label={'Laundry'}
                 error={error !== undefined}
-                errorText={error?.type === 'required' && 'Please select the name of the branch' ||
+                errorText={error?.type === 'required' && 'Please select the name of the laundry' ||
                   error && error?.message  
                 }
                 selectedValue={selectedLaundry}
@@ -167,7 +167,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
           <Autocomplete
               label={'Branch'}
               error={error !== undefined}
-              errorText={error?.type === 'required' && 'Field is required' ||
+              errorText={error?.type === 'required' && 'Please select the name of the branch' ||
                 error && error?.message  
               }
               selectedValue={selectedBranch}
