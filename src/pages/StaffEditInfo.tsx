@@ -418,6 +418,10 @@ const StaffEditInfo = () => {
                           }
                         }}
                         sx={{
+                          input: {
+                            color: "#1F2937",
+                            fontFamily: "Anek Latin",
+                          },
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                             width: "357px"
                           },
@@ -471,6 +475,10 @@ const StaffEditInfo = () => {
                       }
                     }}
                     sx={{
+                      input: {
+                        color: "#1F2937",
+                        fontFamily: "Anek Latin",
+                      },
                       "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                         width: "357px"
                       },
@@ -552,6 +560,10 @@ const StaffEditInfo = () => {
                           }
                         }}
                         sx={{
+                          input: {
+                            color: "#1F2937",
+                            fontFamily: "Anek Latin",
+                          },
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                             width: "357px"
                           },
@@ -611,6 +623,10 @@ const StaffEditInfo = () => {
                             }
                           }}
                           sx={{
+                            input: {
+                              color: "#1F2937",
+                              fontFamily: "Anek Latin",
+                            },
                             "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                               width: "357px"
                             },
@@ -690,6 +706,10 @@ const StaffEditInfo = () => {
                             }
                           }}
                           sx={{
+                            input: {
+                              color: "#1F2937",
+                              fontFamily: "Anek Latin",
+                            },
                             "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                               width: "357px"
                             },
@@ -742,6 +762,10 @@ const StaffEditInfo = () => {
                             }
                           }}
                           sx={{
+                            input: {
+                              color: "#1F2937",
+                              fontFamily: "Anek Latin",
+                            },
                             "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                               width: "357px"
                             },
@@ -780,9 +804,9 @@ const StaffEditInfo = () => {
                       borderRadius: "4px",
                       padding: "0px",
                       margin: "0px",
-                      maxWidth: "135px",
+                      maxWidth: "113px",
                       maxHeight: "40px",
-                      minWidth: "135px",
+                      minWidth: "113px",
                       minHeight: "40px",
                       fontFamily: "Anek Latin",
                       fontSize: "16px",
