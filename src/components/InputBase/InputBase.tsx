@@ -36,6 +36,7 @@ const InputBase: FC<IInputBaseProps> = ({
       variant="outlined"
       style={{
         fontFamily: '\'Anek Latin\', sans-serif',
+        color: '#4B5563',
       }}
       {...inputProps}
       InputProps={{
@@ -63,6 +64,9 @@ const InputBase: FC<IInputBaseProps> = ({
       sx={{
         "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
           width: "85%"
+        },
+        ":placeholder": {
+          color: '#6B7280', 
         },
         "& .MuiOutlinedInput-root": {
           "& fieldset": {

@@ -39,6 +39,12 @@ export const BlockTitle = styled('div')`
   line-height: 100%;
 `;
 
+export const Titles = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
 export const BlockSubtitle = styled('div')`
   color: #4B5563;
   font-size: 15px;

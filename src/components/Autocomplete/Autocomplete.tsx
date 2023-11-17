@@ -71,7 +71,17 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         }}
         options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
-        renderInput={(params) => <TextField {...params} error={error} label={label} {...inputProps} />}
+        renderInput={(params) =>
+          <TextField
+            {...params}
+            error={error}
+            label={label}
+            {...inputProps} 
+            style={{
+              color: '#4B5563',
+            }}
+          />
+        }
       />
       {error ?
         <ErrorMessage>

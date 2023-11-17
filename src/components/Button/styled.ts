@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 
 export const ButtonBase = styled('div')<{selected?: boolean}>`
   padding: 20px 16px;
-  height: 166px;
+  height: 164px;
   width: 100%;
   border-radius: 4px;
   border: 1px solid ${({selected}) => selected ? '#2E8DC8' : '#E5E7EB'};

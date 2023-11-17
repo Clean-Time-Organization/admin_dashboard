@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BasicButton, LinkButton } from "../../components/Button/Buttons";
+import { BasicButtonLong, LinkButtonLong } from "../../components/Button/Buttons";
 import { InputBase } from "../../components/InputBase/InputBase";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
@@ -53,8 +53,14 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
-            minLength: 2,
-            maxLength: 80,
+            minLength: {
+              value: 2,
+              message: 'Please enter the full name of user',
+            },
+            maxLength: {
+              value: 80,
+              message: 'Too long value for user`s full name',
+            },
         }}
       />
       <Controller
@@ -141,8 +147,8 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
       />
     </StepBaseInternal>
     <ButtonLine>
-      <LinkButton onClick={toPreviousStep}>Previous step</LinkButton>
-      <BasicButton onClick={onCreate}>Create staff user</BasicButton>
+      <LinkButtonLong onClick={toPreviousStep}>Previous step</LinkButtonLong>
+      <BasicButtonLong onClick={onCreate}>Create staff user</BasicButtonLong>
     </ButtonLine>
   </StepBase>;
 }
