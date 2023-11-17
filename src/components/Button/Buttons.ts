@@ -3,6 +3,7 @@ import { Button } from './Button';
 
 export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
   padding: 10px ${({pretext}) => !pretext ? '16px' : '24px' } 10px 16px;
+  height: 40px;
   border-radius: 4px;
   background: #2E8DC8;
   color: #FFF;
@@ -25,6 +26,21 @@ export const BasicButton = styled(Button)<{ pretext?: boolean | string }>`
     background: #F1F5FF;
     color:#B9D7EF;
   }
+  
+  &.filter {
+    width: 128px;
+    height: 32px;
+  }
+  
+  &.pageTitle {
+    width: 170px;
+    height: 32px;
+  }
+`;
+
+export const BasicButtonLong = styled(BasicButton)`
+  padding: 10px 40px;
+  font-size: 16px;
 `;
 
 export const LinkButton = styled(BasicButton)`
@@ -34,6 +50,7 @@ export const LinkButton = styled(BasicButton)`
   font-family: "Anek Latin";
 
   &:hover {
+    background: transparent;
     color: #2772AC;
   }
 
@@ -41,4 +58,19 @@ export const LinkButton = styled(BasicButton)`
     background: rgba(0, 0, 0, 0.03);
     color: #1A4C73;
   }
+  
+  &.filter {
+    width: 72px;
+    height: 32px;
+  }
+  
+  &.pageTitle {
+    width: 148px;
+    height: 32px;
+  }
+`;
+
+export const LinkButtonLong = styled(LinkButton)`
+  padding: 10px 40px;
+  font-size: 16px;
 `;

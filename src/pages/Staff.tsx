@@ -206,7 +206,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingRight: "4px" }}>
         <BasicText>{user.phone_number}</BasicText>
         <BasicText>{user.email}</BasicText>
       </Grid>

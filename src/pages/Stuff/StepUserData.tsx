@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { BasicButton, LinkButton } from "../../components/Button/Buttons";
+import { BasicButtonLong, LinkButtonLong } from "../../components/Button/Buttons";
 import { InputBase } from "../../components/InputBase/InputBase";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue, UseFormTrigger } from "react-hook-form";
@@ -61,8 +61,14 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
-            minLength: 2,
-            maxLength: 80,
+            minLength: {
+              value: 2,
+              message: 'Please enter the full name of user',
+            },
+            maxLength: {
+              value: 80,
+              message: 'Too long value for user`s full name',
+            },
         }}
       />
       <Controller
@@ -103,6 +109,10 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
+            pattern: {
+              value: /^\d{9}$/,
+              message: 'Incorrect phone format',
+            },
             minLength: {
               value: 9,
               message: 'Invalid phone'
@@ -141,16 +151,24 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
           required: true,
+          pattern: {
+            value: /^\S*$/,
+            message: 'Password should not contain spaces',
+          },
           minLength: {
             value: 8,
             message: 'Too short value'
+          },
+          maxLength: {
+            value: 150,
+            message: 'Too long value'
           },
       }}
       />
     </StepBaseInternal>
     <ButtonLine>
-      <LinkButton onClick={toPreviousStep}>Previous step</LinkButton>
-      <BasicButton onClick={onCreate}>Create staff user</BasicButton>
+      <LinkButtonLong onClick={toPreviousStep}>Previous step</LinkButtonLong>
+      <BasicButtonLong onClick={onCreate}>Create staff user</BasicButtonLong>
     </ButtonLine>
   </StepBase>;
 }

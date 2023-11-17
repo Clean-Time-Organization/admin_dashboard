@@ -87,8 +87,11 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
       const possibleMatch = matchPath(pattern, location.pathname)
-      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
-      if (possibleMatch !== null && lastPiece !== 'create') {
+      // const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
+      // if (possibleMatch !== null && lastPiece !== 'create') {
+      //   return possibleMatch
+      // }
+      if (possibleMatch !== null) {
         return possibleMatch
       }
     }
@@ -265,7 +268,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                   lineHeight: "120%",
                 }}
               >
-                {getUserFL(authData.firstName, authData.lastName)}
+                {getUserFL(authData.firstName, authData.lastName) || 'AM'}
               </Typography>
             </IconButton>
             <Menu
@@ -288,7 +291,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
               }}
               sx={{
                 "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-                  boxShadow: "none",
+                  boxShadow: "0px 2px 6px 2px rgba(100, 116, 142, 0.15), 0px 1px 2px 0px rgba(100, 116, 142, 0.30)",
                 },
               }}
               open={Boolean(anchorEl)}
@@ -336,6 +339,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       width: "32px",
                       height: "32px",
                       borderRadius: '50%',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
                     <Typography
@@ -348,13 +354,16 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         fontStyle: "normal",
                         fontWeight: "600",
                         lineHeight: "120%",
-                        transform: "translate(24%, 40%)",
                       }}
                     >
                       {drawerData.roundTitle}
                     </Typography>
                   </Box>
-                  <Box>
+                  <Box
+                    sx={{
+                      maxWidth: "180px",
+                    }}
+                  >
                     <Typography
                       sx={{
                         color: "#1F2937",
@@ -366,6 +375,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         fontWeight: "600",
                         lineHeight: "normal",
                         marginBottom: "12px",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
                       }}
                     >
                       {drawerData.title}

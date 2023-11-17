@@ -61,7 +61,46 @@ const theme = createTheme({
         }
       ]
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: '#1F2937',
+          '&.Mui-focused': {
+            borderColor: '#2E8DC8',
+            borderWidth: '1px',
+          },
+          '&.Mui-error': {
+            color: '#B91C1C',
+            borderColor: '#B91C1C',
+            '&:placeholder': {
+              color: '#B91C1C',
+            },
+          },
+        },
+        input: {
+          '&:placeholder': {
+            color: '#6B7280',
+          },
+        }
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          color: '#6B7280',
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: '#2E8DC8',
+          },
+        },
+      },
+    },
   },
-})
+});
 
 export default theme
