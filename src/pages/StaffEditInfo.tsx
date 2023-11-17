@@ -453,7 +453,7 @@ const StaffEditInfo = () => {
                     label="Select"
                     value={status}
                     fullWidth
-                    onChange={e => setStatus(e.target.value === "1" ? Status.Active : Status.Inactive)}
+                    onChange={e => setStatus(+e.target.value)}
                     InputLabelProps={{
                       shrink: true,
                       style: {
