@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { BasicButtonLong, LinkButtonLong } from "../../components/Button/Buttons";
 import { InputBase } from "../../components/InputBase/InputBase";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
-import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, UseFormWatch, UseFormSetValue, UseFormTrigger } from "react-hook-form";
 import { UserForm } from "../../types/user";
 import { PasswordGeneration } from "../../components/PasswordGeneration/PasswordGeneration";
 import { useAppDispatch } from "../../store/hooks";
@@ -12,6 +12,7 @@ interface IStepUserDetailsProps {
   readonly control: Control<UserForm>;
   readonly watch: UseFormWatch<UserForm>;
   readonly setValue: UseFormSetValue<UserForm>;
+  readonly trigger: UseFormTrigger<UserForm>;
   toPreviousStep: () => void;
   onCreate: () => void;
   // readonly getValues: UseFormGetValues<AgreementForm>;
@@ -25,9 +26,16 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
   setValue,
   toPreviousStep,
   onCreate,
+  trigger,
 }) => {
   const dispatch = useAppDispatch();
   const watchPassword = watch('password');
+
+  useEffect(() => {
+    if (watchPassword) {
+      trigger('password');
+    }
+  }, [watchPassword]);
 
   return <StepBase>
     <StepBaseInternal>

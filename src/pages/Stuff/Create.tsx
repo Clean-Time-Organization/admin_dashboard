@@ -16,7 +16,7 @@ const CreateStuffUser = () => {
   const [totalSteps, setTotalSteps] = useState(3);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const { control, watch, setValue, handleSubmit, setError } = useForm<UserForm>({
+  const { control, watch, setValue, handleSubmit, setError, trigger } = useForm<UserForm>({
     mode: 'onTouched',
     defaultValues: {
         role: 'POS',
@@ -106,6 +106,7 @@ const CreateStuffUser = () => {
               setValue={setValue}
               toPreviousStep={() => setCurrentStep(currentStep - 1)}
               onCreate={handleSubmit(handleCreate)}
+              trigger={trigger}
             /> :
             <StepLaundryInfo
               control={control}
@@ -125,6 +126,7 @@ const CreateStuffUser = () => {
               setValue={setValue}
               toPreviousStep={() => setCurrentStep(currentStep - 1)}
               onCreate={handleSubmit(handleCreate)}
+              trigger={trigger}
             />
       }
     </>
