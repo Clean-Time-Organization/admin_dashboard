@@ -203,15 +203,25 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error: any) => {
-      if (Object.keys(error.response.data.detail)[0] === 'email') {
-        dispatch(setNotification({
-          notificationMessage: 'Incorrect user email',
-          notificationType: 'error',
-        }))
-      } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
-        setUserNameError(Object.values(error.response.data.detail)[0] + '')
-      } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
-        setPhoneError(Object.values(error.response.data.detail)[0] + '');
+      let userNameErrors: string[] = []
+      let phoneErrorrs: string[] = []
+
+      if (Array.isArray(error.response.data.detail)) {
+        error.response.data.detail.map((errDetail: { loc: string | string[]; msg: string; }) => {
+          if (errDetail.loc.includes('full_name')) {
+            userNameErrors.push(errDetail.msg)
+          } else if (errDetail.loc.includes('phone_number')) {
+            phoneErrorrs.push(errDetail.msg)
+          }
+        })
+      } else {
+        userNameErrors = [error.response.data.detail]
+      }
+
+      if (userNameErrors.length) {
+        setUserNameError(userNameErrors.join(', '))
+      } else if (phoneErrorrs.length) {
+        setPhoneError(phoneErrorrs.join(', '))
       } else {
         dispatch(setNotification({
           notificationMessage: error.response.data.detail + '',
