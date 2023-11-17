@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { BasicButton, LinkButton } from "../../components/Button/Buttons";
-import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle } from "./styled";
+import { BasicButtonLong, LinkButtonLong } from "../../components/Button/Buttons";
+import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { Branch, Laundry, UserForm } from "../../types/user";
 import { Autocomplete } from "../../components/Autocomplete/Autocomplete";
@@ -123,11 +123,13 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
   return <StepBase>
     <StepBaseInternal>
       <StepTitle>Laundry Info</StepTitle>
-      <StepSubtitle>Choose a laundry and brunch</StepSubtitle>
+      <StepSubtitle>Choose a laundry and branch</StepSubtitle>
     </StepBaseInternal>
     <StepBaseInternal>
-      <BlockTitle>Select Laundry</BlockTitle>
-      <BlockSubtitle>Choose the laundry where this user works</BlockSubtitle>
+      <Titles>
+        <BlockTitle>Select Laundry</BlockTitle>
+        <BlockSubtitle>Choose the laundry where this user works</BlockSubtitle>
+      </Titles>
       <Controller
         control={control}
         name="laundry_id"
@@ -135,7 +137,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
             <Autocomplete
                 label={'Laundry'}
                 error={error !== undefined}
-                errorText={error?.type === 'required' && 'Field is required' ||
+                errorText={error?.type === 'required' && 'Please select the name of the branch' ||
                   error && error?.message  
                 }
                 selectedValue={selectedLaundry}
@@ -154,8 +156,10 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
       />
     </StepBaseInternal>
     <StepBaseInternal>
-      <BlockTitle>Select Branch</BlockTitle>
-      <BlockSubtitle>Select the brunch address</BlockSubtitle>
+      <Titles>
+        <BlockTitle>Select Branch</BlockTitle>
+        <BlockSubtitle>Select the branch address</BlockSubtitle>
+      </Titles>
       <Controller
         control={control}
         name="branch_id"
@@ -186,8 +190,8 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
       />
     </StepBaseInternal>
     <ButtonLine>
-      <LinkButton onClick={toPreviousStep}>Previous step</LinkButton>
-      <BasicButton disabled={!watchLaundry || !watchBranch} onClick={toNextStep}>Continue</BasicButton>
+      <LinkButtonLong onClick={toPreviousStep}>Previous step</LinkButtonLong>
+      <BasicButtonLong disabled={!watchLaundry || !watchBranch} onClick={toNextStep}>Continue</BasicButtonLong>
     </ButtonLine>
   </StepBase>;
 }

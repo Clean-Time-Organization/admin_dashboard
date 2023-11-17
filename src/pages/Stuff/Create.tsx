@@ -29,7 +29,7 @@ const CreateStuffUser = () => {
   const roleProperties = [
     {
       id: 'POS',
-      name: 'Operator POS',
+      name: 'POS Operator',
       subtitle: 'An online learning platform offering courses, webinars, and resources on modern farming techniques, ' +
         'sustainable agriculture practices, and the latest technologies in the agricultural industry.',
     },
