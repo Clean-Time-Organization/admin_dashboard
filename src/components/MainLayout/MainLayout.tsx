@@ -87,8 +87,11 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]
       const possibleMatch = matchPath(pattern, location.pathname)
-      const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
-      if (possibleMatch !== null && lastPiece !== 'create') {
+      // const lastPiece = location.pathname.split('/')[location.pathname.split('/').length - 1];
+      // if (possibleMatch !== null && lastPiece !== 'create') {
+      //   return possibleMatch
+      // }
+      if (possibleMatch !== null) {
         return possibleMatch
       }
     }
