@@ -336,6 +336,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                       width: "32px",
                       height: "32px",
                       borderRadius: '50%',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
                     <Typography
@@ -348,13 +351,16 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         fontStyle: "normal",
                         fontWeight: "600",
                         lineHeight: "120%",
-                        transform: "translate(24%, 40%)",
                       }}
                     >
                       {drawerData.roundTitle}
                     </Typography>
                   </Box>
-                  <Box>
+                  <Box
+                    sx={{
+                      maxWidth: "180px",
+                    }}
+                  >
                     <Typography
                       sx={{
                         color: "#1F2937",
@@ -366,6 +372,9 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                         fontWeight: "600",
                         lineHeight: "normal",
                         marginBottom: "12px",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
                       }}
                     >
                       {drawerData.title}
