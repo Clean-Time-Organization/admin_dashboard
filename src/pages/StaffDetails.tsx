@@ -149,6 +149,7 @@ const StaffDetails = () => {
                   alignItems: "center",
                   gap: "12px",
                   marginLeft: "-20px",
+                  maxWidth: "320px",
                 }}
               >
                 <Typography
@@ -162,6 +163,9 @@ const StaffDetails = () => {
                     fontWeight: "600",
                     lineHeight: "120%",
                     padding: "10px 8px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
                   }}
                 >
                   {[data.first_name, data.last_name].join(' ')}
@@ -247,14 +251,14 @@ const StaffDetails = () => {
                   }}
                   sx={{
                     "& .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper": {
-                      boxShadow: "none",
+                      boxShadow: "0px 2px 6px 2px rgba(100, 116, 142, 0.15), 0px 1px 2px 0px rgba(100, 116, 142, 0.30)",
                     },
                   }}
                 >
                   <MenuItem
                     onClick={handleEdit}
                     sx={{
-                      paddingRight: "90.6px",
+                      paddingRight: "91.94px",
                       paddingTop: "12px",
                       paddingBottom: "12px",
                     }}
@@ -430,20 +434,29 @@ const StaffDetails = () => {
               >
                 Email
               </Typography>
-              <Typography
+              <Box
                 sx={{
-                  color: "#1F2937",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "500",
-                  lineHeight: "150%",
+                  maxWidth: "440px",
                 }}
               >
-                {data.email}
-              </Typography>
+                <Typography
+                  sx={{
+                    color: "#1F2937",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                  }}
+                >
+                  {data.email}
+                </Typography>
+              </Box>
             </Box>
           </Paper>
           {
@@ -456,7 +469,7 @@ const StaffDetails = () => {
                   // justifyContent: "flex-end",
                   display: "grid",
                   gridRow: "1/4",
-                  justifyContent: "center",
+                  justifyContent: "start",
                   gap: "10px",
                   padding: "20px",
                   width: "460px",

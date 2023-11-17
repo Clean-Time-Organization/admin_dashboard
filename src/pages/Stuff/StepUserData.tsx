@@ -101,6 +101,10 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
             required: true,
+            pattern: {
+              value: /^\d{9}$/,
+              message: 'Incorrect phone format',
+            },
             minLength: {
               value: 9,
               message: 'Invalid phone'
@@ -139,9 +143,17 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
         )}
         rules={{
           required: true,
+          pattern: {
+            value: /^\S*$/,
+            message: 'Password should not contain spaces',
+          },
           minLength: {
             value: 8,
             message: 'Too short value'
+          },
+          maxLength: {
+            value: 150,
+            message: 'Too long value'
           },
       }}
       />
