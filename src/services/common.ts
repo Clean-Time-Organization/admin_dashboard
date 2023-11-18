@@ -1,3 +1,4 @@
+import {useCallback, useEffect} from "react";
 
 const getUserFL = (firstName: string, lastName: string) => {
   let result: string[] = []
@@ -13,4 +14,14 @@ const getUserRole = (role: string) => {
   return role
 }
 
-export {getUserFL, getUserRole}
+const useDebounce = (effect: any, dependencies: any, delay: number) => {
+  const callback = useCallback(effect, dependencies)
+
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay)
+    return () => clearTimeout(timeout)
+  }, [callback, delay])
+}
+
+export {getUserFL, getUserRole, useDebounce}
+
