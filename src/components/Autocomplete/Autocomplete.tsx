@@ -27,18 +27,18 @@ type IAutocompleteProps = TextFieldProps & {
 }
 
 const Autocomplete: FC<IAutocompleteProps> = ({
-  label,
-  error,
-  errorText,
-  options,
-  selectedValue,
-  selectValue,
-  inputValue,
-  setInputValue,
-  open,
-  setOpen,
-  ...inputProps
-}) => {
+                                                label,
+                                                error,
+                                                errorText,
+                                                options,
+                                                selectedValue,
+                                                selectValue,
+                                                inputValue,
+                                                setInputValue,
+                                                open,
+                                                setOpen,
+                                                ...inputProps
+                                              }) => {
   const [list, setList] = useState<Array<{ id: number; name: string }>>([]);
 
   useEffect(() => {
@@ -71,12 +71,19 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         }}
         options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
+        renderOption={(props, option) => {
+          return (
+            <li {...props} key={option.id}>
+              {option.name}
+            </li>
+          )
+        }}
         renderInput={(params) =>
           <TextField
             {...params}
             error={error}
             label={label}
-            {...inputProps} 
+            {...inputProps}
             style={{
               color: '#4B5563',
             }}
@@ -88,7 +95,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
           <Alert />
           <span>{errorText}</span>
         </ErrorMessage>
-      : null}
+        : null}
     </FormControl>
   );
 }

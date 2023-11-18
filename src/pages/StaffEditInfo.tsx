@@ -120,8 +120,12 @@ const StaffEditInfo = () => {
         searchParams.append('name', inputBranch.substring(0, 39))
       }
       searchParams.append('laundry_id', selectedLaundry.id + '')
+      const isOpen = openBranches
+      setOpenBranches(false)
+      setBranches(undefined)
       await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
         setBranches(response.data?.items)
+        setOpenBranches(isOpen)
       })
     } else {
       setBranches(undefined)
