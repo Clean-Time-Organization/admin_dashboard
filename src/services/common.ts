@@ -2,8 +2,8 @@ import {useCallback, useEffect} from "react";
 
 const getUserFL = (firstName: string, lastName: string) => {
   let result: string[] = []
-  firstName && result.push(firstName.charAt(0).toUpperCase())
-  lastName && result.push(lastName.charAt(0).toUpperCase())
+  firstName.trim() && result.push(firstName.trim().charAt(0).toUpperCase())
+  lastName.trim() && result.push(lastName.trim().charAt(0).toUpperCase())
   return result.join('')
 }
 

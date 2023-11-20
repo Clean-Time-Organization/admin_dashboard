@@ -7,7 +7,7 @@ type Props = {
   width: number
 }
 
-export const Drawer: FC<Props> = memo(function CtDrawer({width}) {
+export const Drawer: FC<Props> = memo(function Drawer({width}) {
   const drawerData = useAppSelector(state => state.drawerData)
 
   return (
