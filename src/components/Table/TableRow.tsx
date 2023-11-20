@@ -1,12 +1,15 @@
 import {FC} from "react";
 import { TableRowLayout } from "./styled";
-import {User} from "../../types/user";
+
+export type EntityData = {
+  id: number
+}
 
 interface ITableRowProps {
   active: boolean
   children: JSX.Element
-  onClickHandle?: (event: React.MouseEvent<HTMLElement>, entityData?: User) => void
-  entityData?: User
+  onClickHandle?: (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => void
+  entityData?: EntityData
 }
 
 const TableRow: FC<ITableRowProps> = ({ active, children , onClickHandle, entityData}) => {

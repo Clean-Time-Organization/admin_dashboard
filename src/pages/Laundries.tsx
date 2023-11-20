@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { FilterDropdown } from '../components/FilterDropdown/FilterDropdown';
 import { PageTitle } from '../components/PageTitle/PageTitle';
 import { Table } from '../components/Table/Table';
-import { TableRow } from '../components/Table/TableRow';
+import {EntityData, TableRow} from '../components/Table/TableRow';
 import {
   ContentBody,
   FilterRow,
@@ -25,6 +25,7 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
+import {useNavigate} from "react-router-dom";
 import {useDebounce} from "../services/common";
 
 export type Laundry = {
@@ -164,7 +165,14 @@ const Laundries = () => {
 }
 
 const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
-  return <TableRow active={laundry.is_active}>
+  const navigate = useNavigate()
+
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
+    const id = entityData ? entityData.id : ''
+    navigate(`/laundries/${id}`)
+  }
+
+  return <TableRow active={laundry.is_active} entityData={laundry} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, laundry)}>
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>

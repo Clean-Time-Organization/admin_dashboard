@@ -31,7 +31,7 @@ const Breadcrumbs = () => {
   }, [location])
 
   const getTitle = (itemName: string) => {
-    const patterns = ['/customers/:id', '/staff/:id']
+    const patterns = ['/customers/:id', '/staff/:id', '/laundries/:id']
     let match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]

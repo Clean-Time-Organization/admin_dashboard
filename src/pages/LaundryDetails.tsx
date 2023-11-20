@@ -6,28 +6,58 @@ import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
-import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography} from "@mui/material";
+import {
+  Box,
+  Chip,
+  Fab,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
-import {User} from "../types/user";
 import {AxiosResponse} from "axios";
-import {getUserFL, getUserRole} from "../services/common";
+import {getUserFL} from "../services/common";
 import {useAppDispatch} from "../store/hooks";
 import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
+import {Active} from "../components/Icons/Active";
+import {Document} from "../components/Icons/Document";
+import {setNotification} from "../store/features/notification";
 
-const StaffDetails = () => {
+const LaundryDetails = () => {
   const { id } = useParams()
-  const init: User = {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    id: 0,
+  const init = {
+    id,
+    name_en: '',
+    name_ar: '',
     is_active: false,
-    role: 'POS',
-    email: '',
+    address: '',
+    document: {
+      cr_file: '',
+      cr_number: '',
+      vat_file: '',
+      vat_number: '',
+    },
+    owner: {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      id: 0,
+      is_active: false,
+      role: 'POS',
+      email: '',
+    }
   }
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [data, setData] = useState(init)
+  const [fName, setFName] = useState('')
+  const [lName, setLName] = useState('')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -41,7 +71,7 @@ const StaffDetails = () => {
 
   const handleEdit = () => {
     setAnchorEl(null)
-    navigate(`/staff/edit/${id}`)
+    navigate(`/laundry/edit/${id}`)
   }
 
   const handleDelete = () => {
@@ -49,7 +79,7 @@ const StaffDetails = () => {
   }
 
   const getEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.get(`/user/staff/${id}`)
+    return await httpClient.get(`/laundry/${id}`)
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -60,14 +90,21 @@ const StaffDetails = () => {
         case 200:
           setData(response.data)
 
+          const name = response.data.name_en.split(' ')
+
+          setFName(name[0])
+          if (name.length > 1) {
+            setLName(name[1])
+          }
+
           dispatch(setDrawerData({
-            roundTitle: getUserFL(response.data.first_name, response.data.last_name),
-            title: [response.data.first_name, response.data.last_name].join(' '),
-            subTitle: getUserRole(response.data.role),
+            roundTitle: getUserFL(fName, lName),
+            title: response.data.name_en,
+            subTitle: response.data.address,
           }))
 
           dispatch(setBreadCrumbsData({
-            title: [response.data.first_name, response.data.last_name].join(' '),
+            title: response.data.name_en,
           }))
           break
 
@@ -76,8 +113,12 @@ const StaffDetails = () => {
           break
       }
     },
-    onError: (error) => {
-      setData(init)
+    onError: (error: any) => {
+      dispatch(setNotification({
+        notificationMessage: 'Server error, please try again later',
+        notificationType: 'error',
+      }))
+      navigate("/laundries")
     },
   })
 
@@ -127,7 +168,7 @@ const StaffDetails = () => {
                 lineHeight: "43.429px",
               }}
             >
-              {getUserFL(data.first_name, data.last_name)}
+              {getUserFL(fName, lName)}
             </Typography>
           </Box>
           <Box
@@ -169,9 +210,9 @@ const StaffDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {[data.first_name, data.last_name].join(' ')}
+                  {data.name_en}
                 </Typography>
-                {data.last_name ?
+                {data.name_en ?
                   data.is_active ?
                     <Chip
                       label="Active"
@@ -307,7 +348,7 @@ const StaffDetails = () => {
                           lineHeight: "150%",
                         }}
                       >
-                        Delete user
+                        Delete laundry
                       </Typography>
                     </ListItemText>
                   </MenuItem>
@@ -332,15 +373,13 @@ const StaffDetails = () => {
                   padding: "8px",
                 }}
               >
-                {getUserRole(data.role)}
+                {data.address}
               </Typography>
             </Box>
           </Box>
         </Stack>
         <Box
           sx={{
-            // display: "flex",
-            // flexDirection: "row",
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             alignItems: "center",
@@ -351,18 +390,14 @@ const StaffDetails = () => {
           <Paper
             sx={{
               boxShadow: "none",
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "flex-end",
               display: "grid",
               gridTemplateRows: "subgrid",
               gridRow: "1/4",
-              // justifyContent: "center",
               justifyContent: "start",
               gap: "10px",
               padding: "20px",
+              width: "460px",
             }}
-            style={{ width: data.role === "POS" ? "460px" : "984px" }}
           >
             <Typography
               sx={{
@@ -397,7 +432,7 @@ const StaffDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                Phone Number
+                Owner
               </Typography>
               <Typography
                 sx={{
@@ -411,7 +446,7 @@ const StaffDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                {data.phone_number}
+                {[data.owner.first_name, data.owner.last_name].join(' ')}
               </Typography>
             </Box>
             <Box
@@ -433,7 +468,7 @@ const StaffDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                Email
+                Phone Number
               </Typography>
               <Box
                 sx={{
@@ -455,120 +490,171 @@ const StaffDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {data.email}
+                  {data.owner.phone_number}
                 </Typography>
               </Box>
             </Box>
           </Paper>
-          {
-            data.role === "POS" ?
-              <Paper
+            <Paper
+              sx={{
+                boxShadow: "none",
+                display: "grid",
+                gridRow: "1/4",
+                justifyContent: "start",
+                gap: "10px",
+                padding: "20px",
+                width: "460px",
+              }}
+            >
+              <Typography
                 sx={{
-                  boxShadow: "none",
-                  // display: "flex",
-                  // flexDirection: "column",
-                  // justifyContent: "flex-end",
-                  display: "grid",
-                  gridRow: "1/4",
-                  justifyContent: "start",
-                  gap: "10px",
-                  padding: "20px",
-                  width: "460px",
+                  color: "#0E1019",
+                  leadingTrim: "both",
+                  textEdge: "cap",
+                  fontFamily: "Anek Latin",
+                  fontSize: "18px",
+                  fontStyle: "normal",
+                  fontWeight: "600",
+                  lineHeight: "120%",
+                }}
+              >
+                Tax Info
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
                 }}
               >
                 <Typography
                   sx={{
-                    color: "#0E1019",
+                    color: "#656873",
                     leadingTrim: "both",
                     textEdge: "cap",
                     fontFamily: "Anek Latin",
-                    fontSize: "18px",
+                    fontSize: "14px",
                     fontStyle: "normal",
-                    fontWeight: "600",
-                    lineHeight: "120%",
+                    fontWeight: "500",
+                    lineHeight: "150%",
                   }}
                 >
-                  Laundry Info
+                  Vat Number
                 </Typography>
                 <Box
+                  display="flex"
+                  justifyContent="flex-start"
+                  gap="13px"
+                >
+                  <Box
+                    minWidth="66px"
+                    minHeight="32px"
+                    height="32px"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                  >
+                    <Typography
+                      sx={{
+                        color: "#1F2937",
+                        leadingTrim: "both",
+                        textEdge: "cap",
+                        fontFamily: "Anek Latin",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: "500",
+                        lineHeight: "150%",
+                      }}
+                    >
+                      {data.document.vat_number}
+                    </Typography>
+                  </Box>
+                  {data.document.vat_file &&
+                    <Box
+                      height="32px"
+                      width="32px"
+                      paddingTop="1px"
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                    >
+                      <Link href={data.document.vat_file}>
+                        <Document />
+                      </Link>
+                    </Box>
+                  }
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "3px",
+                    color: "#656873",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      color: "#656873",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    Laundry
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#2E8DC8",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    {data.staff?.laundry?.name_en}
-                  </Typography>
-                </Box>
+                  CR Number
+                </Typography>
                 <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "3px",
-                  }}
+                  display="flex"
+                  justifyContent="flex-start"
+                  gap="14px"
                 >
-                  <Typography
-                    sx={{
-                      color: "#656873",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
+                  <Box
+                    minWidth="66px"
+                    minHeight="32px"
+                    height="32px"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
                   >
-                    Branch
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#2E8DC8",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    {data.staff?.branch?.address}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        color: "#1F2937",
+                        leadingTrim: "both",
+                        textEdge: "cap",
+                        fontFamily: "Anek Latin",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: "500",
+                        lineHeight: "150%",
+                      }}
+                    >
+                      {data.document.cr_number}
+                    </Typography>
+                  </Box>
+                  {data.document.cr_file &&
+                      <Box
+                          height="32px"
+                          width="32px"
+                          paddingTop="1px"
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="center"
+                      >
+                          <Link href={data.document.cr_file}>
+                              <Document />
+                          </Link>
+                      </Box>
+                  }
                 </Box>
-              </Paper>
-              : null
-          }
+              </Box>
+            </Paper>
         </Box>
       </Box>
     </ContentBody>
   )
 }
 
-export { StaffDetails }
+export { LaundryDetails }

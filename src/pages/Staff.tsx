@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { FilterDropdown } from '../components/FilterDropdown/FilterDropdown';
 import { PageTitle } from '../components/PageTitle/PageTitle';
 import { Table } from '../components/Table/Table';
-import { TableRow } from '../components/Table/TableRow';
+import {EntityData, TableRow} from '../components/Table/TableRow';
 import {
   ContentBody,
   FilterRow,
@@ -177,7 +177,7 @@ const Staff = () => {
 const StaffRow: FC<IStaffRowProps> = ({ user }) => {
   const navigate = useNavigate()
 
-  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: User) => {
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
     const id = entityData ? entityData.id : ''
     navigate(`/staff/${id}`)
   }
@@ -193,7 +193,7 @@ const StaffRow: FC<IStaffRowProps> = ({ user }) => {
     },
   ]
 
-  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: User) => onTableRowClick(event, entityData)}>
+  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, entityData)}>
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>
