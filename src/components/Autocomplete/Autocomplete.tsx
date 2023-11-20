@@ -27,18 +27,18 @@ type IAutocompleteProps = TextFieldProps & {
 }
 
 const Autocomplete: FC<IAutocompleteProps> = ({
-                                                label,
-                                                error,
-                                                errorText,
-                                                options,
-                                                selectedValue,
-                                                selectValue,
-                                                inputValue,
-                                                setInputValue,
-                                                open,
-                                                setOpen,
-                                                ...inputProps
-                                              }) => {
+  label,
+  error,
+  errorText,
+  options,
+  selectedValue,
+  selectValue,
+  inputValue,
+  setInputValue,
+  open,
+  setOpen,
+  ...inputProps
+}) => {
   const [list, setList] = useState<Array<{ id: number; name: string }>>([]);
 
   useEffect(() => {
