@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { BasicButtonLong, LinkButtonLong } from "../../components/Button/Buttons";
 import { BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import { Control, Controller, UseFormWatch, UseFormSetValue } from "react-hook-form";
 import { Branch, Laundry, UserForm } from "../../types/user";
 import { Autocomplete } from "../../components/Autocomplete/Autocomplete";
 import httpClient from "../../services/HttpClient";
+import { debounce } from "@mui/material";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<UserForm>;
@@ -35,7 +36,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
   const [openBranches, setOpenBranches] = useState(false);
 
   useEffect(() => {
-    getLaundryData();
+    searchLaundryDelayed();
   }, [inputLaundry]);
   
   const getLaundryData = async () => {
@@ -53,12 +54,12 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
   };
 
   const setLaundryName = (value: string) => {
-    console.log(value, inputLaundry);
     if (value === '') {
       if (inputLaundry) {
         setValue('branch_name', undefined);
         setValue('branch_id', undefined);
         setInputLaundry(value);
+        setInputBranch('');
         setSelectedBranch(null);
       }
     } else {
@@ -67,7 +68,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
   };
 
   useEffect(() => {
-    getBranchesData();
+    searchBranchDelayed();
   }, [inputBranch, watchLaundry]);
   
   const getBranchesData = async () => {
@@ -119,6 +120,16 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
       }
     }
   }, []);
+
+  const searchBranchDelayed = useMemo(
+      () => debounce(getBranchesData, 500),
+      [getBranchesData]
+  );
+
+  const searchLaundryDelayed = useMemo(
+    () => debounce(getLaundryData, 500),
+    [getBranchesData]
+);
 
   return <StepBase>
     <StepBaseInternal>

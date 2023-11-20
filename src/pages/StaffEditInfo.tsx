@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
@@ -9,7 +9,8 @@ import {
   CircularProgress, MenuItem, Paper,
   Stack,
   TextField, ThemeProvider,
-  Typography
+  Typography,
+  debounce
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
@@ -82,7 +83,7 @@ const StaffEditInfo = () => {
 
   useEffect(() => {
     if (data && data.role === "POS") {
-      getLaundryData()
+      searchLaundryDelayed();
     }
   }, [inputLaundry])
 
@@ -109,7 +110,7 @@ const StaffEditInfo = () => {
 
   useEffect(() => {
     if (data && data.role === "POS") {
-      getBranchesData()
+      searchBranchDelayed();
     }
   }, [inputBranch, inputLaundry])
 
@@ -234,6 +235,16 @@ const StaffEditInfo = () => {
       }
     },
   })
+
+  const searchBranchDelayed = useMemo(
+      () => debounce(getBranchesData, 500),
+      [getBranchesData]
+  );
+
+  const searchLaundryDelayed = useMemo(
+    () => debounce(getLaundryData, 500),
+    [getBranchesData]
+  );
 
   useEffect(() => {
     getEntityMutation.mutate()
