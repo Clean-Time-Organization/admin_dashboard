@@ -25,6 +25,7 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
+import {useDebounce} from "../services/common";
 
 export type Laundry = {
   id: number
@@ -67,7 +68,13 @@ const Laundries = () => {
   useEffect(() => {
     setIsListLoading(true)
     resetList(1)
-  }, [selectedStatus, searchValue])
+  }, [selectedStatus])
+
+  useDebounce(() => {
+      setIsListLoading(true)
+      resetList(1)
+    }, [searchValue], 500
+  )
 
   useEffect(() => {
     setIsListLoading(true)
