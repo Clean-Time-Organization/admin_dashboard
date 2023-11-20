@@ -1,4 +1,5 @@
 import {useCallback, useEffect} from "react";
+import {matchPath} from "react-router-dom";
 
 const getUserFL = (firstName: string, lastName: string) => {
   let result: string[] = []
@@ -23,5 +24,22 @@ const useDebounce = (effect: any, dependencies: any, delay: number) => {
   }, [callback, delay])
 }
 
-export {getUserFL, getUserRole, useDebounce}
+const useRouteMatch = (patterns: readonly string[], usePattern = false) => {
+  for (let i = 0; i < patterns.length; i += 1) {
+    const pattern = patterns[i]
+    let possibleMatch = null
+    if (usePattern) {
+      possibleMatch = matchPath({path: pattern}, location.pathname)
+    } else {
+      possibleMatch = matchPath(pattern, location.pathname)
+    }
+    if (possibleMatch !== null) {
+      return possibleMatch
+    }
+  }
+
+  return null
+}
+
+export {getUserFL, getUserRole, useDebounce, useRouteMatch}
 

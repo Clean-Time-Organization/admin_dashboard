@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {Link, matchPath, useNavigate} from "react-router-dom";
 import {ArrowDown} from "../Icons/ArrowDown";
-import {getUserFL} from "../../services/common";
+import {getUserFL, useRouteMatch} from "../../services/common";
 import {useAuth} from "../Auth/AuthProvider";
 import {useAppSelector} from "../../store/hooks";
 
@@ -41,18 +41,6 @@ export const Toolbar: FC = memo(function Toolbar() {
     setAnchorEl(null)
     signOut()
     navigate('/login')
-  }
-
-  const useRouteMatch = (patterns: readonly string[]) => {
-    for (let i = 0; i < patterns.length; i += 1) {
-      const pattern = patterns[i]
-      const possibleMatch = matchPath(pattern, location.pathname)
-      if (possibleMatch !== null) {
-        return possibleMatch
-      }
-    }
-
-    return null
   }
 
   const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders'])
