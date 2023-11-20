@@ -13,6 +13,8 @@ import {getUserFL} from "../services/common";
 import {useAppDispatch} from "../store/hooks";
 import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
+import {Active} from "../components/Icons/Active";
+import {Document} from "../components/Icons/Document";
 
 const LaundryDetails = () => {
   const { id } = useParams()
@@ -522,20 +524,45 @@ const LaundryDetails = () => {
                 >
                   Vat Number
                 </Typography>
-                <Typography
-                  sx={{
-                    color: "#1F2937",
-                    leadingTrim: "both",
-                    textEdge: "cap",
-                    fontFamily: "Anek Latin",
-                    fontSize: "16px",
-                    fontStyle: "normal",
-                    fontWeight: "500",
-                    lineHeight: "150%",
-                  }}
+                <Box
+                  display="flex"
+                  justifyContent="flex-start"
                 >
-                  {data.document.vat_number}
-                </Typography>
+                  <Box
+                    minWidth="66px"
+                    minHeight="32px"
+                    height="32px"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                  >
+                    <Typography
+                      sx={{
+                        color: "#1F2937",
+                        leadingTrim: "both",
+                        textEdge: "cap",
+                        fontFamily: "Anek Latin",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: "500",
+                        lineHeight: "150%",
+                      }}
+                    >
+                      {data.document.vat_number}
+                    </Typography>
+                  </Box>
+                  {data.document.vat_file &&
+                    <Box
+                      height="32px"
+                      width="32px"
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                    >
+                      <Document />
+                    </Box>
+                  }
+                </Box>
               </Box>
               <Box
                 sx={{
@@ -558,20 +585,45 @@ const LaundryDetails = () => {
                 >
                   CR Number
                 </Typography>
-                <Typography
-                  sx={{
-                    color: "#1F2937",
-                    leadingTrim: "both",
-                    textEdge: "cap",
-                    fontFamily: "Anek Latin",
-                    fontSize: "16px",
-                    fontStyle: "normal",
-                    fontWeight: "500",
-                    lineHeight: "150%",
-                  }}
+                <Box
+                  display="flex"
+                  justifyContent="flex-start"
                 >
-                  {data.document.cr_number}
-                </Typography>
+                  <Box
+                    minWidth="66px"
+                    minHeight="32px"
+                    height="32px"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                  >
+                    <Typography
+                      sx={{
+                        color: "#1F2937",
+                        leadingTrim: "both",
+                        textEdge: "cap",
+                        fontFamily: "Anek Latin",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: "500",
+                        lineHeight: "150%",
+                      }}
+                    >
+                      {data.document.cr_number}
+                    </Typography>
+                  </Box>
+                  {data.document.cr_file &&
+                      <Box
+                          height="32px"
+                          width="32px"
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="center"
+                      >
+                          <Document />
+                      </Box>
+                  }
+                </Box>
               </Box>
             </Paper>
         </Box>
