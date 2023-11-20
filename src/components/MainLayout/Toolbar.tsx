@@ -2,7 +2,7 @@ import {FC, memo, useEffect, useState} from "react";
 import {Box, IconButton, Menu, MenuItem, Toolbar as MuiToolbar, Typography} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import {Link, matchPath, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ArrowDown} from "../Icons/ArrowDown";
 import {getUserFL, useRouteMatch} from "../../services/common";
 import {useAuth} from "../Auth/AuthProvider";
@@ -17,15 +17,7 @@ export const Toolbar: FC = memo(function Toolbar() {
 
   useEffect(() => {
     const patterns = ['/staff/edit/:id']
-    let match = false
-    for (let i = 0; i < patterns.length; i += 1) {
-      const pattern = patterns[i]
-      const possibleMatch = matchPath({path: pattern}, location.pathname)
-      if (possibleMatch !== null) {
-        match = true
-        break
-      }
-    }
+    const match = useRouteMatch(patterns, true) !== null
     setShowToolBar(!match)
   }, [location])
 
