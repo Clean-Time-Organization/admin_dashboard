@@ -405,27 +405,10 @@ const MainLayout = ({children}: {children: ReactNode}) => {
                 }}
               >
                 <Button
-                  variant="contained"
-                  disableElevation={true}
-                  startIcon={
-                    <Details/>
-                  }
+                  variant="drawer"
+                  startIcon={<Details/>}
                   style={{
-                    justifyContent: "flex-start",
-                    paddingLeft: "16px",
                     backgroundColor: "#2E8DC8",
-                    borderRadius: "4px",
-                    maxWidth: "222px",
-                    maxHeight: "48px",
-                    minWidth: "222px",
-                    minHeight: "48px",
-                    fontFamily: "Anek Latin",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: "600",
-                    lineHeight: "normal",
-                    textTransform: "capitalize",
-                    color: "#FFF",
                   }}
                 >
                   Details
