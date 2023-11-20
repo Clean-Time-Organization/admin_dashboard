@@ -8,9 +8,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
 import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography} from "@mui/material";
 import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
-import {User} from "../types/user";
 import {AxiosResponse} from "axios";
-import {getUserFL, getUserRole} from "../services/common";
+import {getUserFL} from "../services/common";
 import {useAppDispatch} from "../store/hooks";
 import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
@@ -23,6 +22,12 @@ const LaundryDetails = () => {
     name_ar: '',
     is_active: false,
     address: '',
+    document: {
+      cr_file: '',
+      cr_number: '',
+      vat_file: '',
+      vat_number: '',
+    },
     owner: {
       first_name: '',
       last_name: '',
@@ -30,6 +35,7 @@ const LaundryDetails = () => {
       id: 0,
       is_active: false,
       role: 'POS',
+      email: '',
     }
   }
 
@@ -143,7 +149,7 @@ const LaundryDetails = () => {
                 lineHeight: "43.429px",
               }}
             >
-              {getUserFL(data.name_en, data.name_en)}
+              {getUserFL(fName, lName)}
             </Typography>
           </Box>
           <Box
@@ -185,9 +191,9 @@ const LaundryDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {[data.name_en, data.name_en].join(' ')}
+                  {data.name_en}
                 </Typography>
-                {data.address ?
+                {data.name_en ?
                   data.is_active ?
                     <Chip
                       label="Active"
@@ -323,7 +329,7 @@ const LaundryDetails = () => {
                           lineHeight: "150%",
                         }}
                       >
-                        Delete user
+                        Delete laundry
                       </Typography>
                     </ListItemText>
                   </MenuItem>
@@ -407,7 +413,7 @@ const LaundryDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                Phone Number
+                Owner
               </Typography>
               <Typography
                 sx={{
@@ -421,7 +427,7 @@ const LaundryDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                {data.address}
+                {[data.owner.first_name, data.owner.last_name].join(' ')}
               </Typography>
             </Box>
             <Box
@@ -465,7 +471,7 @@ const LaundryDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {data.address}
+                  {data.owner.email}
                 </Typography>
               </Box>
             </Box>
@@ -473,9 +479,6 @@ const LaundryDetails = () => {
             <Paper
               sx={{
                 boxShadow: "none",
-                // display: "flex",
-                // flexDirection: "column",
-                // justifyContent: "flex-end",
                 display: "grid",
                 gridRow: "1/4",
                 justifyContent: "start",
@@ -496,7 +499,7 @@ const LaundryDetails = () => {
                   lineHeight: "120%",
                 }}
               >
-                Laundry Info
+                Tax Info
               </Typography>
               <Box
                 sx={{
@@ -517,11 +520,11 @@ const LaundryDetails = () => {
                     lineHeight: "150%",
                   }}
                 >
-                  Laundry
+                  Vat Number
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#2E8DC8",
+                    color: "#1F2937",
                     leadingTrim: "both",
                     textEdge: "cap",
                     fontFamily: "Anek Latin",
@@ -531,7 +534,7 @@ const LaundryDetails = () => {
                     lineHeight: "150%",
                   }}
                 >
-                  {data.name_en}
+                  {data.document.vat_number}
                 </Typography>
               </Box>
               <Box
@@ -553,11 +556,11 @@ const LaundryDetails = () => {
                     lineHeight: "150%",
                   }}
                 >
-                  Branch
+                  CR Number
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#2E8DC8",
+                    color: "#1F2937",
                     leadingTrim: "both",
                     textEdge: "cap",
                     fontFamily: "Anek Latin",
@@ -567,7 +570,7 @@ const LaundryDetails = () => {
                     lineHeight: "150%",
                   }}
                 >
-                  {data.address}
+                  {data.document.cr_number}
                 </Typography>
               </Box>
             </Paper>
