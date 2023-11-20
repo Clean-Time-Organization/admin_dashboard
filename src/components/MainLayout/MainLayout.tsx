@@ -113,7 +113,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
     navigate('/login')
   }
 
-  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/orders'])
+  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders'])
   let currentTab = routeMatch?.pathnameBase
 
   if (currentTab === '/') {
