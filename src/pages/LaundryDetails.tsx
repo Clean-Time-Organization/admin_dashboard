@@ -27,6 +27,7 @@ import {setDrawerData} from "../store/features/drawerDataSlice";
 import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
 import {Active} from "../components/Icons/Active";
 import {Document} from "../components/Icons/Document";
+import {setNotification} from "../store/features/notification";
 
 const LaundryDetails = () => {
   const { id } = useParams()
@@ -112,8 +113,12 @@ const LaundryDetails = () => {
           break
       }
     },
-    onError: (error) => {
-      setData(init)
+    onError: (error: any) => {
+      dispatch(setNotification({
+        notificationMessage: 'Server error, please try again later',
+        notificationType: 'error',
+      }))
+      navigate("/laundries")
     },
   })
 
@@ -463,7 +468,7 @@ const LaundryDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                Email
+                Phone Number
               </Typography>
               <Box
                 sx={{
@@ -485,7 +490,7 @@ const LaundryDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {data.owner.email}
+                  {data.owner.phone_number}
                 </Typography>
               </Box>
             </Box>
@@ -539,6 +544,7 @@ const LaundryDetails = () => {
                 <Box
                   display="flex"
                   justifyContent="flex-start"
+                  gap="13px"
                 >
                   <Box
                     minWidth="66px"
@@ -567,6 +573,7 @@ const LaundryDetails = () => {
                     <Box
                       height="32px"
                       width="32px"
+                      paddingTop="1px"
                       display="flex"
                       flexDirection="column"
                       justifyContent="center"
@@ -602,6 +609,7 @@ const LaundryDetails = () => {
                 <Box
                   display="flex"
                   justifyContent="flex-start"
+                  gap="14px"
                 >
                   <Box
                     minWidth="66px"
@@ -630,6 +638,7 @@ const LaundryDetails = () => {
                       <Box
                           height="32px"
                           width="32px"
+                          paddingTop="1px"
                           display="flex"
                           flexDirection="column"
                           justifyContent="center"

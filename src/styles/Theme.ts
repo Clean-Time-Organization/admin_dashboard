@@ -93,6 +93,9 @@ const theme = createTheme({
             textTransform: "capitalize",
             color: "#FFF",
             backgroundColor: "#2E8DC8",
+            "&:hover": {
+              background: "#2E8DC8",
+            },
           }
         },
         {
