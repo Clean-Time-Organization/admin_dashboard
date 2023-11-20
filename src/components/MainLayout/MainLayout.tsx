@@ -21,6 +21,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import { Snackbar } from '../Snackbar/Snackbar';
 import { setNotification } from '../../store/features/notification';
 import {setBreadCrumbsData} from "../../store/features/breadCrumbsDataSlice";
+import {Details} from "../Icons/Details";
 
 const MainLayout = ({children}: {children: ReactNode}) => {
   const dispatch = useAppDispatch()
@@ -306,136 +307,131 @@ const MainLayout = ({children}: {children: ReactNode}) => {
             display: "flex"
           }}
         >
-          {
-            showDrawer  ?
-              <Drawer
-                variant="persistent"
-                anchor="left"
-                open={true}
+          {showDrawer &&
+            <Drawer
+              variant="persistent"
+              anchor="left"
+              open={true}
+              sx={{
+                // width: drawerWidth,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                  width: drawerWidth,
+                  boxSizing: "border-box",
+                  marginTop: "64px",
+                  paddingTop: "16px",
+                }
+              }}
+            >
+              <Box
                 sx={{
-                  // width: drawerWidth,
-                  flexShrink: 0,
-                  "& .MuiDrawer-paper": {
-                    width: drawerWidth,
-                    boxSizing: "border-box",
-                    marginTop: "64px",
-                    paddingTop: "16px",
-                  }
+                  display: "flex",
+                  gap: "10px",
+                  alignItems: "center",
+                  padding: "12px 16px",
+                  marginBottom: "16px",
                 }}
               >
                 <Box
+                  component="div"
                   sx={{
+                    backgroundColor: "#EEF5FB",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: '50%',
                     display: "flex",
-                    gap: "10px",
+                    justifyContent: "center",
                     alignItems: "center",
-                    padding: "12px 16px",
-                    marginBottom: "16px",
                   }}
                 >
-                  <Box
-                    component="div"
+                  <Typography
                     sx={{
-                      backgroundColor: "#EEF5FB",
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: '50%',
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      color: "#1A4C73",
+                      leadingTrim: "both",
+                      textEdge: "cap",
+                      fontFamily: "Anek Latin",
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      fontWeight: "600",
+                      lineHeight: "120%",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        color: "#1A4C73",
-                        leadingTrim: "both",
-                        textEdge: "cap",
-                        fontFamily: "Anek Latin",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: "600",
-                        lineHeight: "120%",
-                      }}
-                    >
-                      {drawerData.roundTitle}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      maxWidth: "180px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#1F2937",
-                        leadingTrim: "both",
-                        textEdge: "cap",
-                        fontFamily: "Anek Latin",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: "600",
-                        lineHeight: "normal",
-                        marginBottom: "12px",
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {drawerData.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "#474A58",
-                        leadingTrim: "both",
-                        textEdge: "cap",
-                        fontFamily: "Anek Latin",
-                        fontSize: "12px",
-                        fontStyle: "normal",
-                        fontWeight: "400",
-                        lineHeight: "135%",
-                      }}
-                    >
-                      {drawerData.subTitle}
-                    </Typography>
-                  </Box>
+                    {drawerData.roundTitle}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
+                    maxWidth: "180px",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disableElevation={true}
-                    startIcon={
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M8.33329 17.5H14.1666C15.0871 17.5 15.8333 16.7538 15.8333 15.8333V7.84518C15.8333 7.62416 15.7455 7.4122 15.5892 7.25592L11.0774 2.74408C10.9211 2.5878 10.7091 2.5 10.4881 2.5H5.83329C4.91282 2.5 4.16663 3.24619 4.16663 4.16667V13.3333M4.16663 17.5L8.23219 13.4344M8.23219 13.4344C8.6846 13.8868 9.3096 14.1667 9.99996 14.1667C11.3807 14.1667 12.5 13.0474 12.5 11.6667C12.5 10.286 11.3807 9.16667 9.99996 9.16667C8.61925 9.16667 7.49996 10.286 7.49996 11.6667C7.49996 12.357 7.77978 12.982 8.23219 13.4344Z" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    }
-                    style={{
-                      justifyContent: "flex-start",
-                      paddingLeft: "16px",
-                      backgroundColor: "#2E8DC8",
-                      borderRadius: "4px",
-                      maxWidth: "222px",
-                      maxHeight: "48px",
-                      minWidth: "222px",
-                      minHeight: "48px",
+                  <Typography
+                    sx={{
+                      color: "#1F2937",
+                      leadingTrim: "both",
+                      textEdge: "cap",
                       fontFamily: "Anek Latin",
                       fontSize: "14px",
                       fontStyle: "normal",
                       fontWeight: "600",
                       lineHeight: "normal",
-                      textTransform: "capitalize",
-                      color: "#FFF",
+                      marginBottom: "12px",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
                     }}
                   >
-                    Details
-                  </Button>
+                    {drawerData.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#474A58",
+                      leadingTrim: "both",
+                      textEdge: "cap",
+                      fontFamily: "Anek Latin",
+                      fontSize: "12px",
+                      fontStyle: "normal",
+                      fontWeight: "400",
+                      lineHeight: "135%",
+                    }}
+                  >
+                    {drawerData.subTitle}
+                  </Typography>
                 </Box>
-              </Drawer>
-              : null
+              </Box>
+              <Box
+                sx={{
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  disableElevation={true}
+                  startIcon={
+                    <Details/>
+                  }
+                  style={{
+                    justifyContent: "flex-start",
+                    paddingLeft: "16px",
+                    backgroundColor: "#2E8DC8",
+                    borderRadius: "4px",
+                    maxWidth: "222px",
+                    maxHeight: "48px",
+                    minWidth: "222px",
+                    minHeight: "48px",
+                    fontFamily: "Anek Latin",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "normal",
+                    textTransform: "capitalize",
+                    color: "#FFF",
+                  }}
+                >
+                  Details
+                </Button>
+              </Box>
+            </Drawer>
           }
           {
             showDrawer ?
