@@ -70,7 +70,7 @@ const LaundryDetails = () => {
 
   const handleEdit = () => {
     setAnchorEl(null)
-    navigate(`/staff/edit/${id}`)
+    navigate(`/laundry/edit/${id}`)
   }
 
   const handleDelete = () => {

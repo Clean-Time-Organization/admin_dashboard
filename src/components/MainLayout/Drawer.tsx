@@ -1,14 +1,61 @@
-import {FC, memo} from "react";
+import {FC, memo, useEffect, useState} from "react";
 import {Box, Button, Drawer as MuiDrawer, Typography} from "@mui/material";
 import {Details} from "../Icons/Details";
 import {useAppSelector} from "../../store/hooks";
+import {useLocation} from "react-router-dom";
+import {useRouteMatch} from "../../services/common";
+import {Branches} from "../Icons/Branches";
+import {Prices} from "../Icons/Prices";
+import {AssociatedPOSes} from "../Icons/AssociatedPOSes";
+import {Orders} from "../Icons/Orders";
 
 type Props = {
   width: number
 }
 
 export const Drawer: FC<Props> = memo(function Drawer({width}) {
+  const initButtons: any[] = []
+
   const drawerData = useAppSelector(state => state.drawerData)
+  const location = useLocation()
+  const [buttons, setButtons] = useState(initButtons)
+
+  useEffect(() => {
+    const patterns = ['/laundries/:id']
+    const match = useRouteMatch(patterns, true) !== null
+    if (match) {
+      setButtons([
+        <Button
+          key='branches'
+          variant="drawer"
+          startIcon={<Branches/>}
+        >
+          Branches
+        </Button>,
+        <Button
+          key='prices'
+          variant="drawer"
+          startIcon={<Prices/>}
+        >
+          Prices
+        </Button>,
+        <Button
+          key='associated'
+          variant="drawer"
+          startIcon={<AssociatedPOSes />}
+        >
+          Associated POSes
+        </Button>,
+        <Button
+          key='orders'
+          variant="drawer"
+          startIcon={<Orders />}
+        >
+          Orders
+        </Button>,
+      ])
+    }
+  }, [location])
 
   return (
     <MuiDrawer
@@ -106,15 +153,21 @@ export const Drawer: FC<Props> = memo(function Drawer({width}) {
           paddingRight: "16px",
         }}
       >
-        <Button
-          variant="drawer"
-          startIcon={<Details/>}
-          style={{
-            backgroundColor: "#2E8DC8",
+        <Box
+          sx={{
+            paddingBottom: "8px",
           }}
         >
-          Details
-        </Button>
+          <Button
+            variant="drawerActive"
+            startIcon={<Details/>}
+          >
+            Details
+          </Button>
+          {
+            buttons.map(button => button)
+          }
+        </Box>
       </Box>
     </MuiDrawer>
   )

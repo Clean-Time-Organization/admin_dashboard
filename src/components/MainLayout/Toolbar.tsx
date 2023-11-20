@@ -2,7 +2,7 @@ import {FC, memo, useEffect, useState} from "react";
 import {Box, IconButton, Menu, MenuItem, Toolbar as MuiToolbar, Typography} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {ArrowDown} from "../Icons/ArrowDown";
 import {getUserFL, useRouteMatch} from "../../services/common";
 import {useAuth} from "../Auth/AuthProvider";
@@ -12,6 +12,7 @@ export const Toolbar: FC = memo(function Toolbar() {
   const [showToolBar, setShowToolBar] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const authData = useAppSelector(state => state.authData)
+  const location = useLocation()
   const {signOut} = useAuth()
   const navigate = useNavigate()
 
@@ -85,8 +86,6 @@ export const Toolbar: FC = memo(function Toolbar() {
                 component={Link}
                 sx={{
                   height: "64px",
-                  // padding: "4px",
-                  // minWidth: 'fit-content',
                 }}
               />
               <Tab
@@ -96,8 +95,6 @@ export const Toolbar: FC = memo(function Toolbar() {
                 component={Link}
                 sx={{
                   height: "64px",
-                  // padding: "4px",
-                  // minWidth: 'fit-content',
                 }}
               />
               <Tab
@@ -107,8 +104,6 @@ export const Toolbar: FC = memo(function Toolbar() {
                 component={Link}
                 sx={{
                   height: "64px",
-                  // padding: "4px",
-                  // minWidth: 'fit-content',
                 }}
               />
               <Tab
@@ -120,8 +115,6 @@ export const Toolbar: FC = memo(function Toolbar() {
                 component={Link}
                 sx={{
                   height: "64px",
-                  // padding: "4px",
-                  // minWidth: 'fit-content',
                 }}
               />
               <Tab
@@ -131,8 +124,6 @@ export const Toolbar: FC = memo(function Toolbar() {
                 component={Link}
                 sx={{
                   height: "64px",
-                  // padding: "4px",
-                  // minWidth: 'fit-content',
                 }}
               />
             </Tabs>

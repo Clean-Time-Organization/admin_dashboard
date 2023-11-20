@@ -8,6 +8,12 @@ declare module '@mui/material/Typography' {
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
+    drawerActive: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
     drawer: true;
   }
 }
@@ -70,7 +76,7 @@ const theme = createTheme({
     MuiButton: {
       variants: [
         {
-          props: { variant: 'drawer' },
+          props: { variant: 'drawerActive' },
           style: {
             justifyContent: "flex-start",
             paddingLeft: "16px",
@@ -86,6 +92,29 @@ const theme = createTheme({
             lineHeight: "normal",
             textTransform: "capitalize",
             color: "#FFF",
+            backgroundColor: "#2E8DC8",
+          }
+        },
+        {
+          props: { variant: 'drawer' },
+          style: {
+            justifyContent: "flex-start",
+            paddingLeft: "16px",
+            borderRadius: "4px",
+            maxWidth: "222px",
+            maxHeight: "48px",
+            minWidth: "222px",
+            minHeight: "48px",
+            fontFamily: "Anek Latin",
+            fontSize: "14px",
+            fontStyle: "normal",
+            fontWeight: "500",
+            lineHeight: "150%",
+            textTransform: "capitalize",
+            color: "#656873",
+            backgroundColor: "#FFF",
+            leadingTrim: "both",
+            textEdge: "cap",
           }
         }
       ]
