@@ -17,15 +17,22 @@ import {setBreadCrumbsData} from "../store/features/breadCrumbsDataSlice";
 
 const LaundryDetails = () => {
   const { id } = useParams()
-  const init: User = {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    id: 0,
+  const init = {
+    id,
+    name_en: '',
+    name_ar: '',
     is_active: false,
-    role: 'POS',
-    email: '',
+    address: '',
+    owner: {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      id: 0,
+      is_active: false,
+      role: 'POS',
+    }
   }
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [data, setData] = useState(init)
   const dispatch = useAppDispatch()
@@ -49,12 +56,13 @@ const LaundryDetails = () => {
   }
 
   const getEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.get(`/user/staff/${id}`)
+    return await httpClient.get(`/user/laundry/${id}`)
   }
 
   const getEntityMutation = useMutation(getEntity, {
     onSuccess: response => {
       setData(init)
+
       switch (response.status) {
         case 200:
           setData(response.data)
@@ -126,7 +134,7 @@ const LaundryDetails = () => {
                 lineHeight: "43.429px",
               }}
             >
-              {getUserFL(data.first_name, data.last_name)}
+              {getUserFL(data.name_en, data.name_en)}
             </Typography>
           </Box>
           <Box
@@ -168,9 +176,9 @@ const LaundryDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {[data.first_name, data.last_name].join(' ')}
+                  {[data.name_en, data.name_en].join(' ')}
                 </Typography>
-                {data.last_name ?
+                {data.address ?
                   data.is_active ?
                     <Chip
                       label="Active"
@@ -331,15 +339,13 @@ const LaundryDetails = () => {
                   padding: "8px",
                 }}
               >
-                {getUserRole(data.role)}
+                {data.address}
               </Typography>
             </Box>
           </Box>
         </Stack>
         <Box
           sx={{
-            // display: "flex",
-            // flexDirection: "row",
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             alignItems: "center",
@@ -350,18 +356,14 @@ const LaundryDetails = () => {
           <Paper
             sx={{
               boxShadow: "none",
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "flex-end",
               display: "grid",
               gridTemplateRows: "subgrid",
               gridRow: "1/4",
-              // justifyContent: "center",
               justifyContent: "start",
               gap: "10px",
               padding: "20px",
+              width: "460px",
             }}
-            style={{ width: data.role === "POS" ? "460px" : "984px" }}
           >
             <Typography
               sx={{
@@ -410,7 +412,7 @@ const LaundryDetails = () => {
                   lineHeight: "150%",
                 }}
               >
-                {data.phone_number}
+                {data.address}
               </Typography>
             </Box>
             <Box
@@ -454,116 +456,112 @@ const LaundryDetails = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {data.email}
+                  {data.address}
                 </Typography>
               </Box>
             </Box>
           </Paper>
-          {
-            data.role === "POS" ?
-              <Paper
+            <Paper
+              sx={{
+                boxShadow: "none",
+                // display: "flex",
+                // flexDirection: "column",
+                // justifyContent: "flex-end",
+                display: "grid",
+                gridRow: "1/4",
+                justifyContent: "start",
+                gap: "10px",
+                padding: "20px",
+                width: "460px",
+              }}
+            >
+              <Typography
                 sx={{
-                  boxShadow: "none",
-                  // display: "flex",
-                  // flexDirection: "column",
-                  // justifyContent: "flex-end",
-                  display: "grid",
-                  gridRow: "1/4",
-                  justifyContent: "start",
-                  gap: "10px",
-                  padding: "20px",
-                  width: "460px",
+                  color: "#0E1019",
+                  leadingTrim: "both",
+                  textEdge: "cap",
+                  fontFamily: "Anek Latin",
+                  fontSize: "18px",
+                  fontStyle: "normal",
+                  fontWeight: "600",
+                  lineHeight: "120%",
+                }}
+              >
+                Laundry Info
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
                 }}
               >
                 <Typography
                   sx={{
-                    color: "#0E1019",
+                    color: "#656873",
                     leadingTrim: "both",
                     textEdge: "cap",
                     fontFamily: "Anek Latin",
-                    fontSize: "18px",
+                    fontSize: "14px",
                     fontStyle: "normal",
-                    fontWeight: "600",
-                    lineHeight: "120%",
+                    fontWeight: "500",
+                    lineHeight: "150%",
                   }}
                 >
-                  Laundry Info
+                  Laundry
                 </Typography>
-                <Box
+                <Typography
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "3px",
+                    color: "#2E8DC8",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      color: "#656873",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    Laundry
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#2E8DC8",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    {data.staff?.laundry?.name_en}
-                  </Typography>
-                </Box>
-                <Box
+                  {data.name_en}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "3px",
+                }}
+              >
+                <Typography
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "3px",
+                    color: "#656873",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      color: "#656873",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    Branch
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#2E8DC8",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "150%",
-                    }}
-                  >
-                    {data.staff?.branch?.address}
-                  </Typography>
-                </Box>
-              </Paper>
-              : null
-          }
+                  Branch
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "#2E8DC8",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "150%",
+                  }}
+                >
+                  {data.address}
+                </Typography>
+              </Box>
+            </Paper>
         </Box>
       </Box>
     </ContentBody>

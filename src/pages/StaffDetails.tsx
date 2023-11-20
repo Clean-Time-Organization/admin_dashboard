@@ -55,6 +55,7 @@ const StaffDetails = () => {
   const getEntityMutation = useMutation(getEntity, {
     onSuccess: response => {
       setData(init)
+
       switch (response.status) {
         case 200:
           setData(response.data)
