@@ -55,7 +55,7 @@ const MainLayout = ({children}: {children: ReactNode}) => {
       title: '',
     }))
 
-    let patterns = ['/customers/:id', '/staff/:id']
+    let patterns = ['/customers/:id', '/staff/:id', '/laundries/:id']
     let match = false
     for (let i = 0; i < patterns.length; i += 1) {
       const pattern = patterns[i]

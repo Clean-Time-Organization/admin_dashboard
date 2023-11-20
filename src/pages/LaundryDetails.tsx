@@ -35,6 +35,8 @@ const LaundryDetails = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [data, setData] = useState(init)
+  const [fName, setFName] = useState('')
+  const [lName, setLName] = useState('')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -56,7 +58,7 @@ const LaundryDetails = () => {
   }
 
   const getEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.get(`/user/laundry/${id}`)
+    return await httpClient.get(`/laundry/${id}`)
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -67,14 +69,21 @@ const LaundryDetails = () => {
         case 200:
           setData(response.data)
 
+          const name = response.data.name_en.split(' ')
+
+          setFName(name[0])
+          if (name.length > 1) {
+            setLName(name[1])
+          }
+
           dispatch(setDrawerData({
-            roundTitle: getUserFL(response.data.first_name, response.data.last_name),
-            title: [response.data.first_name, response.data.last_name].join(' '),
-            subTitle: getUserRole(response.data.role),
+            roundTitle: getUserFL(fName, lName),
+            title: response.data.name_en,
+            subTitle: response.data.address,
           }))
 
           dispatch(setBreadCrumbsData({
-            title: [response.data.first_name, response.data.last_name].join(' '),
+            title: response.data.name_en,
           }))
           break
 
