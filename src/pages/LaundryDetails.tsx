@@ -6,7 +6,19 @@ import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
-import {Box, Chip, Fab, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Stack, Typography} from "@mui/material";
+import {
+  Box,
+  Chip,
+  Fab,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import {DeleteOutline, EditOutlined, MoreVert} from "@mui/icons-material";
 import {AxiosResponse} from "axios";
 import {getUserFL} from "../services/common";
@@ -559,7 +571,9 @@ const LaundryDetails = () => {
                       flexDirection="column"
                       justifyContent="center"
                     >
-                      <Document />
+                      <Link href={data.document.vat_file}>
+                        <Document />
+                      </Link>
                     </Box>
                   }
                 </Box>
@@ -620,7 +634,9 @@ const LaundryDetails = () => {
                           flexDirection="column"
                           justifyContent="center"
                       >
-                          <Document />
+                          <Link href={data.document.cr_file}>
+                              <Document />
+                          </Link>
                       </Box>
                   }
                 </Box>
