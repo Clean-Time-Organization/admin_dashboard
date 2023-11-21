@@ -723,102 +723,154 @@ const LaundryEditInfo = () => {
                 >
                   Vat Number
                 </Typography>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <Box
                   display="flex"
                   justifyContent="flex-start"
                   sx={{
+                    flexDirection: "row",
                     paddingBottom: "24px",
                   }}
                 >
-                  <Controller
-                    control={control}
-                    name="vatNumber"
-                    defaultValue={vatNumber}
-                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                      <TextField
-                        id={field.name}
-                        label="VAT Number"
-                        value={vatNumber || ''}
-                        InputLabelProps={{
-                          shrink: true,
-                          style: {
-                            color: "#6B7280",
-                            fontFamily: "Anek Latin",
-                            fontStyle: "normal",
-                            fontWeight: "400",
-                            transform: "translate(15px, -9px) scale(0.75)",
-                          }
-                        }}
-                        // fullWidth
-                        error={!!vatNumberError}
-                        onChange={e => setVatNumber(e.target.value)}
-                        variant="outlined"
-                        inputProps={{
-                          style: {
-                            WebkitBoxShadow: "0 0 0 1000px white inset"
-                          }
-                        }}
-                        sx={{
-                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                            width: "357px"
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                              borderColor: "#D1D5DB",
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: "#2E8DC8",
-                            },
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  {vatNumberError ?
-                    <Alert
-                      variant="support"
-                      severity="error"
-                    >
-                      {vatNumberError}
-                    </Alert>
-                    : null}
-                  {(data.document.vat_number || data.document.vat_file) &&
-                    <Box
-                      height="32px"
-                      width="32px"
-                      paddingTop="1px"
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center"
-                    >
-                      {data.document.vat_number &&
-                        <Box>
-                          <Document />
-                          <Typography
-                            sx={{
-                              color: "#0E1019",
-                              leadingTrim: "both",
-                              textEdge: "cap",
+                  <Box>
+                    <Controller
+                      control={control}
+                      name="vatNumber"
+                      defaultValue={vatNumber}
+                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                        <TextField
+                          id={field.name}
+                          label="VAT Number"
+                          value={vatNumber || ''}
+                          InputLabelProps={{
+                            shrink: true,
+                            style: {
+                              color: "#6B7280",
                               fontFamily: "Anek Latin",
-                              fontSize: "18px",
                               fontStyle: "normal",
-                              fontWeight: "600",
-                              lineHeight: "120%",
-                              paddingBottom: "32px",
-                            }}
-                          >
-                            Vat Number
-                          </Typography>
-                        </Box>
-                      }
-                      {data.document.vat_file &&
-                        <Link href={data.document.vat_file}>
-                          <Download />
-                        </Link>
-                      }
+                              fontWeight: "400",
+                              transform: "translate(15px, -9px) scale(0.75)",
+                            }
+                          }}
+                          // fullWidth
+                          error={!!vatNumberError}
+                          onChange={e => setVatNumber(e.target.value)}
+                          variant="outlined"
+                          inputProps={{
+                            style: {
+                              WebkitBoxShadow: "0 0 0 1000px white inset"
+                            }
+                          }}
+                          sx={{
+                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              width: "357px"
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: "#D1D5DB",
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: "#2E8DC8",
+                              },
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                    {vatNumberError ?
+                      <Alert
+                        variant="support"
+                        severity="error"
+                      >
+                        {vatNumberError}
+                      </Alert>
+                      : null}
+                  </Box>
+                  {data.document.vat_number &&
+                    <Box>
+                      <Document />
                     </Box>
                   }
+                  {data.document.vat_number &&
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#0E1019",
+                          leadingTrim: "both",
+                          textEdge: "cap",
+                          fontFamily: "Anek Latin",
+                          fontSize: "18px",
+                          fontStyle: "normal",
+                          fontWeight: "600",
+                          lineHeight: "120%",
+                          paddingBottom: "32px",
+                        }}
+                      >
+                        Vat Number
+                      </Typography>
+                    </Box>
+                  }
+                  {data.document.vat_file &&
+                    // <Box
+                    //   height="32px"
+                    //   width="32px"
+                    //   paddingTop="1px"
+                    //   display="flex"
+                    //   flexDirection="column"
+                    //   justifyContent="center"
+                    // >
+                    //   {data.document.vat_number &&
+
+                      // }
+                     // {data.document.vat_file &&
+                    <Box>
+                      <Link href={data.document.vat_file}>
+                        <Download />
+                      </Link>
+                    </Box>
+                      // }
+                    // </Box>
+                  }
                 </Box>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               </Box>
               <Box
                 sx={{
