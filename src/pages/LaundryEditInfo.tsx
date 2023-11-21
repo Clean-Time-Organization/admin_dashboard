@@ -797,9 +797,12 @@ const LaundryEditInfo = () => {
                   {data.document.vat_number &&
                     <Box
                       sx={{
+                        display: "flex",
+                        alignItems: "left",
                         paddingLeft: "8px",
                         paddingTop: "18px",
                         maxWidth: "86px",
+                        minWidth: "86px",
                       }}
                     >
                       <Typography
@@ -819,7 +822,7 @@ const LaundryEditInfo = () => {
                           overflow: "hidden",
                         }}
                       >
-                        Vat Number Vat Number Vat Number
+                        {data.document.vat_number}
                       </Typography>
                     </Box>
                   }
@@ -827,7 +830,7 @@ const LaundryEditInfo = () => {
                     <Box
                       sx={{
                         paddingLeft: "36px",
-                        paddingTop: "16px",
+                        paddingTop: "15px",
                       }}
                     >
                       <Link href={data.document.vat_file}>
@@ -921,20 +924,23 @@ const LaundryEditInfo = () => {
                   </Box>
                   {data.document.cr_number &&
                       <Box
-                          sx={{
-                            paddingLeft: "32px",
-                            paddingTop: "17px",
-                          }}
+                        sx={{
+                          paddingLeft: "32px",
+                          paddingTop: "17px",
+                        }}
                       >
-                          <Document />
+                        <Document />
                       </Box>
                   }
                   {data.document.cr_number &&
                     <Box
                       sx={{
+                        display: "flex",
+                        alignItems: "left",
                         paddingLeft: "8px",
                         paddingTop: "18px",
                         maxWidth: "86px",
+                        minWidth: "86px",
                       }}
                     >
                       <Typography
@@ -954,18 +960,18 @@ const LaundryEditInfo = () => {
                           overflow: "hidden",
                         }}
                       >
-                        CR Number CR Number CR Number
+                        {data.document.cr_number}
                       </Typography>
                     </Box>
                   }
-                  {data.document.vat_file &&
+                  {data.document.cr_file &&
                     <Box
                       sx={{
                         paddingLeft: "36px",
-                        paddingTop: "16px",
+                        paddingTop: "15px",
                       }}
                     >
-                      <Link href={data.document.vat_file}>
+                      <Link href={data.document.cr_file}>
                         <Download />
                       </Link>
                     </Box>
