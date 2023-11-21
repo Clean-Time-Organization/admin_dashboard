@@ -723,26 +723,6 @@ const LaundryEditInfo = () => {
                 >
                   Vat Number
                 </Typography>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <Box
                   display="flex"
                   justifyContent="flex-start"
@@ -771,7 +751,6 @@ const LaundryEditInfo = () => {
                               transform: "translate(15px, -9px) scale(0.75)",
                             }
                           }}
-                          // fullWidth
                           error={!!vatNumberError}
                           onChange={e => setVatNumber(e.target.value)}
                           variant="outlined"
@@ -782,7 +761,7 @@ const LaundryEditInfo = () => {
                           }}
                           sx={{
                             "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
+                              width: "368px"
                             },
                             "& .MuiOutlinedInput-root": {
                               "& fieldset": {
@@ -806,71 +785,57 @@ const LaundryEditInfo = () => {
                       : null}
                   </Box>
                   {data.document.vat_number &&
-                    <Box>
+                    <Box
+                      sx={{
+                        paddingLeft: "32px",
+                        paddingTop: "17px",
+                      }}
+                    >
                       <Document />
                     </Box>
                   }
                   {data.document.vat_number &&
-                    <Box>
+                    <Box
+                      sx={{
+                        paddingLeft: "8px",
+                        paddingTop: "18px",
+                        maxWidth: "86px",
+                      }}
+                    >
                       <Typography
                         sx={{
-                          color: "#0E1019",
+                          color: "#656873",
+                          textAlign: "center",
                           leadingTrim: "both",
                           textEdge: "cap",
                           fontFamily: "Anek Latin",
-                          fontSize: "18px",
+                          fontSize: "14px",
                           fontStyle: "normal",
-                          fontWeight: "600",
-                          lineHeight: "120%",
-                          paddingBottom: "32px",
+                          fontWeight: "500",
+                          lineHeight: "130%",
+                          letterSpacing: "0.28px",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
                         }}
                       >
-                        Vat Number
+                        Vat Number Vat Number Vat Number
                       </Typography>
                     </Box>
                   }
                   {data.document.vat_file &&
-                    // <Box
-                    //   height="32px"
-                    //   width="32px"
-                    //   paddingTop="1px"
-                    //   display="flex"
-                    //   flexDirection="column"
-                    //   justifyContent="center"
-                    // >
-                    //   {data.document.vat_number &&
-
-                      // }
-                     // {data.document.vat_file &&
-                    <Box>
+                    <Box
+                      sx={{
+                        paddingLeft: "36px",
+                        paddingTop: "16px",
+                      }}
+                    >
                       <Link href={data.document.vat_file}>
                         <Download />
                       </Link>
                     </Box>
-                      // }
-                    // </Box>
                   }
                 </Box>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               </Box>
               <Box
                 sx={{
@@ -894,62 +859,117 @@ const LaundryEditInfo = () => {
                   CR Number
                 </Typography>
                 <Box
+                  display="flex"
+                  justifyContent="flex-start"
                   sx={{
+                    flexDirection: "row",
                     paddingBottom: "24px",
                   }}
                 >
-                  <Controller
-                    control={control}
-                    name="crNumber"
-                    defaultValue={crNumber}
-                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                      <TextField
-                        id={field.name}
-                        label="CR Number"
-                        value={crNumber || ''}
-                        InputLabelProps={{
-                          shrink: true,
-                          style: {
-                            color: "#6B7280",
-                            fontFamily: "Anek Latin",
-                            fontStyle: "normal",
-                            fontWeight: "400",
-                            transform: "translate(15px, -9px) scale(0.75)",
-                          }
-                        }}
-                        fullWidth
-                        error={!!crNumberError}
-                        onChange={e => setCrNumber(e.target.value)}
-                        variant="outlined"
-                        inputProps={{
-                          style: {
-                            WebkitBoxShadow: "0 0 0 1000px white inset"
-                          }
-                        }}
-                        sx={{
-                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                            width: "357px"
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                              borderColor: "#D1D5DB",
+                  <Box>
+                    <Controller
+                      control={control}
+                      name="crNumber"
+                      defaultValue={crNumber}
+                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                        <TextField
+                          id={field.name}
+                          label="CR Number"
+                          value={crNumber || ''}
+                          InputLabelProps={{
+                            shrink: true,
+                            style: {
+                              color: "#6B7280",
+                              fontFamily: "Anek Latin",
+                              fontStyle: "normal",
+                              fontWeight: "400",
+                              transform: "translate(15px, -9px) scale(0.75)",
+                            }
+                          }}
+                          error={!!crNumberError}
+                          onChange={e => setCrNumber(e.target.value)}
+                          variant="outlined"
+                          inputProps={{
+                            style: {
+                              WebkitBoxShadow: "0 0 0 1000px white inset"
+                            }
+                          }}
+                          sx={{
+                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              width: "368px"
                             },
-                            '&.Mui-focused fieldset': {
-                              borderColor: "#2E8DC8",
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: "#D1D5DB",
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: "#2E8DC8",
+                              },
                             },
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  {crNumberError ?
-                    <Alert
-                      variant="support"
-                      severity="error"
+                          }}
+                        />
+                      )}
+                    />
+                    {crNumberError ?
+                      <Alert
+                        variant="support"
+                        severity="error"
+                      >
+                        {crNumberError}
+                      </Alert>
+                      : null}
+                  </Box>
+                  {data.document.cr_number &&
+                      <Box
+                          sx={{
+                            paddingLeft: "32px",
+                            paddingTop: "17px",
+                          }}
+                      >
+                          <Document />
+                      </Box>
+                  }
+                  {data.document.cr_number &&
+                    <Box
+                      sx={{
+                        paddingLeft: "8px",
+                        paddingTop: "18px",
+                        maxWidth: "86px",
+                      }}
                     >
-                      {crNumberError}
-                    </Alert>
-                    : null}
+                      <Typography
+                        sx={{
+                          color: "#656873",
+                          textAlign: "center",
+                          leadingTrim: "both",
+                          textEdge: "cap",
+                          fontFamily: "Anek Latin",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: "500",
+                          lineHeight: "130%",
+                          letterSpacing: "0.28px",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
+                      >
+                        CR Number CR Number CR Number
+                      </Typography>
+                    </Box>
+                  }
+                  {data.document.vat_file &&
+                    <Box
+                      sx={{
+                        paddingLeft: "36px",
+                        paddingTop: "16px",
+                      }}
+                    >
+                      <Link href={data.document.vat_file}>
+                        <Download />
+                      </Link>
+                    </Box>
+                  }
                 </Box>
               </Box>
               <Box
