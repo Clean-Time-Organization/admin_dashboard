@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
@@ -9,15 +9,12 @@ import {
   CircularProgress, MenuItem, Paper,
   Stack,
   TextField, ThemeProvider,
-  Typography,
-  debounce
+  Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
 import {useAppDispatch} from "../store/hooks";
 import {setNotification} from "../store/features/notification";
-import {Branch, Laundry, User} from "../types/user";
-import {Autocomplete} from "../components/Autocomplete/Autocomplete";
 import theme from "../components/LogIn/Styles/Theme";
 
 enum Status {
@@ -26,132 +23,92 @@ enum Status {
 }
 
 type ApiRequest = {
+  name_en: string
+  name_ar: string
   full_name: string
   phone_number: string
-  laundry_id?: number
-  branch_id?: number
+  address: string
+  vat_number: string
+  cr_number: string
   is_active: boolean
 }
 
-const StaffEditInfo = () => {
+const LaundryEditInfo = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
-
-  const init: User = {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    id: 0,
+  const init = {
+    id,
+    name_en: '',
+    name_ar: '',
     is_active: false,
-    role: 'POS',
-    email: '',
+    address: '',
+    document: {
+      cr_file: '',
+      cr_number: '',
+      vat_file: '',
+      vat_number: '',
+    },
+    owner: {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      id: 0,
+      is_active: false,
+      role: 'POS',
+      email: '',
+    }
   }
+
+  const navigate = useNavigate()
 
   const [data, setData] = useState(init)
 
-  const [selectedLaundry, setSelectedLaundry] = useState<{ id: number; name: string } | null>(null)
-  const [inputLaundry, setInputLaundry] = useState('')
-  const [selectedBranch, setSelectedBranch] = useState<{ id: number; name: string } | null>(null)
-  const [inputBranch, setInputBranch] = useState('')
-  const [laundries, setLaundries] = useState<Array<Laundry>>()
-  const [branches, setBranches] = useState<Array<Branch>>()
+  const [nameEn, setNameEn] = useState('')
+  const [nameEnError, setNameEnError] = useState('')
 
-  const [laundryError, setLaundryError] = useState('')
-  const [branchError, setBranchError] = useState('')
-
-  const [userName, setUserName] = useState('')
-  const [userNameError, setUserNameError] = useState('')
+  const [nameAr, setNameAr] = useState('')
+  const [nameArError, setNameArError] = useState('')
 
   const [status, setStatus] = useState(Status.Inactive)
   const [statusError, setStatusError] = useState('')
 
+  const [ownerName, setOwnerName] = useState('')
+  const [ownerNameError, setOwnerNameError] = useState('')
+
   const [phone, setPhone] = useState('')
   const [phoneError, setPhoneError] = useState('')
 
-  const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState('')
+  const [address, setAddress] = useState('')
+  const [addressError, setAddressError] = useState('')
 
-  const [openLaundries, setOpenLaundries] = useState(false);
-  const [openBranches, setOpenBranches] = useState(false);
+  const [vatNumber, setVatNumber] = useState('')
+  const [vatNumberError, setVatNumberError] = useState('')
+
+  const [crNumber, setCrNumber] = useState('')
+  const [crNumberError, setCrNumberError] = useState('')
 
   const { handleSubmit, control } = useForm()
   const dispatch = useAppDispatch()
 
   const handleClose = () => {
-    navigate(`/staff/${id}`)
-  }
-
-  useEffect(() => {
-    if (data && data.role === "POS") {
-      searchLaundryDelayed();
-    }
-  }, [inputLaundry])
-
-  const getLaundryData = async () => {
-    const searchParams = new URLSearchParams()
-    if (inputLaundry) {
-      searchParams.append('name', inputLaundry)
-    }
-    await httpClient.get('/laundry/search?' + new URLSearchParams(searchParams)).then(response => {
-      setLaundries(response.data?.items)
-    })
-  }
-
-  const setLaundryName = (value: string) => {
-    if (value === '') {
-      if (inputLaundry) {
-        setInputLaundry(value)
-        setSelectedBranch(null)
-      }
-    } else {
-      setInputLaundry(value)
-    }
-  }
-
-  useEffect(() => {
-    if (data && data.role === "POS") {
-      searchBranchDelayed();
-    }
-  }, [inputBranch, inputLaundry])
-
-  const getBranchesData = async () => {
-    if (selectedLaundry && selectedLaundry.id) {
-      const searchParams = new URLSearchParams()
-      if (inputBranch) {
-        searchParams.append('name', inputBranch.substring(0, 39))
-      }
-      searchParams.append('laundry_id', selectedLaundry.id + '')
-      const isOpen = openBranches
-      setOpenBranches(false)
-      setBranches(undefined)
-      await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
-        setBranches(response.data?.items)
-        setOpenBranches(isOpen)
-      })
-    } else {
-      setBranches(undefined)
-    }
+    navigate(`/laundries/${id}`)
   }
 
   const getEntity = async (): Promise<AxiosResponse> => {
-    return await httpClient.get(`/user/staff/${id}`)
+    return await httpClient.get(`/laundry/${id}`)
   }
 
   const updateEntity = async (): Promise<AxiosResponse> => {
     let apiData: ApiRequest = {
-      full_name: userName,
+      name_en: nameEn,
+      name_ar: nameAr,
+      full_name: ownerName,
       phone_number: phone,
+      address: address,
+      vat_number: vatNumber,
+      cr_number: crNumber,
       is_active: status === Status.Active,
     }
-    if (data.role === "POS") {
-      if (selectedLaundry) {
-        apiData.laundry_id = selectedLaundry.id
-      }
-      if (selectedBranch) {
-        apiData.branch_id = selectedBranch.id
-      }
-    }
-    return await httpClient.put(`/user/staff/${id}`, apiData)
+    return await httpClient.put(`/laundry/${id}`, apiData)
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -160,22 +117,14 @@ const StaffEditInfo = () => {
         case 200:
           setData(response.data)
 
-          setUserName([response.data.first_name, response.data.last_name].join(' '))
-          setEmail(response.data.email)
+          setNameEn(response.data.name_en)
+          setNameAr(response.data.name_ar)
           setStatus(response.data.is_active ? Status.Active : Status.Inactive)
-          setPhone(response.data.phone_number)
-
-          if (response.data.role === "POS") {
-            setSelectedLaundry({
-              id: response.data.staff.laundry.id,
-              name: response.data.staff.laundry.name_en,
-            })
-
-            setSelectedBranch({
-              id: response.data.staff.branch.id,
-              name: response.data.staff.branch.address,
-            })
-          }
+          setOwnerName([response.data.owner.first_name, response.data.owner.last_name].join(' '))
+          setPhone(response.data.owner.phone_number)
+          setAddress(response.data.address)
+          setVatNumber(response.data.document.vat_number)
+          setCrNumber(response.data.document.cr_number)
 
           break
 
@@ -197,7 +146,7 @@ const StaffEditInfo = () => {
           navigate(`/staff/${id}`)
 
           dispatch(setNotification({
-            notificationMessage: 'User successfully updated',
+            notificationMessage: 'Laundry successfully updated',
             notificationType: 'success',
           }))
           break
@@ -224,7 +173,7 @@ const StaffEditInfo = () => {
       }
 
       if (userNameErrors.length) {
-        setUserNameError(userNameErrors.join(', '))
+        setOwnerNameError(userNameErrors.join(', '))
       } else if (phoneErrorrs.length) {
         setPhoneError(phoneErrorrs.join(', '))
       } else {
@@ -236,60 +185,40 @@ const StaffEditInfo = () => {
     },
   })
 
-  const searchBranchDelayed = useMemo(
-      () => debounce(getBranchesData, 500),
-      [getBranchesData]
-  );
-
-  const searchLaundryDelayed = useMemo(
-    () => debounce(getLaundryData, 500),
-    [getBranchesData]
-  );
-
   useEffect(() => {
     getEntityMutation.mutate()
   }, [])
 
   useEffect(() => {
-    setUserNameError('')
-  }, [userName])
+    setNameEnError('')
+  }, [nameEn])
+
+  useEffect(() => {
+    setNameArError('')
+  }, [nameAr])
 
   useEffect(() => {
     setPhoneError('')
   }, [phone])
 
   useEffect(() => {
-    setEmailError('')
-  }, [email])
-
-  useEffect(() => {
-    setLaundryError('')
-  }, [selectedLaundry])
-
-  useEffect(() => {
-    setBranchError('')
-  }, [selectedBranch])
+    setAddressError('')
+  }, [address])
 
   const onSubmit = () => {
     let errors = false
 
-    if (userName.trim() === '') {
-      setUserNameError('Please enter user name')
+    if (nameEn.trim() === '') {
+      setNameEnError('Please enter name')
+      errors = true
+    }
+    if (nameAr.trim() === '') {
+      setNameArError('Please enter name')
       errors = true
     }
     if (phone.trim() === '') {
       setPhoneError('Please enter phone')
       errors = true
-    }
-    if (data.role === "POS") {
-      if (!selectedLaundry || !selectedLaundry.id) {
-        setLaundryError('Please select laundry')
-        errors = true
-      }
-      if (!selectedBranch || !selectedBranch.id) {
-        setBranchError('Please select branch')
-        errors = true
-      }
     }
 
     if (!errors) {
@@ -409,13 +338,13 @@ const StaffEditInfo = () => {
                 >
                   <Controller
                     control={control}
-                    name="userName"
-                    defaultValue={userName}
+                    name="nameEn"
+                    defaultValue={nameEn}
                     render={({ field: { ref, ...field }, fieldState: { error } }) => (
                       <TextField
                         id={field.name}
-                        label="User name"
-                        value={userName || ''}
+                        label="Laundry Name (EN)"
+                        value={nameEn || ''}
                         autoFocus
                         InputLabelProps={{
                           shrink: true,
@@ -428,8 +357,8 @@ const StaffEditInfo = () => {
                           }
                         }}
                         fullWidth
-                        error={!!userNameError}
-                        onChange={e => setUserName(e.target.value)}
+                        error={!!nameEnError}
+                        onChange={e => setNameEn(e.target.value)}
                         variant="outlined"
                         inputProps={{
                           style: {
@@ -452,12 +381,71 @@ const StaffEditInfo = () => {
                       />
                     )}
                   />
-                  {userNameError ?
+                  {nameEnError ?
                     <Alert
                       variant="support"
                       severity="error"
                     >
-                      {userNameError}
+                      {nameEnError}
+                    </Alert>
+                    : null}
+                </Box>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
+                    name="nameAr"
+                    defaultValue={nameAr}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="Laundry Name (AR)"
+                        value={nameAr || ''}
+                        autoFocus
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        fullWidth
+                        error={!!nameArError}
+                        onChange={e => setNameAr(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {nameArError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {nameArError}
                     </Alert>
                     : null}
                 </Box>
@@ -544,12 +532,70 @@ const StaffEditInfo = () => {
                 >
                   <Controller
                     control={control}
+                    name="ownerName"
+                    defaultValue={ownerName}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="Laundry owner"
+                        value={ownerName || ''}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        fullWidth
+                        error={!!ownerNameError}
+                        onChange={e => setOwnerName(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {ownerNameError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {ownerNameError}
+                    </Alert>
+                    : null}
+                </Box>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
                     name="phone"
                     defaultValue={phone}
                     render={({ field: { ref, ...field }, fieldState: { error } }) => (
                       <TextField
                         id={field.name}
-                        label="Phone"
+                        label="Phone Number"
                         value={phone || ''}
                         InputLabelProps={{
                           shrink: true,
@@ -595,191 +641,228 @@ const StaffEditInfo = () => {
                     </Alert>
                     : null}
                 </Box>
-                {data.role === "POS" &&
-                  <Box
-                    sx={{
-                      paddingBottom: "28px",
-                    }}
-                  >
-                    <Controller
-                      control={control}
-                      name="email"
-                      defaultValue={email}
-                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                        <TextField
-                          id={field.name}
-                          label="Email"
-                          value={email || ''}
-                          InputLabelProps={{
-                            shrink: true,
-                            style: {
-                              color: "#6B7280",
-                              fontFamily: "Anek Latin",
-                              fontStyle: "normal",
-                              fontWeight: "400",
-                              transform: "translate(15px, -9px) scale(0.75)",
-                            }
-                          }}
-                          fullWidth
-                          error={!!emailError}
-                          onChange={e => setEmail(e.target.value)}
-                          variant="outlined"
-                          inputProps={{
-                            readOnly: true,
-                            style: {
-                              WebkitBoxShadow: "0 0 0 1000px white inset"
-                            }
-                          }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
-                            },
-                          }}
-                        />
-                      )}
-                    />
-                    {emailError &&
-                      <Alert
-                          variant="support"
-                          severity="error"
-                      >
-                        {emailError}
-                      </Alert>}
-                  </Box>}
-              </Box>
-              {data.role === "POS" &&
                 <Box
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
+                    paddingBottom: "28px",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      color: "#0E1019",
-                      leadingTrim: "both",
-                      textEdge: "cap",
-                      fontFamily: "Anek Latin",
-                      fontSize: "18px",
-                      fontStyle: "normal",
-                      fontWeight: "600",
-                      lineHeight: "120%",
-                      paddingBottom: "32px",
-                    }}
-                  >
-                    Laundry Info
-                  </Typography>
-                  <Box
-                    sx={{
-                      paddingBottom: "24px",
-                    }}
-                  >
-                    <Controller
-                      control={control}
-                      name="laundry_id"
-                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                        <Autocomplete
-                          id={field.name}
-                          label="Laundry"
-                          error={!!laundryError}
-                          errorText={laundryError}
-                          selectedValue={selectedLaundry}
-                          selectValue={setSelectedLaundry}
-                          inputValue={inputLaundry}
-                          setInputValue={setLaundryName}
-                          open={openLaundries}
-                          setOpen={setOpenLaundries}
-                          options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
-                          {...field}
-                          InputLabelProps={{
-                            shrink: true,
-                            style: {
-                              color: "#6B7280",
-                              fontFamily: "Anek Latin",
-                              fontStyle: "normal",
-                              fontWeight: "400",
-                              transform: "translate(15px, -9px) scale(0.75)",
-                            }
-                          }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
-                            },
-                          }}
-                        />
-                      )}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      paddingBottom: "24px",
-                    }}
-                  >
-                    <Controller
-                      control={control}
-                      name="branch_id"
-                      render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                        <Autocomplete
-                          label="Branch"
-                          error={!!branchError}
-                          errorText={branchError}
-                          selectedValue={selectedBranch}
-                          selectValue={setSelectedBranch}
-                          inputValue={inputBranch}
-                          setInputValue={setInputBranch}
-                          disabled={!selectedLaundry || !selectedLaundry.id}
-                          open={openBranches}
-                          setOpen={setOpenBranches}
-                          options={selectedLaundry && selectedLaundry.id ?
-                            branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
-                            []
+                  <Controller
+                    control={control}
+                    name="address"
+                    defaultValue={address}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="Address"
+                        value={address || ''}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
                           }
-                          {...field}
-                          InputLabelProps={{
-                            shrink: true,
-                            style: {
-                              color: "#6B7280",
-                              fontFamily: "Anek Latin",
-                              fontStyle: "normal",
-                              fontWeight: "400",
-                              transform: "translate(15px, -9px) scale(0.75)",
-                            }
-                          }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
+                        }}
+                        fullWidth
+                        error={!!addressError}
+                        onChange={e => setAddress(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          readOnly: true,
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
                             },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
                             },
-                          }}
-                        />
-                      )}
-                    />
-                  </Box>
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {addressError &&
+                    <Alert
+                        variant="support"
+                        severity="error"
+                    >
+                      {addressError}
+                    </Alert>}
                 </Box>
-              }
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#0E1019",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "18px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "120%",
+                    paddingBottom: "32px",
+                  }}
+                >
+                  Vat Number
+                </Typography>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
+                    name="vatNumber"
+                    defaultValue={vatNumber}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="VAT Number"
+                        value={vatNumber || ''}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        fullWidth
+                        error={!!vatNumberError}
+                        onChange={e => setVatNumber(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {vatNumberError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {vatNumberError}
+                    </Alert>
+                    : null}
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#0E1019",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "18px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "120%",
+                    paddingBottom: "32px",
+                  }}
+                >
+                  CR Number
+                </Typography>
+                <Box
+                  sx={{
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <Controller
+                    control={control}
+                    name="crNumber"
+                    defaultValue={crNumber}
+                    render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                      <TextField
+                        id={field.name}
+                        label="CR Number"
+                        value={crNumber || ''}
+                        InputLabelProps={{
+                          shrink: true,
+                          style: {
+                            color: "#6B7280",
+                            fontFamily: "Anek Latin",
+                            fontStyle: "normal",
+                            fontWeight: "400",
+                            transform: "translate(15px, -9px) scale(0.75)",
+                          }
+                        }}
+                        fullWidth
+                        error={!!crNumberError}
+                        onChange={e => setCrNumber(e.target.value)}
+                        variant="outlined"
+                        inputProps={{
+                          style: {
+                            WebkitBoxShadow: "0 0 0 1000px white inset"
+                          }
+                        }}
+                        sx={{
+                          "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            width: "357px"
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#D1D5DB",
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: "#2E8DC8",
+                            },
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  {crNumberError ?
+                    <Alert
+                      variant="support"
+                      severity="error"
+                    >
+                      {crNumberError}
+                    </Alert>
+                    : null}
+                </Box>
+              </Box>
+
+
+
               <Box
                 sx={{
                   display: "flex",
@@ -839,4 +922,4 @@ const StaffEditInfo = () => {
   )
 }
 
-export { StaffEditInfo }
+export { LaundryEditInfo }

@@ -15,6 +15,7 @@ import {CustomerDetails} from "./pages/CustomerDetails";
 import {StaffDetails} from "./pages/StaffDetails";
 import {StaffEditInfo} from "./pages/StaffEditInfo";
 import {LaundryDetails} from "./pages/LaundryDetails";
+import {LaundryEditInfo} from "./pages/LaundryEditInfo";
 
 const queryClient = new QueryClient()
 
@@ -36,6 +37,7 @@ export const App: FC = memo(function App() {
             <Route path={'/customers/:id'} element={<RequireAuth><CustomerDetails /></RequireAuth>} />
             <Route path={'/laundries'} element={<RequireAuth><Laundries /></RequireAuth>} />
             <Route path={'/laundries/:id'} element={<RequireAuth><LaundryDetails /></RequireAuth>} />
+            <Route path={'/laundries/edit/:id'} element={<RequireAuth><LaundryEditInfo /></RequireAuth>} />
             <Route path={'/orders'} element={<RequireAuth><Home /></RequireAuth>} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
