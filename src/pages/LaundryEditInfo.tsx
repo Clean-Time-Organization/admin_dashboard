@@ -6,7 +6,7 @@ import {
   Alert,
   Box,
   Button,
-  CircularProgress, MenuItem, Paper,
+  CircularProgress, Link, MenuItem, Paper,
   Stack,
   TextField, ThemeProvider,
   Typography
@@ -16,6 +16,8 @@ import {Controller, useForm} from "react-hook-form";
 import {useAppDispatch} from "../store/hooks";
 import {setNotification} from "../store/features/notification";
 import theme from "../components/LogIn/Styles/Theme";
+import {Document} from "../components/Icons/Document";
+import {Download} from "../components/Icons/Download";
 
 enum Status {
   Active = 1,
@@ -722,6 +724,8 @@ const LaundryEditInfo = () => {
                   Vat Number
                 </Typography>
                 <Box
+                  display="flex"
+                  justifyContent="flex-start"
                   sx={{
                     paddingBottom: "24px",
                   }}
@@ -745,7 +749,7 @@ const LaundryEditInfo = () => {
                             transform: "translate(15px, -9px) scale(0.75)",
                           }
                         }}
-                        fullWidth
+                        // fullWidth
                         error={!!vatNumberError}
                         onChange={e => setVatNumber(e.target.value)}
                         variant="outlined"
@@ -778,6 +782,42 @@ const LaundryEditInfo = () => {
                       {vatNumberError}
                     </Alert>
                     : null}
+                  {(data.document.vat_number || data.document.vat_file) &&
+                    <Box
+                      height="32px"
+                      width="32px"
+                      paddingTop="1px"
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                    >
+                      {data.document.vat_number &&
+                        <Box>
+                          <Document />
+                          <Typography
+                            sx={{
+                              color: "#0E1019",
+                              leadingTrim: "both",
+                              textEdge: "cap",
+                              fontFamily: "Anek Latin",
+                              fontSize: "18px",
+                              fontStyle: "normal",
+                              fontWeight: "600",
+                              lineHeight: "120%",
+                              paddingBottom: "32px",
+                            }}
+                          >
+                            Vat Number
+                          </Typography>
+                        </Box>
+                      }
+                      {data.document.vat_file &&
+                        <Link href={data.document.vat_file}>
+                          <Download />
+                        </Link>
+                      }
+                    </Box>
+                  }
                 </Box>
               </Box>
               <Box
@@ -860,9 +900,6 @@ const LaundryEditInfo = () => {
                     : null}
                 </Box>
               </Box>
-
-
-
               <Box
                 sx={{
                   display: "flex",
