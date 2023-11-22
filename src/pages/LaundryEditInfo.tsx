@@ -176,7 +176,7 @@ const LaundryEditInfo = () => {
           navigate(`/laundries/${id}`)
 
           dispatch(setNotification({
-            notificationMessage: 'Edits are successfully saved',
+            notificationMessage: 'Edits successfully saved',
             notificationType: 'success',
           }))
           break
@@ -712,7 +712,6 @@ const LaundryEditInfo = () => {
                         onChange={e => setAddress(e.target.value)}
                         variant="outlined"
                         inputProps={{
-                          readOnly: true,
                           style: {
                             WebkitBoxShadow: "0 0 0 1000px white inset"
                           }
