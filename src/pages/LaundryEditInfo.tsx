@@ -6,9 +6,19 @@ import {
   Alert,
   Box,
   Button,
-  CircularProgress, Link, MenuItem, Paper,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider, IconButton,
+  Link,
+  MenuItem,
+  Paper,
   Stack,
-  TextField, ThemeProvider,
+  TextField,
+  ThemeProvider,
   Typography
 } from "@mui/material";
 import {AxiosResponse} from "axios";
@@ -18,6 +28,7 @@ import {setNotification} from "../store/features/notification";
 import theme from "../components/LogIn/Styles/Theme";
 import {Document} from "../components/Icons/Document";
 import {Download} from "../components/Icons/Download";
+import {Close} from "../components/Icons/Close";
 
 enum Status {
   Active = 1,
@@ -70,6 +81,7 @@ const LaundryEditInfo = () => {
   const [nameAr, setNameAr] = useState('')
   const [nameArError, setNameArError] = useState('')
 
+  const [prevStatus, setPrevStatus] = useState(Status.Inactive)
   const [status, setStatus] = useState(Status.Inactive)
   const [statusError, setStatusError] = useState('')
 
@@ -88,6 +100,8 @@ const LaundryEditInfo = () => {
   const [crNumber, setCrNumber] = useState('')
   const [crNumberError, setCrNumberError] = useState('')
 
+  const [openDialog, setOpenDialog] = useState(false)
+
   const { handleSubmit, control } = useForm()
   const dispatch = useAppDispatch()
 
@@ -95,12 +109,21 @@ const LaundryEditInfo = () => {
     navigate(`/laundries/${id}`)
   }
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
+
+  const handleConfirmSubmit = () => {
+    setOpenDialog(false)
+    updateEntityMutation.mutate()
+  }
+
   const getEntity = async (): Promise<AxiosResponse> => {
     return await httpClient.get(`/laundry/${id}`)
   }
 
   const updateEntity = async (): Promise<AxiosResponse> => {
-    let apiData: ApiRequest = {
+    const apiData: ApiRequest = {
       name_en: nameEn,
       name_ar: nameAr,
       full_name: ownerName,
@@ -110,7 +133,11 @@ const LaundryEditInfo = () => {
       cr_number: crNumber,
       is_active: status === Status.Active,
     }
-    return await httpClient.put(`/laundry/${id}`, apiData)
+    return await httpClient.put(`/laundry/${id}`, apiData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
   }
 
   const getEntityMutation = useMutation(getEntity, {
@@ -122,6 +149,7 @@ const LaundryEditInfo = () => {
           setNameEn(response.data.name_en)
           setNameAr(response.data.name_ar)
           setStatus(response.data.is_active ? Status.Active : Status.Inactive)
+          setPrevStatus(response.data.is_active ? Status.Active : Status.Inactive)
           setOwnerName([response.data.owner.first_name, response.data.owner.last_name].join(' '))
           setPhone(response.data.owner.phone_number)
           setAddress(response.data.address)
@@ -145,7 +173,7 @@ const LaundryEditInfo = () => {
     onSuccess: response => {
       switch (response.status) {
         case 200:
-          navigate(`/staff/${id}`)
+          navigate(`/laundries/${id}`)
 
           dispatch(setNotification({
             notificationMessage: 'Laundry successfully updated',
@@ -210,21 +238,33 @@ const LaundryEditInfo = () => {
   const onSubmit = () => {
     let errors = false
 
-    if (nameEn.trim() === '') {
-      setNameEnError('Please enter name')
-      errors = true
-    }
-    if (nameAr.trim() === '') {
-      setNameArError('Please enter name')
+    if (ownerName.trim() === '') {
+      setOwnerNameError('Please enter owner name')
       errors = true
     }
     if (phone.trim() === '') {
       setPhoneError('Please enter phone')
       errors = true
     }
+    if (address.trim() === '') {
+      setAddressError('Please enter address')
+      errors = true
+    }
+    if (vatNumber.toString().trim() === '') {
+      setVatNumberError('Please enter vat number')
+      errors = true
+    }
+    if (crNumber.toString().trim() === '') {
+      setCrNumberError('Please enter cr number')
+      errors = true
+    }
 
     if (!errors) {
-      updateEntityMutation.mutate()
+      if (prevStatus === Status.Active && status === Status.Inactive) {
+        setOpenDialog(true)
+      } else {
+        updateEntityMutation.mutate()
+      }
     }
   }
 
@@ -406,7 +446,6 @@ const LaundryEditInfo = () => {
                         id={field.name}
                         label="Laundry Name (AR)"
                         value={nameAr || ''}
-                        autoFocus
                         InputLabelProps={{
                           shrink: true,
                           style: {
@@ -417,6 +456,7 @@ const LaundryEditInfo = () => {
                             transform: "translate(15px, -9px) scale(0.75)",
                           }
                         }}
+                        dir="rtl"
                         fullWidth
                         error={!!nameArError}
                         onChange={e => setNameAr(e.target.value)}
@@ -866,7 +906,6 @@ const LaundryEditInfo = () => {
                   justifyContent="flex-start"
                   sx={{
                     flexDirection: "row",
-                    paddingBottom: "24px",
                   }}
                 >
                   <Box>
@@ -978,61 +1017,214 @@ const LaundryEditInfo = () => {
                   }
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disableElevation={true}
-                    disabled={updateEntityMutation.isLoading}
-                    style={{
-                      backgroundColor: "#2E8DC8",
-                      borderRadius: "4px",
-                      padding: "0px",
-                      margin: "0px",
-                      maxWidth: "135px",
-                      maxHeight: "40px",
-                      minWidth: "135px",
-                      minHeight: "40px",
-                      fontFamily: "Anek Latin",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "24px",
-                      textTransform: "capitalize",
-                    }}
-                    startIcon={
-                      updateEntityMutation.isLoading ? (
-                        <Stack
-                          alignItems="center"
-                          style={{
-                            paddingLeft: "15px"
-                          }}>
-                          <CircularProgress
-                            size={25}
-                            style={{
-                              color: "white",
-                            }} />
-                        </Stack>
-                      ) : null
-                    }
-                  >
-                    {updateEntityMutation.isLoading ? '' : 'Save'}
-                  </Button>
-                </Box>
-              </Box>
             </Paper>
+          </Box>
+          <Box
+            sx={{
+              width: "calc(100vw - 18px)",
+              borderTop: "1px solid #E5E7EB",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#FFF",
+              padding: "16px 0px 15px",
+            }}
+          >
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              sx={{
+                width: "672px",
+                maxWidth: "672px",
+              }}
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                disableElevation={true}
+                disabled={updateEntityMutation.isLoading}
+                style={{
+                  backgroundColor: "#2E8DC8",
+                  borderRadius: "4px",
+                  padding: "0px",
+                  margin: "0px",
+                  maxWidth: "113px",
+                  maxHeight: "40px",
+                  minWidth: "113px",
+                  minHeight: "40px",
+                  fontFamily: "Anek Latin",
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: "500",
+                  lineHeight: "24px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={
+                  updateEntityMutation.isLoading ? (
+                    <Stack
+                      alignItems="center"
+                      style={{
+                        paddingLeft: "15px"
+                      }}>
+                      <CircularProgress
+                        size={25}
+                        style={{
+                          color: "white",
+                        }} />
+                    </Stack>
+                  ) : null
+                }
+              >
+                {updateEntityMutation.isLoading ? '' : 'Save'}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </form>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          borderRadius: "8px",
+          background: "#FFF",
+          minWidth: "570px",
+        }}
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: "24px",
+            paddingBottom: "0px",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#0E1019",
+              leadingTrim: "both",
+              textEdge: "cap",
+              fontFamily: "Anek Latin",
+              fontSize: "20px",
+              fontStyle: "normal",
+              fontWeight: "600",
+              lineHeight: "120%",
+            }}
+          >
+            Deactivate laundry
+          </Typography>
+          <IconButton onClick={handleCloseDialog}>
+            <Close width={24} height={24}/>
+          </IconButton>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            paddingBottom: "0px",
+          }}
+        >
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{
+              paddingTop: "32px",
+              paddingBottom: "32px",
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#0E1019",
+                leadingTrim: "both",
+                textEdge: "cap",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "400",
+                lineHeight: "150%",
+              }}
+            >
+              Are you sure that you want to deactivate
+              <span
+                style={{
+                  fontWeight: "600",
+                }}>
+                &nbsp;{data.name_en}
+              </span>
+              ? This action can not be reversed
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions
+          sx={{
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            paddingRight: "24px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: "24px",
+            }}
+          >
+            <Button
+              autoFocus
+              variant="contained"
+              disableElevation={true}
+              onClick={handleCloseDialog}
+              style={{
+                backgroundColor: "#FFF",
+                borderRadius: "4px",
+                margin: "0px",
+                maxWidth: "125px",
+                maxHeight: "40px",
+                minWidth: "125px",
+                minHeight: "40px",
+                textTransform: "capitalize",
+                color: "#2E8DC8",
+                textAlign: "center",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "130%",
+                letterSpacing: "0.32px",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              disableElevation={true}
+              onClick={handleConfirmSubmit}
+              style={{
+                backgroundColor: "#2E8DC8",
+                borderRadius: "4px",
+                padding: "0px",
+                margin: "0px",
+                maxWidth: "156px",
+                maxHeight: "40px",
+                minWidth: "156px",
+                minHeight: "40px",
+                textTransform: "capitalize",
+                color: "#FFF",
+                textAlign: "center",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "130%",
+                letterSpacing: "0.32px",
+              }}
+            >
+              Deactivate
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   )
 }

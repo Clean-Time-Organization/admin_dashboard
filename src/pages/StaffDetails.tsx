@@ -339,25 +339,19 @@ const StaffDetails = () => {
         </Stack>
         <Box
           sx={{
-            // display: "flex",
-            // flexDirection: "row",
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             alignItems: "center",
             width: "100%",
-            gap: "24px",
+            columnGap: "24px",
           }}
         >
           <Paper
             sx={{
               boxShadow: "none",
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "flex-end",
               display: "grid",
               gridTemplateRows: "subgrid",
               gridRow: "1/4",
-              // justifyContent: "center",
               justifyContent: "start",
               gap: "10px",
               padding: "20px",
@@ -465,9 +459,6 @@ const StaffDetails = () => {
               <Paper
                 sx={{
                   boxShadow: "none",
-                  // display: "flex",
-                  // flexDirection: "column",
-                  // justifyContent: "flex-end",
                   display: "grid",
                   gridRow: "1/4",
                   justifyContent: "start",
