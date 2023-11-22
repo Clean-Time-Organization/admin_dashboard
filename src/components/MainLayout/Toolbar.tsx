@@ -17,7 +17,7 @@ export const Toolbar: FC = memo(function Toolbar() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const patterns = ['/staff/edit/:id']
+    const patterns = ['/staff/edit/:id', '/laundries/edit/:id']
     const match = useRouteMatch(patterns, true) !== null
     setShowToolBar(!match)
   }, [location])
