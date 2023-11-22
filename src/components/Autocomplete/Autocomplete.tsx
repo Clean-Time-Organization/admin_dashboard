@@ -24,6 +24,7 @@ type IAutocompleteProps = TextFieldProps & {
   setInputValue: (val: string) => void;
   open: boolean;
   setOpen: (val: boolean) => void;
+  size?: string;
 }
 
 const Autocomplete: FC<IAutocompleteProps> = ({
@@ -37,6 +38,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
   setInputValue,
   open,
   setOpen,
+  size,
   ...inputProps
 }) => {
   const [list, setList] = useState<Array<{ id: number; name: string }>>([]);
@@ -71,6 +73,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         }}
         options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
+        size={size || 'medium'}
         renderOption={(props, option) => {
           return (
             <li {...props} key={option.id}>
@@ -81,11 +84,13 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         renderInput={(params) =>
           <TextField
             {...params}
+            size={size || 'medium'}
             error={error}
             label={label}
             {...inputProps}
-            style={{
-              color: '#4B5563',
+            sx={size && {
+              fontSize: '14px',
+              height: '32px',
             }}
           />
         }
