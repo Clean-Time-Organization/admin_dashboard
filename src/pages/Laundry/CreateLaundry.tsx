@@ -2,30 +2,40 @@ import { useNavigate } from "react-router-dom";
 import { CreationPanel } from "../../components/CreationPanel/CreationPanel";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UserForm } from "../../types/user";
 import httpClient from "../../services/HttpClient";
 import { useAppDispatch } from "../../store/hooks";
 import { setNotification } from "../../store/features/notification";
+import {StepName} from "./StepName";
+
+export type LaundryForm = {
+  name_en: string
+  name_ar: string
+  full_name: string
+  address: string
+  phone_number: string
+  vat_number: number
+  cr_number: number
+}
 
 const CreateLaundry = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [totalSteps, setTotalSteps] = useState(3);
-  const [currentStep, setCurrentStep] = useState(1);
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const [totalSteps, setTotalSteps] = useState(3)
+  const [currentStep, setCurrentStep] = useState(1)
 
-  const { control, watch, setValue, handleSubmit, setError, trigger } = useForm<UserForm>({
+  const { control, watch, setValue, handleSubmit, setError, trigger } = useForm<LaundryForm>({
     mode: 'onTouched',
     defaultValues: {
-        role: 'POS',
-        password: '',
+        name_en: '',
+        name_ar: '',
     },
-  });
+  })
 
   const cancelEvent = () => {
-    navigate('/laundries');
-  };
+    navigate('/laundries')
+  }
 
-  const handleCreate: SubmitHandler<UserForm> = async (values) => {
+  const handleCreate: SubmitHandler<LaundryForm> = async (values) => {
     await httpClient.post(
       '/laundry',
       {...values, phone_number: '+966' + values.phone_number}
@@ -35,28 +45,28 @@ const CreateLaundry = () => {
         dispatch(setNotification({
           notificationMessage: 'User is successfully created',
           notificationType: 'success',
-        }));
+        }))
       }
     }).catch(error => {
-      if (error.response.data.detail instanceof Array) {
-        error.response.data.detail.forEach((item: any) => {
-          setError(item.loc[1], { type: 'validate', message: item.msg + ''} );
-        });
-      } else if (Object.keys(error.response.data.detail)[0] === 'email') {
-        setError('email', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
-      } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
-        setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
-      } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
-        setError('phone_number', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} );
-      } else {
-        dispatch(setNotification({
-          notificationMessage: error.response.data.detail + '',
-          notificationType: 'error',
-        }));
-      }
+      // if (error.response.data.detail instanceof Array) {
+      //   error.response.data.detail.forEach((item: any) => {
+      //     setError(item.loc[1], { type: 'validate', message: item.msg + ''} )
+      //   });
+      // } else if (Object.keys(error.response.data.detail)[0] === 'email') {
+      //   setError('email', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
+      // } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
+      //   setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
+      // } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
+      //   setError('phone_number', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
+      // } else {
+      //   dispatch(setNotification({
+      //     notificationMessage: error.response.data.detail + '',
+      //     notificationType: 'error',
+      //   }))
+      // }
       // then - else => set global error message if smth went wrong, otherwise - success
-    });
-  };
+    })
+  }
 
   return <CreationPanel
     stepperTitle="Create Laundry"
@@ -66,8 +76,8 @@ const CreateLaundry = () => {
   >
     <>
       {
-        // currentStep === 1 &&
-        //   <StepRole list={roleProperties} setValue={setValue} selectedValue={watchRole} setCurrentStep={() => setCurrentStep(currentStep + 1)} />
+        currentStep === 1 &&
+          <StepName control={control} watch={watch} toNextStep={() => setCurrentStep(currentStep + 1)} />
       }
       {
         // currentStep === 2 &&
@@ -94,4 +104,4 @@ const CreateLaundry = () => {
   </CreationPanel>
 }
 
-export { CreateLaundry };
+export { CreateLaundry }
