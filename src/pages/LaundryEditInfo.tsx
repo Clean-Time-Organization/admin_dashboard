@@ -176,7 +176,7 @@ const LaundryEditInfo = () => {
           navigate(`/laundries/${id}`)
 
           dispatch(setNotification({
-            notificationMessage: 'Laundry successfully updated',
+            notificationMessage: 'Edits are successfully saved',
             notificationType: 'success',
           }))
           break
