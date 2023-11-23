@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { setNotification } from "../../store/features/notification";
 import {StepName} from "./StepName";
 import {StepOwner} from "./StepOwner";
+import {StepTaxInfo} from "./StepTaxInfo";
 
 export type LaundryForm = {
   name_en: string
@@ -99,15 +100,14 @@ const CreateLaundry = () => {
           />
       }
       {
-        // currentStep === 3 &&
-        //   <StepUserDetails
-        //     control={control}
-        //     watch={watch}
-        //     setValue={setValue}
-        //     toPreviousStep={() => setCurrentStep(currentStep - 1)}
-        //     onCreate={handleSubmit(handleCreate)}
-        //     trigger={trigger}
-        //   />
+        currentStep === 3 &&
+          <StepTaxInfo
+            control={control}
+            errors={errors}
+            trigger={trigger}
+            toPreviousStep={() => setCurrentStep(currentStep - 1)}
+            onCreate={handleSubmit(handleCreate)}
+          />
       }
     </>
   </CreationPanel>

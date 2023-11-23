@@ -1,6 +1,6 @@
 import { FC} from "react";
-import { BasicButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormTrigger} from "react-hook-form";
+import {BasicButtonLong, LinkButtonLong} from "../../components/Button/Buttons";
+import {Control, Controller, UseFormTrigger, UseFormWatch} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
@@ -10,40 +10,41 @@ interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
   readonly errors: FieldErrors<any>
   readonly trigger: UseFormTrigger<LaundryForm>
-  toNextStep: () => void
+  toPreviousStep: () => void
+  onCreate: () => void
 }
 
-const StepName: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toNextStep}) => {
+const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPreviousStep, onCreate}) => {
   const handleNextStep = () => {
     trigger()
-    const stepFields = ['name_en']
+    const stepFields = ['vat_number', 'cr_number']
     const errorFields = Object.keys(errors)
     let stepIsValid = !stepFields.some(item => errorFields.includes(item))
 
     if (stepIsValid) {
-      toNextStep()
+      onCreate()
     }
   }
 
   return <StepBase>
     <StepBaseInternal>
-      <StepTitle>Basic Info</StepTitle>
-      <StepSubtitle>Provide information about the laundry, including contact information</StepSubtitle>
+      <StepTitle>Tax Info</StepTitle>
+      <StepSubtitle>Provide financial information and attach files</StepSubtitle>
     </StepBaseInternal>
     <StepBaseInternal>
       <Titles>
-        <BlockTitle>Laundry Name</BlockTitle>
-        <BlockSubtitle>Provide the name of the laundry in English and Arabic</BlockSubtitle>
+        <BlockTitle>Vat Number</BlockTitle>
+        <BlockSubtitle>Please indicate the VAT number for the laundry. Upload a file up to 10 MB.</BlockSubtitle>
       </Titles>
       <Controller
         control={control}
-        name="name_en"
+        name="vat_number"
         render={({ field: { ref, ...field }, fieldState: { error } }) => (
           <InputBase
             autoFocus
-            label={'Laundry Name (EN)'}
+            label={'VAT Number'}
             error={error !== undefined}
-            errorText={error?.type === 'required' && 'Please enter laundry name' ||
+            errorText={error?.type === 'required' && 'Please enter the VAT Number' ||
               error && error?.message
             }
             autoComplete={'off'}
@@ -54,15 +55,18 @@ const StepName: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toNextSt
           required: true,
         }}
       />
+      <Titles>
+        <BlockTitle>CR Number</BlockTitle>
+        <BlockSubtitle>Please indicate the CR number for the laundry. Upload a file up to 10 MB.</BlockSubtitle>
+      </Titles>
       <Controller
         control={control}
-        name="name_ar"
+        name="cr_number"
         render={({ field: { ref, ...field }, fieldState: { error } }) => (
           <InputBase
-            dir="rtl"
-            label={'Laundry Name (AR)'}
+            label={'CR Number'}
             error={error !== undefined}
-            errorText={error?.type === 'required' && 'Please enter laundry name' ||
+            errorText={error?.type === 'required' && 'Please enter the CR Number' ||
               error && error?.message
             }
             autoComplete={'off'}
@@ -70,14 +74,15 @@ const StepName: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toNextSt
           />
         )}
         rules={{
-          // required: true,
+          required: true,
         }}
       />
     </StepBaseInternal>
     <ButtonLine>
-      <BasicButtonLong onClick={handleNextStep}>Continue</BasicButtonLong>
+      <LinkButtonLong onClick={toPreviousStep}>Previous step</LinkButtonLong>
+      <BasicButtonLong onClick={onCreate}>Create laundry</BasicButtonLong>
     </ButtonLine>
   </StepBase>;
 }
 
-export { StepName }
+export { StepTaxInfo }
