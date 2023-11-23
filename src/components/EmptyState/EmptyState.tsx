@@ -8,7 +8,7 @@ interface IEmptyStateProps {
   title: string;
   subtitle?: string;
   buttonName?: string;
-  buttonAction: () => void;
+  buttonAction?: () => void;
 }
 
 const EmptyState: FC<IEmptyStateProps> = ({

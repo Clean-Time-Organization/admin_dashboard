@@ -24,6 +24,7 @@ type IAutocompleteProps = TextFieldProps & {
   setInputValue: (val: string) => void;
   open: boolean;
   setOpen: (val: boolean) => void;
+  size?: string;
 }
 
 const Autocomplete: FC<IAutocompleteProps> = ({
@@ -37,6 +38,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
   setInputValue,
   open,
   setOpen,
+  size,
   ...inputProps
 }) => {
   const [list, setList] = useState<Array<{ id: number; name: string }>>([]);
@@ -71,6 +73,18 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         }}
         options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
+        size={size || 'medium'}
+        sx={size === 'small' ? {
+          fontSize: '14px',
+          maxHeight: '32px',
+          '& input': {
+            height: '20px',
+            padding: '2px 4px 0px 8px',
+            '&:placeholder': {
+              fontSize: '14px',
+            },
+          },
+        } : {}}
         renderOption={(props, option) => {
           return (
             <li {...props} key={option.id}>
@@ -81,12 +95,25 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         renderInput={(params) =>
           <TextField
             {...params}
+            size={size || 'medium'}
             error={error}
             label={label}
             {...inputProps}
-            style={{
-              color: '#4B5563',
-            }}
+            sx={size === 'small' ? {
+              fontSize: '14px',
+              '> .MuiInputBase-sizeSmall': {
+                padding: '3px 4px 4px !important',
+                fontSize: '14px',
+              },
+              '> label': {
+                fontSize: '14px',
+                top: '-4px',
+
+                '& .Mui-focused': {
+                  top: '0',
+                },
+              }
+            } : {}}
           />
         }
       />

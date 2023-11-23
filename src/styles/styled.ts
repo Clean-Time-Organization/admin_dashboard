@@ -47,6 +47,22 @@ export const Name = styled('div')`
   overflow: hidden; 
 `;
 
+export const NameLink = styled('div')`
+  color: #2E8DC8;
+  leading-trim: both;
+  text-edge: cap;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 120%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  // cursor: pointer;
+  // &:hover {
+  //   text-decoration: underline;
+  // }
+`;
+
 export const BasicText = styled('div')`
   color: #0E1019;
   font-size: 14px;
@@ -71,6 +87,21 @@ export const BasicTextName = styled('span')`
   overflow: hidden;
 `;
 
+export const BasicTextNameLink = styled('span')`
+  color: #2E8DC8;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  // width: 290px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 export const ColoredText = styled('div')<{color: string}>`
   color: ${({color}) => color};
 `;
@@ -86,6 +117,14 @@ export const Chips = styled('div')`
   align-items: center;
   border-radius: 4px;
   font-family: 'Anek Latin', sans-serif;
+`;
+
+export const ChipsOverflow = styled(Chips)`
+  padding: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 200px;
 `;
 
 export const ChipsButton = styled('div')`

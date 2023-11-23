@@ -155,13 +155,24 @@ const theme = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
+          '&.MuiInputLabel-shrink': {
+            top: 0,
+          },
           '&.Mui-focused': {
             color: '#2E8DC8',
+            top: 0,
           },
         },
       },
     },
-  },
+    MuiInputLabel: {
+      styleOverrides: {
+        shrink: {
+          top: 0,
+        },
+      },
+    },
+  }
 });
 
 export default theme

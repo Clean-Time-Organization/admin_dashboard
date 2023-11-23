@@ -36,7 +36,7 @@ export const Toolbar: FC = memo(function Toolbar() {
     navigate('/login')
   }
 
-  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders'])
+  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders', '/items'])
   let currentTab = routeMatch?.pathnameBase
 
   if (currentTab === '/') {
@@ -121,6 +121,15 @@ export const Toolbar: FC = memo(function Toolbar() {
                 label={(<Typography variant="nav">Orders</Typography>)}
                 value="/orders"
                 to="/orders"
+                component={Link}
+                sx={{
+                  height: "64px",
+                }}
+              />
+              <Tab
+                label={(<Typography variant="nav">Items</Typography>)}
+                value="/items"
+                to="/items"
                 component={Link}
                 sx={{
                   height: "64px",
