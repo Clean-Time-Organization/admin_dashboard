@@ -74,6 +74,17 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         options={list}
         getOptionLabel={(option: { id: number; name: string }) => `${option.name}`}
         size={size || 'medium'}
+        sx={size === 'small' ? {
+          fontSize: '14px',
+          maxHeight: '32px',
+          '& input': {
+            height: '20px',
+            padding: '2px 4px 0px 8px',
+            '&:placeholder': {
+              fontSize: '14px',
+            },
+          },
+        } : {}}
         renderOption={(props, option) => {
           return (
             <li {...props} key={option.id}>
@@ -88,10 +99,21 @@ const Autocomplete: FC<IAutocompleteProps> = ({
             error={error}
             label={label}
             {...inputProps}
-            sx={size && {
+            sx={size === 'small' ? {
               fontSize: '14px',
-              height: '32px',
-            }}
+              '> .MuiInputBase-sizeSmall': {
+                padding: '3px 4px 4px !important',
+                fontSize: '14px',
+              },
+              '> label': {
+                fontSize: '14px',
+                top: '-4px',
+
+                '& .Mui-focused': {
+                  top: '0',
+                },
+              }
+            } : {}}
           />
         }
       />

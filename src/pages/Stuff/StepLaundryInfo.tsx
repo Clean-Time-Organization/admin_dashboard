@@ -155,7 +155,7 @@ const StepLaundryInfo: FC<IStepLaundryInfoProps> = ({
                 selectValue={setSelectedLaundry}
                 inputValue={inputLaundry}
                 setInputValue={setLaundryName}
-                options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || '' }}) || []}
+                options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || laundry.name_ar || '' }}) || []}
                 open={openLaundries}
                 setOpen={setOpenLaundries}
                 {...field}
