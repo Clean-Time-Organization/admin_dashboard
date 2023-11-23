@@ -1,13 +1,14 @@
-import {FC, useRef, useState} from "react";
+import {ChangeEvent, FC, useRef, useState} from "react";
 import {BasicButtonLong, LinkButton, LinkButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormTrigger, UseFormWatch} from "react-hook-form";
+import {Control, Controller, UseFormTrigger} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
 import {FieldErrors} from "react-hook-form/dist/types/errors";
-import {Box, Typography} from "@mui/material";
+import {Box, IconButton, Typography} from "@mui/material";
 import {Document} from "../../components/Icons/Document";
 import {Attach} from "../../components/Icons/Attach";
+import {Delete} from "../../components/Icons/Delete";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
@@ -47,6 +48,34 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
     }
   }
 
+  const handleVatFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setVatFile('')
+
+    if (event && event?.target && event?.target?.files) {
+      if (event?.target?.files.length) {
+        setVatFile(event?.target?.files[0].name)
+      }
+    }
+  }
+
+  const handleCrFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCrFile('')
+
+    if (event && event?.target && event?.target?.files) {
+      if (event?.target?.files.length) {
+        setCrFile(event?.target?.files[0].name)
+      }
+    }
+  }
+
+  const removeVatFileDialog = () => {
+
+  }
+
+  const removeCrFileDialog = () => {
+
+  }
+
   return <StepBase>
     <StepBaseInternal>
       <StepTitle>Tax Info</StepTitle>
@@ -65,8 +94,8 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
         }}
       >
         <Box
-          maxWidth={466}
-          minWidth={466}
+          maxWidth={396}
+          minWidth={396}
         >
           <Controller
             control={control}
@@ -81,9 +110,6 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
                 }
                 autoComplete={'off'}
                 {...field}
-                sx={{
-                  // maxWidth: "466px"
-                }}
               />
             )}
             rules={{
@@ -92,46 +118,58 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
           />
         </Box>
         {vatFile ?
-            <Box>
-                <Box
-                    sx={{
-                      paddingLeft: "32px",
-                      paddingTop: "17px",
-                    }}
+            <>
+              <Box
+                sx={{
+                  paddingLeft: "32px",
+                  paddingTop: "17px",
+                }}
+              >
+                <Document />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "left",
+                  paddingLeft: "8px",
+                  paddingTop: "18px",
+                  maxWidth: "86px",
+                  minWidth: "86px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#656873",
+                    textAlign: "center",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: "500",
+                    lineHeight: "130%",
+                    letterSpacing: "0.28px",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                  }}
                 >
-                    <Document />
-                </Box>
-                <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "left",
-                      paddingLeft: "8px",
-                      paddingTop: "18px",
-                      maxWidth: "86px",
-                      minWidth: "86px",
-                    }}
+                  {vatFile}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  paddingTop: "6px",
+                  paddingLeft: "30px",
+                }}
+              >
+                <IconButton
+                  onClick={removeVatFileDialog}
                 >
-                    <Typography
-                        sx={{
-                          color: "#656873",
-                          textAlign: "center",
-                          leadingTrim: "both",
-                          textEdge: "cap",
-                          fontFamily: "Anek Latin",
-                          fontSize: "14px",
-                          fontStyle: "normal",
-                          fontWeight: "500",
-                          lineHeight: "130%",
-                          letterSpacing: "0.28px",
-                          whiteSpace: "nowrap",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                        }}
-                    >
-                      {vatFile}
-                    </Typography>
-                </Box>
-            </Box>
+                  <Delete />
+                </IconButton>
+              </Box>
+            </>
           :
             <Box
               sx={{
@@ -145,10 +183,17 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
                 pretext="true"
               >
                 Upload file
+                <input
+                  ref={vatFileRef}
+                  type="file"
+                  hidden
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleVatFileChange}
+                  name="[vatFileRef]"
+                />
               </LinkButton>
             </Box>
         }
-        <input ref={vatFileRef} type="file" accept=".jpg,.jpeg,.png" style={{ display: "none" }}/>
       </Box>
       <Titles>
         <BlockTitle>CR Number</BlockTitle>
@@ -162,8 +207,8 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
         }}
       >
         <Box
-          maxWidth={466}
-          minWidth={466}
+          maxWidth={396}
+          minWidth={396}
         >
           <Controller
             control={control}
@@ -185,7 +230,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
           />
         </Box>
         {crFile ?
-          <Box>
+          <>
             <Box
               sx={{
                 paddingLeft: "32px",
@@ -221,14 +266,26 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
                   overflow: "hidden",
                 }}
               >
-                {vatFile}
+                {crFile}
               </Typography>
             </Box>
-          </Box>
+            <Box
+              sx={{
+                paddingTop: "6px",
+                paddingLeft: "30px",
+              }}
+            >
+              <IconButton
+                onClick={removeCrFileDialog}
+              >
+                <Delete />
+              </IconButton>
+            </Box>
+          </>
           :
           <Box
             sx={{
-              paddingLeft: "10px",
+              paddingLeft: "18px",
               paddingTop: "8px",
             }}
           >
@@ -238,10 +295,17 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
               pretext="true"
             >
               Upload file
+              <input
+                ref={crFileRef}
+                type="file"
+                hidden
+                accept=".jpg,.jpeg,.png"
+                onChange={handleCrFileChange}
+                name="[crFileRef]"
+              />
             </LinkButton>
           </Box>
         }
-        <input ref={crFileRef} type="file" accept=".jpg,.jpeg,.png" style={{ display: "none" }}/>
       </Box>
     </StepBaseInternal>
     <ButtonLine>
