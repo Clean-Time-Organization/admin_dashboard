@@ -6,6 +6,7 @@ import httpClient from "../../services/HttpClient";
 import { useAppDispatch } from "../../store/hooks";
 import { setNotification } from "../../store/features/notification";
 import {StepName} from "./StepName";
+import {StepOwner} from "./StepOwner";
 
 export type LaundryForm = {
   name_en: string
@@ -26,8 +27,11 @@ const CreateLaundry = () => {
   const { control, watch, setValue, handleSubmit, setError, trigger } = useForm<LaundryForm>({
     mode: 'onTouched',
     defaultValues: {
-        name_en: '',
-        name_ar: '',
+      name_en: '',
+      name_ar: '',
+      full_name: '',
+      phone_number: '',
+      address: '',
     },
   })
 
@@ -77,17 +81,21 @@ const CreateLaundry = () => {
     <>
       {
         currentStep === 1 &&
-          <StepName control={control} watch={watch} toNextStep={() => setCurrentStep(currentStep + 1)} />
+          <StepName
+            control={control}
+            watch={watch}
+            setError={setError}
+            toNextStep={() => setCurrentStep(currentStep + 1)}
+          />
       }
       {
-        // currentStep === 2 &&
-        //   <StepLaundryInfo
-        //     control={control}
-        //     watch={watch}
-        //     setValue={setValue}
-        //     toPreviousStep={() => setCurrentStep(currentStep - 1)}
-        //     toNextStep={() => setCurrentStep(currentStep + 1)}
-        //   />
+        currentStep === 2 &&
+          <StepOwner
+            control={control}
+            watch={watch}
+            toPreviousStep={() => setCurrentStep(currentStep - 1)}
+            toNextStep={() => setCurrentStep(currentStep + 1)}
+          />
       }
       {
         // currentStep === 3 &&

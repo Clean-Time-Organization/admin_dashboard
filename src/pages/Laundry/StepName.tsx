@@ -1,6 +1,6 @@
 import { FC} from "react";
 import { BasicButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormWatch} from "react-hook-form";
+import {Control, Controller, UseFormSetError, UseFormWatch} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
@@ -8,12 +8,14 @@ import {InputBase} from "../../components/InputBase/InputBase";
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
   readonly watch: UseFormWatch<LaundryForm>
+  readonly setError: UseFormSetError<LaundryForm>
   toNextStep: () => void
 }
 
 const StepName: FC<IStepLaundryInfoProps> = ({
   control,
   watch,
+  setError,
   toNextStep,
 }) => {
   const nameEn = watch('name_en')
@@ -21,6 +23,8 @@ const StepName: FC<IStepLaundryInfoProps> = ({
   const handleNextStep = () => {
     if (nameEn.trim()) {
       toNextStep()
+    } else {
+      setError('name_en', {type: 'validate', message: 'Please enter laundry name'} )
     }
   }
 
@@ -39,9 +43,10 @@ const StepName: FC<IStepLaundryInfoProps> = ({
         name="name_en"
         render={({ field: { ref, ...field }, fieldState: { error } }) => (
           <InputBase
+            autoFocus
             label={'Laundry Name (EN)'}
             error={error !== undefined}
-            errorText={error?.type === 'required' && 'Field is required' ||
+            errorText={error?.type === 'required' && 'Please enter laundry name' ||
               error && error?.message
             }
             autoComplete={'off'}
@@ -60,7 +65,7 @@ const StepName: FC<IStepLaundryInfoProps> = ({
             dir="rtl"
             label={'Laundry Name (AR)'}
             error={error !== undefined}
-            errorText={error?.type === 'required' && 'Field is required' ||
+            errorText={error?.type === 'required' && 'Please enter laundry name' ||
               error && error?.message
             }
             autoComplete={'off'}
