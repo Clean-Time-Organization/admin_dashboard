@@ -198,17 +198,15 @@ const Orders = () => {
   return <ContentBody>
     <Breadcrumbs />
     <PageTitle
-      name={'Customers'}
+      name={'Orders'}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
       {
         (!orderList && !selectedDates && !searchValue && !isListLoading) ?
           <EmptyState
-            title={'There are no staff orders yet'}
-            subtitle={'You don\'t have any staff orders created yet'}
-            buttonName={'Create staff order'}
-            buttonAction={console.log}
+            title={'There are no orders yet'}
+            subtitle={'You don\'t have any orders created yet'}
           />
           : <>
             <FilterRow>
