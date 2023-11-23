@@ -4,26 +4,24 @@ import {Control, Controller, UseFormWatch} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
+import {FieldErrors} from "react-hook-form/dist/types/errors";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
-  readonly watch: UseFormWatch<LaundryForm>
+  readonly errors: FieldErrors<any>
+  trigger: () => void
   toPreviousStep: () => void
   toNextStep: () => void
 }
 
-const StepOwner: FC<IStepLaundryInfoProps> = ({
-  control,
-  watch,
-  toPreviousStep,
-  toNextStep,
-}) => {
-  const fullName = watch('full_name')
-  const phone = watch('phone_number')
-  const address = watch('address')
-
+const StepOwner: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPreviousStep, toNextStep}) => {
   const handleNextStep = () => {
-    if (fullName.trim() && phone.trim() && address.trim()) {
+    trigger()
+    const stepFields = ['full_name', 'phone_number', 'address']
+    const errorFields = Object.keys(errors)
+    let stepIsValid = !stepFields.some(item => errorFields.includes(item))
+
+    if (stepIsValid) {
       toNextStep()
     }
   }

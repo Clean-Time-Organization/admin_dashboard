@@ -84,6 +84,7 @@ const CreateLaundry = () => {
           <StepName
             control={control}
             errors={errors}
+            trigger={trigger}
             toNextStep={() => setCurrentStep(currentStep + 1)}
           />
       }
@@ -91,7 +92,8 @@ const CreateLaundry = () => {
         currentStep === 2 &&
           <StepOwner
             control={control}
-            watch={watch}
+            errors={errors}
+            trigger={trigger}
             toPreviousStep={() => setCurrentStep(currentStep - 1)}
             toNextStep={() => setCurrentStep(currentStep + 1)}
           />

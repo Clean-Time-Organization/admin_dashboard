@@ -9,11 +9,13 @@ import {FieldErrors} from "react-hook-form/dist/types/errors";
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
   readonly errors: FieldErrors<any>
+  trigger: () => void
   toNextStep: () => void
 }
 
-const StepName: FC<IStepLaundryInfoProps> = ({control, errors, toNextStep, }) => {
+const StepName: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toNextStep}) => {
   const handleNextStep = () => {
+    trigger()
     const stepFields = ['name_en']
     const errorFields = Object.keys(errors)
     let stepIsValid = !stepFields.some(item => errorFields.includes(item))
