@@ -36,11 +36,15 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
   }
 
   const showUploadVatFile = () => {
-
+    if (vatFileRef.current) {
+      vatFileRef.current.click()
+    }
   }
 
   const showUploadCrFile = () => {
-
+    if (crFileRef.current) {
+      crFileRef.current.click()
+    }
   }
 
   return <StepBase>
@@ -144,7 +148,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
               </LinkButton>
             </Box>
         }
-        <input ref={vatFileRef} type="file" style={{ display: "none" }}/>
+        <input ref={vatFileRef} type="file" accept=".jpg,.jpeg,.png" style={{ display: "none" }}/>
       </Box>
       <Titles>
         <BlockTitle>CR Number</BlockTitle>
@@ -237,7 +241,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
             </LinkButton>
           </Box>
         }
-        <input ref={crFileRef} type="file" style={{ display: "none" }}/>
+        <input ref={crFileRef} type="file" accept=".jpg,.jpeg,.png" style={{ display: "none" }}/>
       </Box>
     </StepBaseInternal>
     <ButtonLine>
