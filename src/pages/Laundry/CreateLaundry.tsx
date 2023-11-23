@@ -24,7 +24,7 @@ const CreateLaundry = () => {
   const [totalSteps, setTotalSteps] = useState(3)
   const [currentStep, setCurrentStep] = useState(1)
 
-  const { control, watch, setValue, handleSubmit, setError, trigger } = useForm<LaundryForm>({
+  const { control, watch, setValue, handleSubmit, setError, trigger, formState: {errors} } = useForm<LaundryForm>({
     mode: 'onTouched',
     defaultValues: {
       name_en: '',
@@ -83,8 +83,7 @@ const CreateLaundry = () => {
         currentStep === 1 &&
           <StepName
             control={control}
-            watch={watch}
-            setError={setError}
+            errors={errors}
             toNextStep={() => setCurrentStep(currentStep + 1)}
           />
       }

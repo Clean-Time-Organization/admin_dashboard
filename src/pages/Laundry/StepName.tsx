@@ -1,30 +1,25 @@
 import { FC} from "react";
 import { BasicButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormSetError, UseFormWatch} from "react-hook-form";
+import {Control, Controller} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
+import {FieldErrors} from "react-hook-form/dist/types/errors";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
-  readonly watch: UseFormWatch<LaundryForm>
-  readonly setError: UseFormSetError<LaundryForm>
+  readonly errors: FieldErrors<any>
   toNextStep: () => void
 }
 
-const StepName: FC<IStepLaundryInfoProps> = ({
-  control,
-  watch,
-  setError,
-  toNextStep,
-}) => {
-  const nameEn = watch('name_en')
-
+const StepName: FC<IStepLaundryInfoProps> = ({control, errors, toNextStep, }) => {
   const handleNextStep = () => {
-    if (nameEn.trim()) {
+    const stepFields = ['name_en']
+    const errorFields = Object.keys(errors)
+    let stepIsValid = !stepFields.some(item => errorFields.includes(item))
+
+    if (stepIsValid) {
       toNextStep()
-    } else {
-      setError('name_en', {type: 'validate', message: 'Please enter laundry name'} )
     }
   }
 
