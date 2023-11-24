@@ -48,19 +48,20 @@ const CreateLaundry = () => {
     formData.append("name_en", values.name_en)
     formData.append("name_ar", values.name_ar)
     formData.append("full_name", values.full_name)
-    formData.append("phone_number", values.phone_number)
+    formData.append("phone_number", '+966' + values.phone_number)
     formData.append("address", values.address)
+    formData.append("vat_number", values.vat_number.toString())
+    formData.append("cr_number", values.cr_number.toString())
 
     formData.append("vat_file", vatFile)
     formData.append("cr_file", crFile)
 
     await httpClient.post(
-      '/laundry',
-      // {...values, phone_number: '+966' + values.phone_number},
+      '/laundry/',
       formData,
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'multipart/form-data'
         }
       }
     ).then(response => {
@@ -72,7 +73,6 @@ const CreateLaundry = () => {
         }))
       }
     }).catch(error => {
-      console.dir(error)
       // if (error.response.data.detail instanceof Array) {
       //   error.response.data.detail.forEach((item: any) => {
       //     setError(item.loc[1], { type: 'validate', message: item.msg + ''} )
