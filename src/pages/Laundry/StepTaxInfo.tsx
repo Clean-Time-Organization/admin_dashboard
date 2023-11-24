@@ -24,16 +24,18 @@ interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
   readonly errors: FieldErrors<any>
   readonly trigger: UseFormTrigger<LaundryForm>
+  setParentVatFile: (file: Blob) => void
+  setParentCrFile: (file: Blob) => void
   toPreviousStep: () => void
   onCreate: () => void
 }
 
-const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPreviousStep, onCreate}) => {
+const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, setParentVatFile, setParentCrFile, toPreviousStep, onCreate}) => {
   const vatFileRef = useRef<HTMLInputElement>(null)
   const crFileRef = useRef<HTMLInputElement>(null)
 
-  const[vatFile, setVatFile] = useState('')
-  const[crFile, setCrFile] = useState('')
+  const[vatFileName, setVatFileName] = useState('')
+  const[crFileName, setCrFileName] = useState('')
 
   const [openDialog, setOpenDialog] = useState(false)
   const [fileToDelete, setFileToDelete] = useState('')
@@ -62,21 +64,23 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
   }
 
   const handleVatFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setVatFile('')
+    setVatFileName('')
 
     if (event && event?.target && event?.target?.files) {
       if (event?.target?.files.length) {
-        setVatFile(event?.target?.files[0].name)
+        setVatFileName(event?.target?.files[0].name)
+        setParentVatFile(event?.target?.files[0])
       }
     }
   }
 
   const handleCrFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCrFile('')
+    setCrFileName('')
 
     if (event && event?.target && event?.target?.files) {
       if (event?.target?.files.length) {
-        setCrFile(event?.target?.files[0].name)
+        setCrFileName(event?.target?.files[0].name)
+        setParentCrFile(event?.target?.files[0])
       }
     }
   }
@@ -97,9 +101,9 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
 
   const handleConfirmSubmit = () => {
     if (fileToDelete === 'vat') {
-      setVatFile('')
+      setVatFileName('')
     } else if (fileToDelete === 'cr') {
-      setCrFile('')
+      setCrFileName('')
     }
     setFileToDelete('')
     setOpenDialog(false)
@@ -132,6 +136,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
               <InputBase
                 autoFocus
+                type="number"
                 label={'VAT Number'}
                 error={error !== undefined}
                 errorText={error?.type === 'required' && 'Please enter the VAT Number' ||
@@ -146,7 +151,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
             }}
           />
         </Box>
-        {vatFile ?
+        {vatFileName ?
             <>
               <Box
                 sx={{
@@ -183,7 +188,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
                     overflow: "hidden",
                   }}
                 >
-                  {vatFile}
+                  {vatFileName}
                 </Typography>
               </Box>
               <Box
@@ -244,6 +249,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
             name="cr_number"
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
               <InputBase
+                type="number"
                 label={'CR Number'}
                 error={error !== undefined}
                 errorText={error?.type === 'required' && 'Please enter the CR Number' ||
@@ -258,7 +264,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
             }}
           />
         </Box>
-        {crFile ?
+        {crFileName ?
           <>
             <Box
               sx={{
@@ -295,7 +301,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
                   overflow: "hidden",
                 }}
               >
-                {crFile}
+                {crFileName}
               </Typography>
             </Box>
             <Box

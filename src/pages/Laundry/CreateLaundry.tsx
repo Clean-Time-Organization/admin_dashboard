@@ -24,6 +24,8 @@ const CreateLaundry = () => {
   const dispatch = useAppDispatch()
   const [totalSteps, setTotalSteps] = useState(3)
   const [currentStep, setCurrentStep] = useState(1)
+  const [vatFile, setVatFile] = useState(new Blob())
+  const [crFile, setCrFile] = useState(new Blob())
 
   const { control, watch, setValue, handleSubmit, setError, trigger, formState: {errors} } = useForm<LaundryForm>({
     mode: 'onTouched',
@@ -41,9 +43,21 @@ const CreateLaundry = () => {
   }
 
   const handleCreate: SubmitHandler<LaundryForm> = async (values) => {
+    const formData = new FormData()
+
+    formData.append("name_en", values.name_en)
+    formData.append("name_ar", values.name_ar)
+    formData.append("full_name", values.full_name)
+    formData.append("phone_number", values.phone_number)
+    formData.append("address", values.address)
+
+    formData.append("vat_file", vatFile)
+    formData.append("cr_file", crFile)
+
     await httpClient.post(
       '/laundry',
-      {...values, phone_number: '+966' + values.phone_number},
+      // {...values, phone_number: '+966' + values.phone_number},
+      formData,
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -111,6 +125,8 @@ const CreateLaundry = () => {
             control={control}
             errors={errors}
             trigger={trigger}
+            setParentVatFile={setVatFile}
+            setParentCrFile={setCrFile}
             toPreviousStep={() => setCurrentStep(currentStep - 1)}
             onCreate={handleSubmit(handleCreate)}
           />
