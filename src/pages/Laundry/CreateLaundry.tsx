@@ -17,6 +17,8 @@ export type LaundryForm = {
   phone_number: string
   vat_number: number
   cr_number: number
+  vat_file: Blob
+  cr_file: Blob
 }
 
 const CreateLaundry = () => {
@@ -27,7 +29,7 @@ const CreateLaundry = () => {
   const [vatFile, setVatFile] = useState(new Blob())
   const [crFile, setCrFile] = useState(new Blob())
 
-  const { control, watch, setValue, handleSubmit, setError, trigger, formState: {errors} } = useForm<LaundryForm>({
+  const { control, watch, setValue, handleSubmit, setError, trigger, register, formState: {errors} } = useForm<LaundryForm>({
     mode: 'onTouched',
     defaultValues: {
       name_en: '',
@@ -35,6 +37,8 @@ const CreateLaundry = () => {
       full_name: '',
       phone_number: '',
       address: '',
+      vat_number: 0,
+      cr_number: 0,
     },
   })
 
@@ -43,6 +47,7 @@ const CreateLaundry = () => {
   }
 
   const handleCreate: SubmitHandler<LaundryForm> = async (values) => {
+    console.log('123123')
     const formData = new FormData()
 
     formData.append("name_en", values.name_en)
@@ -55,6 +60,8 @@ const CreateLaundry = () => {
 
     formData.append("vat_file", vatFile)
     formData.append("cr_file", crFile)
+
+    console.dir(values)
 
     if (vatFile.size > 10 * 1024 * 1024 || crFile.size > 10 * 1024 * 1024) {
       dispatch(setNotification({
@@ -140,6 +147,8 @@ const CreateLaundry = () => {
             control={control}
             errors={errors}
             trigger={trigger}
+            register={register}
+            setValue={setValue}
             setParentVatFile={setVatFile}
             setParentCrFile={setCrFile}
             toPreviousStep={() => setCurrentStep(currentStep - 1)}

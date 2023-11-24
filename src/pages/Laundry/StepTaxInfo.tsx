@@ -1,6 +1,6 @@
 import {ChangeEvent, FC, useRef, useState} from "react";
 import {BasicButtonLong, LinkButton, LinkButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormTrigger, UseFormWatch} from "react-hook-form";
+import {Control, Controller, UseFormTrigger} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
@@ -21,11 +21,14 @@ import {Delete} from "../../components/Icons/Delete";
 import {Close} from "../../components/Icons/Close";
 import {useAppDispatch} from "../../store/hooks";
 import {setNotification} from "../../store/features/notification";
+import {UseFormRegister, UseFormSetValue} from "react-hook-form/dist/types/form";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
   readonly errors: FieldErrors<any>
   readonly trigger: UseFormTrigger<LaundryForm>
+  readonly register: UseFormRegister<LaundryForm>
+  readonly setValue: UseFormSetValue<LaundryForm>
   setParentVatFile: (file: Blob) => void
   setParentCrFile: (file: Blob) => void
   toPreviousStep: () => void
@@ -37,6 +40,8 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     control,
     errors,
     trigger,
+    register,
+    setValue,
     setParentVatFile,
     setParentCrFile,
     toPreviousStep,
@@ -52,6 +57,9 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
 
   const [openDialog, setOpenDialog] = useState(false)
   const [fileToDelete, setFileToDelete] = useState('')
+
+  const vatFileInput = register("vat_file", { required: true })
+  const crFileInput = register("cr_file", { required: true })
 
   const handleCreate = async () => {
     await trigger('vat_number')
@@ -93,7 +101,8 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     if (event && event?.target && event?.target?.files) {
       if (event?.target?.files.length) {
         setVatFileName(event?.target?.files[0].name)
-        setParentVatFile(event?.target?.files[0])
+        // setParentVatFile(event?.target?.files[0])
+        setValue('vat_file', event?.target?.files[0])
       }
     }
   }
@@ -242,12 +251,13 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
               >
                 Upload file
                 <input
+                  {...vatFileInput}
                   ref={vatFileRef}
                   type="file"
                   hidden
                   accept=".jpg,.jpeg,.png"
                   onChange={handleVatFileChange}
-                  name="[vatFileRef]"
+                  name="vatFileRef"
                 />
               </LinkButton>
             </Box>
