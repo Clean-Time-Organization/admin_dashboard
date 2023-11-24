@@ -1,6 +1,6 @@
 import {ChangeEvent, FC, useRef, useState} from "react";
 import {BasicButtonLong, LinkButton, LinkButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormTrigger} from "react-hook-form";
+import {Control, Controller, UseFormTrigger, UseFormWatch} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
@@ -19,6 +19,8 @@ import {Document} from "../../components/Icons/Document";
 import {Attach} from "../../components/Icons/Attach";
 import {Delete} from "../../components/Icons/Delete";
 import {Close} from "../../components/Icons/Close";
+import {useAppDispatch} from "../../store/hooks";
+import {setNotification} from "../../store/features/notification";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
@@ -30,7 +32,18 @@ interface IStepLaundryInfoProps {
   onCreate: () => void
 }
 
-const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, setParentVatFile, setParentCrFile, toPreviousStep, onCreate}) => {
+const StepTaxInfo: FC<IStepLaundryInfoProps> = (
+  {
+    control,
+    errors,
+    trigger,
+    setParentVatFile,
+    setParentCrFile,
+    toPreviousStep,
+    onCreate,
+  }) => {
+  const dispatch = useAppDispatch()
+
   const vatFileRef = useRef<HTMLInputElement>(null)
   const crFileRef = useRef<HTMLInputElement>(null)
 
@@ -40,11 +53,22 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, setPa
   const [openDialog, setOpenDialog] = useState(false)
   const [fileToDelete, setFileToDelete] = useState('')
 
-  const handleCreate = () => {
-    trigger()
+  const handleCreate = async () => {
+    await trigger('vat_number')
+    await trigger('cr_number')
+
     const stepFields = ['vat_number', 'cr_number']
     const errorFields = Object.keys(errors)
     let stepIsValid = !stepFields.some(item => errorFields.includes(item))
+
+    if (vatFileName.trim() === '' || crFileName.trim() === '') {
+      stepIsValid = false
+
+      dispatch(setNotification({
+        notificationMessage: 'File is required',
+        notificationType: 'error',
+      }))
+    }
 
     if (stepIsValid) {
       onCreate()
@@ -355,7 +379,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, setPa
           borderRadius: "8px",
           background: "#FFF",
           minWidth: "570px",
-          maxWidth: "570px",
+          // maxWidth: "570px",
         }}
       >
         <DialogTitle

@@ -56,41 +56,56 @@ const CreateLaundry = () => {
     formData.append("vat_file", vatFile)
     formData.append("cr_file", crFile)
 
-    await httpClient.post(
-      '/laundry/',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    if (vatFile.size > 10 * 1024 * 1024 || crFile.size > 10 * 1024 * 1024) {
+      dispatch(setNotification({
+        notificationMessage: 'Your file exceeds our limit of 10 Mb',
+        notificationType: 'error',
+      }))
+    } else {
+      await httpClient.post(
+        '/laundry/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         }
-      }
-    ).then(response => {
-      if (response.status === 200) {
-        navigate('/laundries');
-        dispatch(setNotification({
-          notificationMessage: 'Laundry is successfully created',
-          notificationType: 'success',
-        }))
-      }
-    }).catch(error => {
-      // if (error.response.data.detail instanceof Array) {
-      //   error.response.data.detail.forEach((item: any) => {
-      //     setError(item.loc[1], { type: 'validate', message: item.msg + ''} )
-      //   });
-      // } else if (Object.keys(error.response.data.detail)[0] === 'email') {
-      //   setError('email', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
-      // } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
-      //   setError('full_name', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
-      // } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
-      //   setError('phone_number', { type: 'validate', message: Object.values(error.response.data.detail)[0] + ''} )
-      // } else {
-      //   dispatch(setNotification({
-      //     notificationMessage: error.response.data.detail + '',
-      //     notificationType: 'error',
-      //   }))
-      // }
-      // then - else => set global error message if smth went wrong, otherwise - success
-    })
+      ).then(response => {
+        if (response.status === 200) {
+          navigate('/laundries');
+          dispatch(setNotification({
+            notificationMessage: 'Laundry is successfully created',
+            notificationType: 'success',
+          }))
+        }
+      }).catch(error => {
+        if (error.response.data.detail instanceof Array) {
+          error.response.data.detail.forEach((item: any) => {
+            setError(item.loc[1], {type: 'validate', message: item.msg + ''})
+          })
+        } else if (typeof(error.response.data.detail) === 'string') {
+          dispatch(setNotification({
+            notificationMessage: error.response.data.detail + '',
+            notificationType: 'error',
+          }))
+        } else {
+          const errorFields = Object.keys(error.response.data.detail)
+          if (errorFields.includes('name_en')) {
+            setError('name_en', { type: 'validate', message: error.response.data.detail.name_en} )
+            setCurrentStep(1)
+          } else if (errorFields.includes('full_name')) {
+            setError('full_name', { type: 'validate', message: error.response.data.detail.full_name} )
+            setCurrentStep(2)
+          } else if (errorFields.includes('phone_number')) {
+            setError('phone_number', { type: 'validate', message: error.response.data.detail.phone_number} )
+            setCurrentStep(2)
+          } else if (errorFields.includes('address')) {
+            setError('address', { type: 'validate', message: error.response.data.detail.address} )
+            setCurrentStep(3)
+          }
+        }
+      })
+    }
   }
 
   return <CreationPanel
