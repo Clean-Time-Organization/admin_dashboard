@@ -349,6 +349,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
           borderRadius: "8px",
           background: "#FFF",
           minWidth: "570px",
+          maxWidth: "570px",
         }}
       >
         <DialogTitle

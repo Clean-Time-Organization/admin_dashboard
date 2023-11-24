@@ -43,16 +43,22 @@ const CreateLaundry = () => {
   const handleCreate: SubmitHandler<LaundryForm> = async (values) => {
     await httpClient.post(
       '/laundry',
-      {...values, phone_number: '+966' + values.phone_number}
+      {...values, phone_number: '+966' + values.phone_number},
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
     ).then(response => {
       if (response.status === 200) {
         navigate('/staff');
         dispatch(setNotification({
-          notificationMessage: 'User is successfully created',
+          notificationMessage: 'Laundry is successfully created',
           notificationType: 'success',
         }))
       }
     }).catch(error => {
+      console.dir(error)
       // if (error.response.data.detail instanceof Array) {
       //   error.response.data.detail.forEach((item: any) => {
       //     setError(item.loc[1], { type: 'validate', message: item.msg + ''} )
