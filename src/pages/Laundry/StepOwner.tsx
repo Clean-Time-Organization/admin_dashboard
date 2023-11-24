@@ -1,6 +1,6 @@
-import { FC} from "react";
+import {FC, useEffect} from "react";
 import {BasicButtonLong, LinkButtonLong} from "../../components/Button/Buttons";
-import {Control, Controller, UseFormTrigger} from "react-hook-form";
+import {Control, Controller, UseFormTrigger, UseFormWatch} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
@@ -14,11 +14,18 @@ interface IStepLaundryInfoProps {
   toNextStep: () => void
 }
 
-const StepOwner: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPreviousStep, toNextStep}) => {
-  const handleNextStep = () => {
-    trigger('full_name')
-    trigger('phone_number')
-    trigger('address')
+const StepOwner: FC<IStepLaundryInfoProps> = (
+  {
+    control,
+    errors,
+    trigger,
+    toPreviousStep,
+    toNextStep,
+  }) => {
+  const handleNextStep = async () => {
+    await trigger('full_name')
+    await trigger('phone_number')
+    await trigger('address')
 
     const stepFields = ['full_name', 'phone_number', 'address']
     const errorFields = Object.keys(errors)
