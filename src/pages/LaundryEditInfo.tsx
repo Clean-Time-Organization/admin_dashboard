@@ -238,6 +238,10 @@ const LaundryEditInfo = () => {
   const onSubmit = () => {
     let errors = false
 
+    if (nameEn.trim() === '') {
+      setNameEnError('Please enter name')
+      errors = true
+    }
     if (ownerName.trim() === '') {
       setOwnerNameError('Please enter owner name')
       errors = true

@@ -50,6 +50,7 @@ interface ILaundryRowProps {
 }
 
 const Laundries = () => {
+  const navigate = useNavigate()
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>()
   const [entityList, setEntityList] = useState<LaundryList>()
   const [searchValue, setSearchValue] = useState<string>('')
@@ -102,17 +103,23 @@ const Laundries = () => {
       setEntityList(response.data)
       setIsListLoading(false)
     })
-  };
+  }
 
   const clearFilters = () => {
     setSelectedStatus(undefined)
     setCurrentPage(1)
-  };
+  }
+
+  const createLaundry = () => {
+    navigate('/laundries/create')
+  }
 
   return <ContentBody>
     <Breadcrumbs />
     <PageTitle
       name={'Laundries'}
+      createButtonName={'Create laundry'}
+      createButtonClick={createLaundry}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
