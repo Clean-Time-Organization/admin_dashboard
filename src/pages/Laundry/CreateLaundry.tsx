@@ -51,7 +51,7 @@ const CreateLaundry = () => {
       }
     ).then(response => {
       if (response.status === 200) {
-        navigate('/staff');
+        navigate('/laundries');
         dispatch(setNotification({
           notificationMessage: 'Laundry is successfully created',
           notificationType: 'success',
