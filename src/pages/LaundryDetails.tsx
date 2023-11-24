@@ -578,7 +578,7 @@ const LaundryDetails = () => {
                       flexDirection="column"
                       justifyContent="center"
                     >
-                      <Link href={data.document.vat_file}>
+                      <Link href={data.document.vat_file} target="_blank">
                         <Document />
                       </Link>
                     </Box>
@@ -636,16 +636,16 @@ const LaundryDetails = () => {
                   </Box>
                   {data.document.cr_file &&
                       <Box
-                          height="32px"
-                          width="32px"
-                          paddingTop="1px"
-                          display="flex"
-                          flexDirection="column"
-                          justifyContent="center"
+                        height="32px"
+                        width="32px"
+                        paddingTop="1px"
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
                       >
-                          <Link href={data.document.cr_file}>
-                              <Document />
-                          </Link>
+                        <Link href={data.document.cr_file} target="_blank">
+                          <Document />
+                        </Link>
                       </Box>
                   }
                 </Box>

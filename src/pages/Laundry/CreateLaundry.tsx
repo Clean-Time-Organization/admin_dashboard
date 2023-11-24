@@ -26,8 +26,6 @@ const CreateLaundry = () => {
   const dispatch = useAppDispatch()
   const [totalSteps, setTotalSteps] = useState(3)
   const [currentStep, setCurrentStep] = useState(1)
-  const [vatFile, setVatFile] = useState(new Blob())
-  const [crFile, setCrFile] = useState(new Blob())
 
   const { control, watch, setValue, handleSubmit, setError, trigger, register, formState: {errors} } = useForm<LaundryForm>({
     mode: 'onTouched',
@@ -47,7 +45,6 @@ const CreateLaundry = () => {
   }
 
   const handleCreate: SubmitHandler<LaundryForm> = async (values) => {
-    console.log('123123')
     const formData = new FormData()
 
     formData.append("name_en", values.name_en)
@@ -57,13 +54,10 @@ const CreateLaundry = () => {
     formData.append("address", values.address)
     formData.append("vat_number", values.vat_number.toString())
     formData.append("cr_number", values.cr_number.toString())
+    formData.append("vat_file", values.vat_file)
+    formData.append("cr_file", values.cr_file)
 
-    formData.append("vat_file", vatFile)
-    formData.append("cr_file", crFile)
-
-    console.dir(values)
-
-    if (vatFile.size > 10 * 1024 * 1024 || crFile.size > 10 * 1024 * 1024) {
+    if (values.vat_file.size > 10 * 1024 * 1024 || values.cr_file.size > 10 * 1024 * 1024) {
       dispatch(setNotification({
         notificationMessage: 'Your file exceeds our limit of 10 Mb',
         notificationType: 'error',
@@ -149,8 +143,6 @@ const CreateLaundry = () => {
             trigger={trigger}
             register={register}
             setValue={setValue}
-            setParentVatFile={setVatFile}
-            setParentCrFile={setCrFile}
             toPreviousStep={() => setCurrentStep(currentStep - 1)}
             onCreate={handleSubmit(handleCreate)}
           />

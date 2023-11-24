@@ -29,8 +29,6 @@ interface IStepLaundryInfoProps {
   readonly trigger: UseFormTrigger<LaundryForm>
   readonly register: UseFormRegister<LaundryForm>
   readonly setValue: UseFormSetValue<LaundryForm>
-  setParentVatFile: (file: Blob) => void
-  setParentCrFile: (file: Blob) => void
   toPreviousStep: () => void
   onCreate: () => void
 }
@@ -42,8 +40,6 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     trigger,
     register,
     setValue,
-    setParentVatFile,
-    setParentCrFile,
     toPreviousStep,
     onCreate,
   }) => {
@@ -58,8 +54,8 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
   const [openDialog, setOpenDialog] = useState(false)
   const [fileToDelete, setFileToDelete] = useState('')
 
-  const vatFileInput = register("vat_file", { required: true })
-  const crFileInput = register("cr_file", { required: true })
+  // const vatFileInput = register("vat_file", { required: true })
+  // const crFileInput = register("cr_file", { required: true })
 
   const handleCreate = async () => {
     await trigger('vat_number')
@@ -101,7 +97,6 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     if (event && event?.target && event?.target?.files) {
       if (event?.target?.files.length) {
         setVatFileName(event?.target?.files[0].name)
-        // setParentVatFile(event?.target?.files[0])
         setValue('vat_file', event?.target?.files[0])
       }
     }
@@ -113,7 +108,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     if (event && event?.target && event?.target?.files) {
       if (event?.target?.files.length) {
         setCrFileName(event?.target?.files[0].name)
-        setParentCrFile(event?.target?.files[0])
+        setValue('cr_file', event?.target?.files[0])
       }
     }
   }
@@ -251,7 +246,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
               >
                 Upload file
                 <input
-                  {...vatFileInput}
+
                   ref={vatFileRef}
                   type="file"
                   hidden
