@@ -36,68 +36,27 @@ interface IStaffRowProps {
 }
 
 const Items = () => {
-  const [selectedDates, setSelectedDates] = useState<number | string | boolean>();
+  const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
   const [orderList, setOrderList] = useState<OrderList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isListLoading, setIsListLoading] = useState(false);
 
-  const [selectedLaundry, setSelectedLaundry] = useState<{ id: number; name: string } | null>(null);
-  const [inputLaundry, setInputLaundry] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState<{ id: number; name: string } | null>(null);
-  const [inputBranch, setInputBranch] = useState('');
-  const [laundries, setLaundries] = useState<Array<Laundry>>();
-  const [branches, setBranches] = useState<Array<Branch>>();
-  const [openLaundries, setOpenLaundries] = useState(false);
-  const [openBranches, setOpenBranches] = useState(false);
-  const today = new Date();
-
-  const dateToString = (date: Date): string => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
-  };
-
-  const dateProperties = [
+  const statusProperties = [
     {
-      id: dateToString(new Date((new Date()).setDate(today.getDate() - 7))),
-      name: 'Last Week',
+      id: true,
+      name: 'Active',
     },
     {
-      id: dateToString(new Date((new Date()).setMonth(today.getMonth() - 1))),
-      name: 'Last Month',
-    },
-    {
-      id: dateToString(new Date((new Date()).setMonth(today.getMonth() - 3))),
-      name: '3 Months',
-    },
-    {
-      id: dateToString(new Date((new Date()).setMonth(today.getMonth() - 6))),
-      name: '6 Months',
-    },
-    {
-      id: dateToString(new Date((new Date()).setFullYear(today.getFullYear() - 1))),
-      name: 'Annual',
+      id: false,
+      name: 'Inactive',
     },
   ];
 
   useEffect(() => {
     setIsListLoading(true);
     resetList(1);
-  }, [selectedDates]);
-
-  useEffect(() => {
-    setSelectedBranch(null);
-    setIsListLoading(true);
-    resetList(1);
-  }, [selectedLaundry]);
-
-  useEffect(() => {
-    setIsListLoading(true);
-    resetList(1);
-  }, [selectedBranch]);
+  }, [selectedStatus]);
 
   useDebounce(() => {
     setIsListLoading(true)
@@ -117,14 +76,8 @@ const Items = () => {
       setCurrentPage(page);
       return;
     }
-    if (selectedDates !== undefined) {
-      params.append('date', selectedDates + '');
-    }
-    if (selectedLaundry) {
-      params.append('laundry_id', selectedLaundry.id + '');
-      if (selectedBranch) {
-        params.append('branch_id', selectedBranch.id + '');
-      }
+    if (selectedStatus !== undefined) {
+      params.append('status', selectedStatus + '');
     }
     if (searchValue) {
       params.append('value', searchValue);
@@ -139,61 +92,9 @@ const Items = () => {
   };
 
   const clearFilters = () => {
-    setSelectedLaundry(null);
-    setSelectedDates(undefined);
+    setSelectedStatus(undefined);
     setCurrentPage(1);
   };
-
-  useEffect(() => {
-    searchLaundryDelayed();
-  }, [inputLaundry]);
-  
-  const getLaundryData = async () => {
-    const searchParams = new URLSearchParams();
-    if (inputLaundry) {
-      searchParams.append('name', inputLaundry);
-    }
-    const isOpen = openLaundries;
-    setOpenLaundries(false);
-    setLaundries(undefined);
-    await httpClient.get('/laundry/search?' + new URLSearchParams(searchParams)).then(response => {
-      setLaundries(response.data?.items);
-      setOpenLaundries(isOpen);
-    });
-  };
-
-  useEffect(() => {
-    searchBranchDelayed();
-  }, [inputBranch, selectedLaundry]);
-  
-  const getBranchesData = async () => {
-    if (selectedLaundry) {
-      const searchParams = new URLSearchParams();
-      if (inputBranch) {
-        searchParams.append('name', inputBranch);
-      }
-      searchParams.append('laundry_id', selectedLaundry.id + '');
-      const isOpen = openBranches;
-      setOpenBranches(false);
-      setBranches(undefined);
-      await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
-        setBranches(response.data?.items);
-        setOpenBranches(isOpen);
-      });
-    } else {
-      setBranches(undefined);
-    }
-  };
-
-  const searchBranchDelayed = useMemo(
-      () => debounce(getBranchesData, 500),
-      [getBranchesData]
-  );
-
-  const searchLaundryDelayed = useMemo(
-    () => debounce(getLaundryData, 500),
-    [getBranchesData]
-  );
 
   return <ContentBody>
     <Breadcrumbs />
@@ -201,76 +102,29 @@ const Items = () => {
       name={'Items'}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
+      createButtonClick={console.log}
+      createButtonName={'Create Item'}
     />
       {
-        (!orderList && !selectedDates && !searchValue && !isListLoading) ?
+        (!orderList && !selectedStatus && !searchValue && !isListLoading) ?
           <EmptyState
-            title={'There are no staff orders yet'}
-            subtitle={'You don\'t have any staff orders created yet'}
-            buttonName={'Create staff order'}
-            buttonAction={console.log}
+            title={'There are no items yet'}
+            subtitle={'You don\'t have any items created yet'}
           />
           : <>
             <FilterRow>
-              <FilterDropdown name={'Period'} properties={dateProperties} selectProperty={setSelectedDates} selectedProperty={selectedDates} />
-              <div style={{ height: '32px', width: '20%' }}>
-                <Autocomplete
-                  label={'Laundry'}
-                  selectedValue={selectedLaundry}
-                  selectValue={setSelectedLaundry}
-                  inputValue={inputLaundry}
-                  setInputValue={setInputLaundry}
-                  options={laundries?.map((laundry: Laundry) => {return { id: laundry.id, name: laundry.name_en || laundry.name_ar || '' }}) || []}
-                  open={openLaundries}
-                  setOpen={setOpenLaundries}
-                  size={'small'}
-                />
-              </div>
-              <div style={{ height: '32px', width: '20%' }}>
-                <Autocomplete
-                  label={'Branch'}
-                  selectedValue={selectedBranch}
-                  selectValue={setSelectedBranch}
-                  inputValue={inputBranch}
-                  setInputValue={setInputBranch}
-                  options={selectedLaundry ?
-                    branches?.map((branch: Branch) => {return { id: branch.id, name: branch.address || ''}}) || [] :
-                    []
-                  }
-                  open={openBranches}
-                  setOpen={setOpenBranches}
-                  size={'small'}
-                />
-              </div>
+              <FilterDropdown name={'Status'} properties={statusProperties} selectProperty={setSelectedStatus} selectedProperty={selectedStatus} /> 
               <Search value={searchValue} setValue={setSearchValue} />
             </FilterRow>
             {
-              (selectedDates !== undefined || selectedLaundry) && <FilterRow>
-                { selectedDates !== undefined &&
+              (selectedStatus !== undefined) && <FilterRow>
+                { selectedStatus !== undefined &&
                   <Chips>
-                    {dateProperties.find(item => item.id === selectedDates)?.name}
-                    <ChipsButton onClick={() => setSelectedDates(undefined)}>
+                    {statusProperties.find(item => item.id === selectedStatus)?.name}
+                    <ChipsButton onClick={() => setSelectedStatus(undefined)}>
                       <Close />
                     </ChipsButton>
                   </Chips>
-                }
-                {
-                  selectedLaundry &&
-                    <Chips>
-                      {selectedLaundry.name}
-                      <ChipsButton onClick={() => setSelectedLaundry(null)}>
-                        <Close />
-                      </ChipsButton>
-                    </Chips>
-                }
-                {
-                  selectedLaundry && selectedBranch &&
-                    <Chips>
-                      <ChipsOverflow>{selectedBranch.name}</ChipsOverflow>
-                      <ChipsButton onClick={() => setSelectedBranch(null)}>
-                        <Close />
-                      </ChipsButton>
-                    </Chips>
                 }
                 <LinkButton onClick={() => clearFilters()}>Clear filters</LinkButton>
               </FilterRow>
@@ -278,7 +132,7 @@ const Items = () => {
             {
               orderList &&
                 <FilterRow>
-                  {(selectedDates !== undefined || selectedLaundry || searchValue) &&
+                  {(selectedStatus !== undefined  || searchValue) &&
                     <HintText>
                       { orderList.total + ' ' + (orderList.total === 1 ? 'result' : 'results') + ' found'}
                     </HintText>
@@ -289,7 +143,7 @@ const Items = () => {
               <>
                 {
                   orderList?.items.map((order: Order) => (
-                    <CustomerRow order={order} key={'order' + order.id} />
+                    <CustomerRow order={order} key={'item' + order.id} />
                   ))
                 }
               </>
@@ -331,43 +185,30 @@ const CustomerRow: FC<IStaffRowProps> = ({ order }) => {
 
   return <TableRow active={true} entityData={order} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, entityData)}>
     <Grid container>
-      <Grid item xs={3} style={{ display: 'flex' }}>
+      <Grid item xs={5} style={{ display: 'flex', alignItems: 'center' }}>
         <Grid container>
           <Grid item xs={12}>
-            <NameLink>{order.customer.first_name + ' ' + order.customer.last_name}</NameLink>
-          </Grid>
-          <Grid item xs={12}>
-            <BasicText>{order.customer.phone_number}</BasicText>
+            <Name>{order.customer.first_name + ' ' + order.customer.last_name}</Name>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-        <BasicText>{dateToString(new Date(order.created_at))}</BasicText>
+        <Grid container>
+          <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
+          <Grid item xs={12}><Name>SAR</Name></Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={5} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-        {
-          order.branch &&
-            <>
-              {
-                order?.branch?.laundry &&
-                  <BasicText>
-                    Laundry:&nbsp;
-                    <BasicTextNameLink onClick={(e) => onLaundryClick(e, order?.branch?.laundry?.id)}>
-                      {order?.branch?.laundry?.name_en}
-                    </BasicTextNameLink>
-                  </BasicText>
-              }
-              {
-                order?.branch &&
-                  <BasicText>Branch:&nbsp;<BasicTextName>{order?.branch?.address}</BasicTextName></BasicText>
-              }
-            </>
-        }
+      <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+        <Grid container>
+          <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
+          <Grid item xs={12}><Name>SAR</Name></Grid>
+        </Grid>
       </Grid>
       <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <BasicText>
-          {order.id}
-        </BasicText>
+        {/* <BasicText>
+          <ColoredText color={user.is_active ? '#005E1B' : '#AE2121'}>{user.id}</ColoredText>&nbsp;
+          {user.is_active ? <Active /> : <Inactive />}
+        </BasicText> */}
       </Grid>
     </Grid>
   </TableRow>
