@@ -5,10 +5,20 @@ import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepS
 import {LaundryForm} from "./CreateLaundry";
 import {InputBase} from "../../components/InputBase/InputBase";
 import {FieldErrors} from "react-hook-form/dist/types/errors";
-import {Box, IconButton, Typography} from "@mui/material";
+import {
+  Box, Button, Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Typography
+} from "@mui/material";
 import {Document} from "../../components/Icons/Document";
 import {Attach} from "../../components/Icons/Attach";
 import {Delete} from "../../components/Icons/Delete";
+import {Close} from "../../components/Icons/Close";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
@@ -24,6 +34,9 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
 
   const[vatFile, setVatFile] = useState('')
   const[crFile, setCrFile] = useState('')
+
+  const [openDialog, setOpenDialog] = useState(false)
+  const [fileToDelete, setFileToDelete] = useState('')
 
   const handleCreate = () => {
     trigger()
@@ -69,11 +82,27 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
   }
 
   const removeVatFileDialog = () => {
-
+    setFileToDelete('vat')
+    setOpenDialog(true)
   }
 
   const removeCrFileDialog = () => {
+    setFileToDelete('cr')
+    setOpenDialog(true)
+  }
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
+
+  const handleConfirmSubmit = () => {
+    if (fileToDelete === 'vat') {
+      setVatFile('')
+    } else if (fileToDelete === 'cr') {
+      setCrFile('')
+    }
+    setFileToDelete('')
+    setOpenDialog(false)
   }
 
   return <StepBase>
@@ -285,7 +314,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
           :
           <Box
             sx={{
-              paddingLeft: "18px",
+              paddingLeft: "10px",
               paddingTop: "8px",
             }}
           >
@@ -311,8 +340,144 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = ({control, errors, trigger, toPre
     <ButtonLine>
       <LinkButtonLong onClick={toPreviousStep}>Previous step</LinkButtonLong>
       <BasicButtonLong onClick={handleCreate}>Create laundry</BasicButtonLong>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          borderRadius: "8px",
+          background: "#FFF",
+          minWidth: "570px",
+        }}
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: "24px",
+            paddingBottom: "0px",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#0E1019",
+              leadingTrim: "both",
+              textEdge: "cap",
+              fontFamily: "Anek Latin",
+              fontSize: "20px",
+              fontStyle: "normal",
+              fontWeight: "600",
+              lineHeight: "120%",
+            }}
+          >
+            Delete file
+          </Typography>
+          <IconButton onClick={handleCloseDialog}>
+            <Close width={24} height={24}/>
+          </IconButton>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            paddingBottom: "0px",
+          }}
+        >
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{
+              paddingTop: "32px",
+              paddingBottom: "32px",
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#0E1019",
+                leadingTrim: "both",
+                textEdge: "cap",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "400",
+                lineHeight: "150%",
+              }}
+            >
+              Are you sure that you want to delete this file?
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions
+          sx={{
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            paddingRight: "24px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: "24px",
+            }}
+          >
+            <Button
+              autoFocus
+              variant="contained"
+              disableElevation={true}
+              onClick={handleCloseDialog}
+              style={{
+                backgroundColor: "#FFF",
+                borderRadius: "4px",
+                margin: "0px",
+                maxWidth: "125px",
+                maxHeight: "40px",
+                minWidth: "125px",
+                minHeight: "40px",
+                textTransform: "capitalize",
+                color: "#2E8DC8",
+                textAlign: "center",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "130%",
+                letterSpacing: "0.32px",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              disableElevation={true}
+              onClick={handleConfirmSubmit}
+              style={{
+                backgroundColor: "#2E8DC8",
+                borderRadius: "4px",
+                padding: "0px",
+                margin: "0px",
+                maxWidth: "156px",
+                maxHeight: "40px",
+                minWidth: "156px",
+                minHeight: "40px",
+                textTransform: "capitalize",
+                color: "#FFF",
+                textAlign: "center",
+                fontFamily: "Anek Latin",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: "500",
+                lineHeight: "130%",
+                letterSpacing: "0.32px",
+              }}
+            >
+              Delete
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
     </ButtonLine>
-  </StepBase>;
+  </StepBase>
 }
 
 export { StepTaxInfo }
