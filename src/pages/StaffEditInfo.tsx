@@ -314,6 +314,7 @@ const StaffEditInfo = () => {
               flexDirection: "column",
               justifyContent: "flex-end",
               width: "672px",
+              marginBottom: "50px",
             }}
           >
             <Box
@@ -321,7 +322,6 @@ const StaffEditInfo = () => {
                 width: "672px",
                 display: "flex",
                 justifyContent: "flex-end",
-                // paddingBottom: "30px",
                 marginBottom: "32px",
               }}
             >
@@ -378,7 +378,7 @@ const StaffEditInfo = () => {
                   fontStyle: "normal",
                   fontWeight: "600",
                   lineHeight: "120%",
-                  // paddingBottom: "24px",
+                  height: "28px",
                 }}
               >
                 Edit Info
@@ -399,14 +399,15 @@ const StaffEditInfo = () => {
                     fontStyle: "normal",
                     fontWeight: "600",
                     lineHeight: "120%",
-                    paddingBottom: "32px",
+                    height: "18px",
+                    marginBottom: "32px",
                   }}
                 >
                   Basic Info
                 </Typography>
                 <Box
                   sx={{
-                    paddingBottom: "24px",
+                    marginBottom: "24px",
                   }}
                 >
                   <Controller
@@ -467,11 +468,7 @@ const StaffEditInfo = () => {
                     </Alert>
                     : null}
                 </Box>
-                <Box
-                  sx={{
-                    // paddingBottom: "28px",
-                  }}
-                >
+                <Box>
                   <TextField
                     id="outlined-select-status"
                     select
@@ -542,14 +539,15 @@ const StaffEditInfo = () => {
                     fontStyle: "normal",
                     fontWeight: "600",
                     lineHeight: "120%",
-                    paddingBottom: "32px",
+                    height: "18px",
+                    marginBottom: "32px",
                   }}
                 >
                   Contact Info
                 </Typography>
                 <Box
                   sx={{
-                    paddingBottom: "24px",
+                    marginBottom: "24px",
                   }}
                 >
                   <Controller
@@ -610,11 +608,7 @@ const StaffEditInfo = () => {
                     : null}
                 </Box>
                 {data.role === "POS" &&
-                  <Box
-                    sx={{
-                      // paddingBottom: "28px",
-                    }}
-                  >
+                  <Box>
                     <Controller
                       control={control}
                       name="email"
@@ -690,14 +684,15 @@ const StaffEditInfo = () => {
                       fontStyle: "normal",
                       fontWeight: "600",
                       lineHeight: "120%",
-                      paddingBottom: "32px",
+                      height: "18px",
+                      marginBottom: "32px",
                     }}
                   >
                     Laundry Info
                   </Typography>
                   <Box
                     sx={{
-                      paddingBottom: "24px",
+                      marginBottom: "24px",
                     }}
                   >
                     <Controller
@@ -859,15 +854,15 @@ const StaffEditInfo = () => {
           </Box>
           {data.role === "POS" &&
             <Box
-                sx={{
-                  width: "calc(100vw - 18px)",
-                  borderTop: "1px solid #E5E7EB",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "#FFF",
-                  padding: "16px 0px 15px",
-                }}
+              sx={{
+                width: "calc(100vw - 18px)",
+                borderTop: "1px solid #E5E7EB",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#FFF",
+                padding: "16px 0px 15px",
+              }}
             >
               <Box
                 display="flex"
