@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { FilterDropdown } from '../components/FilterDropdown/FilterDropdown';
 import { PageTitle } from '../components/PageTitle/PageTitle';
 import { Table } from '../components/Table/Table';
-import { TableRow } from '../components/Table/TableRow';
+import {EntityData, TableRow} from '../components/Table/TableRow';
 import {
   ContentBody,
   FilterRow,
@@ -25,6 +25,8 @@ import { Close } from '../components/Icons/Close';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
+import {useNavigate} from "react-router-dom";
+import {useDebounce} from "../services/common";
 
 export type Laundry = {
   id: number
@@ -48,6 +50,7 @@ interface ILaundryRowProps {
 }
 
 const Laundries = () => {
+  const navigate = useNavigate()
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>()
   const [entityList, setEntityList] = useState<LaundryList>()
   const [searchValue, setSearchValue] = useState<string>('')
@@ -67,7 +70,13 @@ const Laundries = () => {
   useEffect(() => {
     setIsListLoading(true)
     resetList(1)
-  }, [selectedStatus, searchValue])
+  }, [selectedStatus])
+
+  useDebounce(() => {
+      setIsListLoading(true)
+      resetList(1)
+    }, [searchValue], 500
+  )
 
   useEffect(() => {
     setIsListLoading(true)
@@ -94,17 +103,23 @@ const Laundries = () => {
       setEntityList(response.data)
       setIsListLoading(false)
     })
-  };
+  }
 
   const clearFilters = () => {
     setSelectedStatus(undefined)
     setCurrentPage(1)
-  };
+  }
+
+  const createLaundry = () => {
+    navigate('/laundries/create')
+  }
 
   return <ContentBody>
     <Breadcrumbs />
     <PageTitle
       name={'Laundries'}
+      createButtonName={'Create laundry'}
+      createButtonClick={createLaundry}
       exportButtonName={'Export to .xls'}
       exportButtonClick={console.log}
     />
@@ -157,7 +172,14 @@ const Laundries = () => {
 }
 
 const LaundryRow: FC<ILaundryRowProps> = ({ laundry }) => {
-  return <TableRow active={laundry.is_active}>
+  const navigate = useNavigate()
+
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
+    const id = entityData ? entityData.id : ''
+    navigate(`/laundries/${id}`)
+  }
+
+  return <TableRow active={laundry.is_active} entityData={laundry} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, laundry)}>
     <Grid container>
       <Grid item xs={4} style={{ display: 'flex' }}>
         <Grid container>

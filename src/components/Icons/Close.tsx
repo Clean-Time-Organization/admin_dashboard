@@ -1,5 +1,5 @@
-export const Close = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const Close = ({width=20, height=20}) => (
+  <svg width={width} height={height} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="mask0_41_6317" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
       <rect width="20" height="20" fill="#D9D9D9"/>
     </mask>

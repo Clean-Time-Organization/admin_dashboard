@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import { FilterDropdown } from '../components/FilterDropdown/FilterDropdown';
 import { PageTitle } from '../components/PageTitle/PageTitle';
 import { Table } from '../components/Table/Table';
-import { TableRow } from '../components/Table/TableRow';
+import {EntityData, TableRow} from '../components/Table/TableRow';
 import {
   ContentBody,
   FilterRow,
@@ -25,6 +25,7 @@ import { EmptyState } from '../components/EmptyState/EmptyState';
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs';
 import httpClient from "../services/HttpClient";
 import {useNavigate} from "react-router-dom";
+import {useDebounce} from "../services/common";
 
 interface IStaffRowProps {
   user: User;
@@ -51,7 +52,13 @@ const Customers = () => {
   useEffect(() => {
     setIsListLoading(true);
     resetList(1);
-  }, [selectedStatus, searchValue]);
+  }, [selectedStatus]);
+
+  useDebounce(() => {
+    setIsListLoading(true)
+    resetList(1)
+    }, [searchValue], 500
+  )
 
   useEffect(() => {
     setIsListLoading(true);
@@ -143,12 +150,12 @@ const Customers = () => {
 const CustomerRow: FC<IStaffRowProps> = ({ user }) => {
   const navigate = useNavigate()
 
-  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: User) => {
+  const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
     const id = entityData ? entityData.id : ''
     navigate(`/customers/${id}`)
   }
 
-  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: User) => onTableRowClick(event, entityData)}>
+  return <TableRow active={user.is_active} entityData={user} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, entityData)}>
     <Grid container>
       <Grid item xs={6} style={{ display: 'flex' }}>
         <Grid container>

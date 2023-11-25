@@ -1,8 +1,10 @@
+import {useCallback, useEffect} from "react";
+import {matchPath} from "react-router-dom";
 
 const getUserFL = (firstName: string, lastName: string) => {
   let result: string[] = []
-  firstName && result.push(firstName.charAt(0).toUpperCase())
-  lastName && result.push(lastName.charAt(0).toUpperCase())
+  firstName.trim() && result.push(firstName.trim().charAt(0).toUpperCase())
+  lastName.trim() && result.push(lastName.trim().charAt(0).toUpperCase())
   return result.join('')
 }
 
@@ -13,4 +15,31 @@ const getUserRole = (role: string) => {
   return role
 }
 
-export {getUserFL, getUserRole}
+const useDebounce = (effect: any, dependencies: any, delay: number) => {
+  const callback = useCallback(effect, dependencies)
+
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay)
+    return () => clearTimeout(timeout)
+  }, [callback, delay])
+}
+
+const useRouteMatch = (patterns: readonly string[], usePattern = false) => {
+  for (let i = 0; i < patterns.length; i += 1) {
+    const pattern = patterns[i]
+    let possibleMatch = null
+    if (usePattern) {
+      possibleMatch = matchPath({path: pattern}, location.pathname)
+    } else {
+      possibleMatch = matchPath(pattern, location.pathname)
+    }
+    if (possibleMatch !== null) {
+      return possibleMatch
+    }
+  }
+
+  return null
+}
+
+export {getUserFL, getUserRole, useDebounce, useRouteMatch}
+

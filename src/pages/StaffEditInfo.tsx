@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import httpClient from "../services/HttpClient";
 import {useNavigate, useParams} from "react-router-dom";
 import {useMutation} from "react-query";
@@ -9,7 +9,8 @@ import {
   CircularProgress, MenuItem, Paper,
   Stack,
   TextField, ThemeProvider,
-  Typography
+  Typography,
+  debounce
 } from "@mui/material";
 import {AxiosResponse} from "axios";
 import {Controller, useForm} from "react-hook-form";
@@ -82,7 +83,7 @@ const StaffEditInfo = () => {
 
   useEffect(() => {
     if (data && data.role === "POS") {
-      getLaundryData()
+      searchLaundryDelayed();
     }
   }, [inputLaundry])
 
@@ -109,7 +110,7 @@ const StaffEditInfo = () => {
 
   useEffect(() => {
     if (data && data.role === "POS") {
-      getBranchesData()
+      searchBranchDelayed();
     }
   }, [inputBranch, inputLaundry])
 
@@ -120,8 +121,12 @@ const StaffEditInfo = () => {
         searchParams.append('name', inputBranch.substring(0, 39))
       }
       searchParams.append('laundry_id', selectedLaundry.id + '')
+      const isOpen = openBranches
+      setOpenBranches(false)
+      setBranches(undefined)
       await httpClient.get('/laundry/branch/search?' + new URLSearchParams(searchParams)).then(response => {
         setBranches(response.data?.items)
+        setOpenBranches(isOpen)
       })
     } else {
       setBranches(undefined)
@@ -203,15 +208,25 @@ const StaffEditInfo = () => {
       }
     },
     onError: (error: any) => {
-      if (Object.keys(error.response.data.detail)[0] === 'email') {
-        dispatch(setNotification({
-          notificationMessage: 'Incorrect user email',
-          notificationType: 'error',
-        }))
-      } else if (Object.keys(error.response.data.detail)[0] === 'full_name') {
-        setUserNameError(Object.values(error.response.data.detail)[0] + '')
-      } else if (Object.keys(error.response.data.detail)[0] === 'phone_number') {
-        setPhoneError(Object.values(error.response.data.detail)[0] + '');
+      let userNameErrors: string[] = []
+      let phoneErrorrs: string[] = []
+
+      if (Array.isArray(error.response.data.detail)) {
+        error.response.data.detail.map((errDetail: { loc: string | string[]; msg: string; }) => {
+          if (errDetail.loc.includes('full_name')) {
+            userNameErrors.push(errDetail.msg)
+          } else if (errDetail.loc.includes('phone_number')) {
+            phoneErrorrs.push(errDetail.msg)
+          }
+        })
+      } else {
+        userNameErrors = [error.response.data.detail]
+      }
+
+      if (userNameErrors.length) {
+        setUserNameError(userNameErrors.join(', '))
+      } else if (phoneErrorrs.length) {
+        setPhoneError(phoneErrorrs.join(', '))
       } else {
         dispatch(setNotification({
           notificationMessage: error.response.data.detail + '',
@@ -220,6 +235,16 @@ const StaffEditInfo = () => {
       }
     },
   })
+
+  const searchBranchDelayed = useMemo(
+      () => debounce(getBranchesData, 500),
+      [getBranchesData]
+  );
+
+  const searchLaundryDelayed = useMemo(
+    () => debounce(getLaundryData, 500),
+    [getBranchesData]
+  );
 
   useEffect(() => {
     getEntityMutation.mutate()
@@ -296,7 +321,8 @@ const StaffEditInfo = () => {
                 width: "672px",
                 display: "flex",
                 justifyContent: "flex-end",
-                paddingBottom: "32px",
+                // paddingBottom: "30px",
+                marginBottom: "32px",
               }}
             >
               <Button
@@ -339,6 +365,7 @@ const StaffEditInfo = () => {
                 borderRadius: "8px",
                 background: "#fff",
                 boxShadow: "none",
+                gap: "28px",
               }}
             >
               <Typography
@@ -351,7 +378,7 @@ const StaffEditInfo = () => {
                   fontStyle: "normal",
                   fontWeight: "600",
                   lineHeight: "120%",
-                  paddingBottom: "24px",
+                  // paddingBottom: "24px",
                 }}
               >
                 Edit Info
@@ -442,13 +469,13 @@ const StaffEditInfo = () => {
                 </Box>
                 <Box
                   sx={{
-                    paddingBottom: "28px",
+                    // paddingBottom: "28px",
                   }}
                 >
                   <TextField
-                    id="outlined-select-currency"
+                    id="outlined-select-status"
                     select
-                    label="Select"
+                    label="Status"
                     value={status}
                     fullWidth
                     onChange={e => setStatus(+e.target.value)}
@@ -585,7 +612,7 @@ const StaffEditInfo = () => {
                 {data.role === "POS" &&
                   <Box
                     sx={{
-                      paddingBottom: "28px",
+                      // paddingBottom: "28px",
                     }}
                   >
                     <Controller
@@ -834,12 +861,12 @@ const StaffEditInfo = () => {
             <Box
                 sx={{
                   width: "calc(100vw - 18px)",
-                  height: "72px",
                   borderTop: "1px solid #E5E7EB",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   background: "#FFF",
+                  padding: "16px 0px 15px",
                 }}
             >
               <Box
