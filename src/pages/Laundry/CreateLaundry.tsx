@@ -17,8 +17,8 @@ export type LaundryForm = {
   phone_number: string
   vat_number: number
   cr_number: number
-  vat_file: Blob
-  cr_file: Blob
+  vat_file: File
+  cr_file: File
 }
 
 const CreateLaundry = () => {
@@ -27,7 +27,7 @@ const CreateLaundry = () => {
   const [totalSteps, setTotalSteps] = useState(3)
   const [currentStep, setCurrentStep] = useState(1)
 
-  const { control, watch, setValue, handleSubmit, setError, trigger, register, formState: {errors} } = useForm<LaundryForm>({
+  const { control, watch, setValue, resetField, handleSubmit, setError, trigger, formState: {errors} } = useForm<LaundryForm>({
     mode: 'onTouched',
     defaultValues: {
       name_en: '',
@@ -139,10 +139,11 @@ const CreateLaundry = () => {
         currentStep === 3 &&
           <StepTaxInfo
             control={control}
+            watch={watch}
             errors={errors}
             trigger={trigger}
-            register={register}
             setValue={setValue}
+            resetField={resetField}
             toPreviousStep={() => setCurrentStep(currentStep - 1)}
             onCreate={handleSubmit(handleCreate)}
           />

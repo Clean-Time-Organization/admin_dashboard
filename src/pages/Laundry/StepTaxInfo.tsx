@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, useRef, useState} from "react";
+import {ChangeEvent, createRef, FC, useEffect, useRef, useState} from "react";
 import {BasicButtonLong, LinkButton, LinkButtonLong} from "../../components/Button/Buttons";
 import {Control, Controller, UseFormTrigger} from "react-hook-form";
 import {BlockSubtitle, BlockTitle, ButtonLine, StepBase, StepBaseInternal, StepSubtitle, StepTitle, Titles } from "./styled";
@@ -21,14 +21,19 @@ import {Delete} from "../../components/Icons/Delete";
 import {Close} from "../../components/Icons/Close";
 import {useAppDispatch} from "../../store/hooks";
 import {setNotification} from "../../store/features/notification";
-import {UseFormRegister, UseFormSetValue} from "react-hook-form/dist/types/form";
+import {
+  UseFormResetField,
+  UseFormSetValue,
+  UseFormWatch
+} from "react-hook-form/dist/types/form";
 
 interface IStepLaundryInfoProps {
   readonly control: Control<LaundryForm>
+  readonly watch: UseFormWatch<LaundryForm>
   readonly errors: FieldErrors<any>
   readonly trigger: UseFormTrigger<LaundryForm>
-  readonly register: UseFormRegister<LaundryForm>
   readonly setValue: UseFormSetValue<LaundryForm>
+  readonly resetField: UseFormResetField<LaundryForm>
   toPreviousStep: () => void
   onCreate: () => void
 }
@@ -36,26 +41,24 @@ interface IStepLaundryInfoProps {
 const StepTaxInfo: FC<IStepLaundryInfoProps> = (
   {
     control,
+    watch,
     errors,
     trigger,
-    register,
     setValue,
+    resetField,
     toPreviousStep,
     onCreate,
   }) => {
   const dispatch = useAppDispatch()
 
+  const watchVatFile = watch('vat_file')
+  const watchCrFile = watch('cr_file')
+
   const vatFileRef = useRef<HTMLInputElement>(null)
   const crFileRef = useRef<HTMLInputElement>(null)
 
-  const[vatFileName, setVatFileName] = useState('')
-  const[crFileName, setCrFileName] = useState('')
-
   const [openDialog, setOpenDialog] = useState(false)
   const [fileToDelete, setFileToDelete] = useState('')
-
-  // const vatFileInput = register("vat_file", { required: true })
-  // const crFileInput = register("cr_file", { required: true })
 
   const handleCreate = async () => {
     await trigger('vat_number')
@@ -65,7 +68,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     const errorFields = Object.keys(errors)
     let stepIsValid = !stepFields.some(item => errorFields.includes(item))
 
-    if (vatFileName.trim() === '' || crFileName.trim() === '') {
+    if (!watchVatFile || !watchCrFile) {
       stepIsValid = false
 
       dispatch(setNotification({
@@ -80,36 +83,26 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
   }
 
   const showUploadVatFile = () => {
-    if (vatFileRef.current) {
-      vatFileRef.current.click()
-    }
+    vatFileRef.current!.click()
   }
 
   const showUploadCrFile = () => {
-    if (crFileRef.current) {
-      crFileRef.current.click()
-    }
+    crFileRef.current!.click()
   }
 
   const handleVatFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setVatFileName('')
+    resetField('vat_file')
 
-    if (event && event?.target && event?.target?.files) {
-      if (event?.target?.files.length) {
-        setVatFileName(event?.target?.files[0].name)
-        setValue('vat_file', event?.target?.files[0])
-      }
+    if (event.target.files!.length) {
+      setValue('vat_file', event.target.files![0])
     }
   }
 
   const handleCrFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCrFileName('')
+    resetField('cr_file')
 
-    if (event && event?.target && event?.target?.files) {
-      if (event?.target?.files.length) {
-        setCrFileName(event?.target?.files[0].name)
-        setValue('cr_file', event?.target?.files[0])
-      }
+    if (event.target.files!.length) {
+      setValue('cr_file', event.target.files![0])
     }
   }
 
@@ -127,12 +120,13 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
     setOpenDialog(false)
   }
 
-  const handleConfirmSubmit = () => {
+  const handleDialogConfirm = () => {
     if (fileToDelete === 'vat') {
-      setVatFileName('')
+      resetField('vat_file')
     } else if (fileToDelete === 'cr') {
-      setCrFileName('')
+      resetField('cr_file')
     }
+
     setFileToDelete('')
     setOpenDialog(false)
   }
@@ -164,7 +158,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
               <InputBase
                 autoFocus
-                type="number"
+                // type="number"
                 label={'VAT Number'}
                 error={error !== undefined}
                 errorText={error?.type === 'required' && 'Please enter the VAT Number' ||
@@ -179,7 +173,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             }}
           />
         </Box>
-        {vatFileName ?
+        {watchVatFile ?
             <>
               <Box
                 sx={{
@@ -216,7 +210,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
                     overflow: "hidden",
                   }}
                 >
-                  {vatFileName}
+                  {watchVatFile.name}
                 </Typography>
               </Box>
               <Box
@@ -246,7 +240,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
               >
                 Upload file
                 <input
-
+                  id={'vatFile'}
                   ref={vatFileRef}
                   type="file"
                   hidden
@@ -278,7 +272,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             name="cr_number"
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
               <InputBase
-                type="number"
+                // type="number"
                 label={'CR Number'}
                 error={error !== undefined}
                 errorText={error?.type === 'required' && 'Please enter the CR Number' ||
@@ -293,7 +287,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             }}
           />
         </Box>
-        {crFileName ?
+        {watchCrFile ?
           <>
             <Box
               sx={{
@@ -330,7 +324,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
                   overflow: "hidden",
                 }}
               >
-                {crFileName}
+                {watchCrFile.name}
               </Typography>
             </Box>
             <Box
@@ -360,6 +354,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             >
               Upload file
               <input
+                id={'crFile'}
                 ref={crFileRef}
                 type="file"
                 hidden
@@ -486,7 +481,7 @@ const StepTaxInfo: FC<IStepLaundryInfoProps> = (
             <Button
               variant="contained"
               disableElevation={true}
-              onClick={handleConfirmSubmit}
+              onClick={handleDialogConfirm}
               style={{
                 backgroundColor: "#2E8DC8",
                 borderRadius: "4px",
