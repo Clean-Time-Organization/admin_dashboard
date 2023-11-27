@@ -72,7 +72,7 @@ const Items = () => {
       return;
     }
     if (selectedStatus !== undefined) {
-      params.append('is_available', selectedStatus + '');
+      params.append('is_active', selectedStatus + '');
     }
     if (searchValue) {
       params.append('value', searchValue);
@@ -101,7 +101,7 @@ const Items = () => {
       createButtonName={'Create Item'}
     />
       {
-        ((!itemList || itemList.items.length === 0) && !selectedStatus && !searchValue && !isListLoading) ?
+        ((!itemList || itemList.items.length === 0) && selectedStatus === undefined && !searchValue && !isListLoading) ?
           <EmptyState
             title={'There are no items yet'}
             subtitle={'You don\'t have any items created yet'}
@@ -178,10 +178,10 @@ const CustomerRow: FC<IItemRowProps> = ({ item }) => {
         </Grid>
       </Grid>
       <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        {/* <BasicText>
-          <ColoredText color={item.is_available ? '#005E1B' : '#AE2121'}>{item.id}</ColoredText>&nbsp;
-          {item.is_available ? <Active /> : <Inactive />}
-        </BasicText> */}
+        <BasicText>
+          <ColoredText color={item.is_active ? '#005E1B' : '#AE2121'}>{item.id}</ColoredText>&nbsp;
+          {item.is_active ? <Active /> : <Inactive />}
+        </BasicText>
       </Grid>
     </Grid>
   </TableRow>
