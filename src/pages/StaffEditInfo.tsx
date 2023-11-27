@@ -314,6 +314,7 @@ const StaffEditInfo = () => {
               flexDirection: "column",
               justifyContent: "flex-end",
               width: "672px",
+              marginBottom: "50px",
             }}
           >
             <Box
@@ -321,7 +322,6 @@ const StaffEditInfo = () => {
                 width: "672px",
                 display: "flex",
                 justifyContent: "flex-end",
-                // paddingBottom: "30px",
                 marginBottom: "32px",
               }}
             >
@@ -354,39 +354,42 @@ const StaffEditInfo = () => {
                 }}
                 onClick={handleClose}
               >
-                Close
+                Cancel
               </Button>
             </Box>
             <Paper
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "32px",
                 borderRadius: "8px",
                 background: "#fff",
                 boxShadow: "none",
                 gap: "28px",
               }}
             >
-              <Typography
-                sx={{
-                  color: "#0E1019",
-                  leadingTrim: "both",
-                  textEdge: "cap",
-                  fontFamily: "Anek Latin",
-                  fontSize: "28px",
-                  fontStyle: "normal",
-                  fontWeight: "600",
-                  lineHeight: "120%",
-                  // paddingBottom: "24px",
-                }}
-              >
-                Edit Info
-              </Typography>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#0E1019",
+                    leadingTrim: "both",
+                    textEdge: "cap",
+                    fontFamily: "Anek Latin",
+                    fontSize: "28px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "120%",
+                    height: "24px",
+                    padding: "32px 32px 0px",
+                  }}
+                >
+                  Edit Info
+                </Typography>
+              </Box>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  padding: "0 32px",
                 }}
               >
                 <Typography
@@ -399,14 +402,15 @@ const StaffEditInfo = () => {
                     fontStyle: "normal",
                     fontWeight: "600",
                     lineHeight: "120%",
-                    paddingBottom: "32px",
+                    height: "12px",
+                    marginBottom: "32px",
                   }}
                 >
                   Basic Info
                 </Typography>
                 <Box
                   sx={{
-                    paddingBottom: "24px",
+                    marginBottom: "24px",
                   }}
                 >
                   <Controller
@@ -439,8 +443,12 @@ const StaffEditInfo = () => {
                           }
                         }}
                         sx={{
+                          input: {
+                            color: "#1F2937",
+                            fontFamily: "Anek Latin",
+                          },
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                            width: "357px"
+                            width: "580px"
                           },
                           "& .MuiOutlinedInput-root": {
                             "& fieldset": {
@@ -463,11 +471,7 @@ const StaffEditInfo = () => {
                     </Alert>
                     : null}
                 </Box>
-                <Box
-                  sx={{
-                    // paddingBottom: "28px",
-                  }}
-                >
+                <Box>
                   <TextField
                     id="outlined-select-status"
                     select
@@ -492,6 +496,10 @@ const StaffEditInfo = () => {
                       }
                     }}
                     sx={{
+                      input: {
+                        color: "#1F2937",
+                        fontFamily: "Anek Latin",
+                      },
                       "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                         width: "357px"
                       },
@@ -522,6 +530,7 @@ const StaffEditInfo = () => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  padding: "0 32px",
                 }}
               >
                 <Typography
@@ -534,16 +543,17 @@ const StaffEditInfo = () => {
                     fontStyle: "normal",
                     fontWeight: "600",
                     lineHeight: "120%",
-                    paddingBottom: "32px",
+                    height: "12px",
+                    marginBottom: "32px",
                   }}
                 >
                   Contact Info
                 </Typography>
-                <Box
-                  sx={{
-                    paddingBottom: "24px",
-                  }}
-                >
+                  <Box
+                    sx = {{
+                      marginBottom: data.role === "POS" ? "24px" : "0px",
+                    }}
+                  >
                   <Controller
                     control={control}
                     name="phone"
@@ -551,7 +561,7 @@ const StaffEditInfo = () => {
                     render={({ field: { ref, ...field }, fieldState: { error } }) => (
                       <TextField
                         id={field.name}
-                        label="Phone"
+                        label="Phone Number"
                         value={phone || ''}
                         InputLabelProps={{
                           shrink: true,
@@ -573,6 +583,10 @@ const StaffEditInfo = () => {
                           }
                         }}
                         sx={{
+                          input: {
+                            color: "#1F2937",
+                            fontFamily: "Anek Latin",
+                          },
                           "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
                             width: "357px"
                           },
@@ -598,11 +612,7 @@ const StaffEditInfo = () => {
                     : null}
                 </Box>
                 {data.role === "POS" &&
-                  <Box
-                    sx={{
-                      // paddingBottom: "28px",
-                    }}
-                  >
+                  <Box>
                     <Controller
                       control={control}
                       name="email"
@@ -633,8 +643,12 @@ const StaffEditInfo = () => {
                             }
                           }}
                           sx={{
+                            input: {
+                              color: "#1F2937",
+                              fontFamily: "Anek Latin",
+                            },
                             "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
+                              width: "580px"
                             },
                             "& .MuiOutlinedInput-root": {
                               "& fieldset": {
@@ -662,6 +676,7 @@ const StaffEditInfo = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
+                    padding: "0 32px 32px",
                   }}
                 >
                   <Typography
@@ -674,14 +689,15 @@ const StaffEditInfo = () => {
                       fontStyle: "normal",
                       fontWeight: "600",
                       lineHeight: "120%",
-                      paddingBottom: "32px",
+                      height: "18px",
+                      marginBottom: "32px",
                     }}
                   >
                     Laundry Info
                   </Typography>
                   <Box
                     sx={{
-                      paddingBottom: "24px",
+                      marginBottom: "24px",
                     }}
                   >
                     <Controller
@@ -711,28 +727,11 @@ const StaffEditInfo = () => {
                               transform: "translate(15px, -9px) scale(0.75)",
                             }
                           }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
-                            },
-                          }}
                         />
                       )}
                     />
                   </Box>
-                  <Box
-                    sx={{
-                      paddingBottom: "24px",
-                    }}
-                  >
+                  <Box>
                     <Controller
                       control={control}
                       name="branch_id"
@@ -763,19 +762,6 @@ const StaffEditInfo = () => {
                               transform: "translate(15px, -9px) scale(0.75)",
                             }
                           }}
-                          sx={{
-                            "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-                              width: "357px"
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              "& fieldset": {
-                                borderColor: "#D1D5DB",
-                              },
-                              '&.Mui-focused fieldset': {
-                                borderColor: "#2E8DC8",
-                              },
-                            },
-                          }}
                         />
                       )}
                     />
@@ -792,6 +778,7 @@ const StaffEditInfo = () => {
                   <Box
                     display="flex"
                     justifyContent="flex-end"
+                    paddingBottom="32px"
                   >
                     <Button
                       type="submit"
@@ -839,15 +826,15 @@ const StaffEditInfo = () => {
           </Box>
           {data.role === "POS" &&
             <Box
-                sx={{
-                  width: "calc(100vw - 18px)",
-                  borderTop: "1px solid #E5E7EB",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "#FFF",
-                  padding: "16px 0px 15px",
-                }}
+              sx={{
+                width: "calc(100vw - 18px)",
+                borderTop: "1px solid #E5E7EB",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#FFF",
+                padding: "16px 0px 15px",
+              }}
             >
               <Box
                 display="flex"
