@@ -18,6 +18,7 @@ import {LaundryDetails} from "./pages/LaundryDetails";
 import {LaundryEditInfo} from "./pages/LaundryEditInfo";
 import {CreateLaundry} from "./pages/Laundry/CreateLaundry";
 import { Orders } from './pages/Orders';
+import { Items } from './pages/Items';
 
 const queryClient = new QueryClient()
 
@@ -42,7 +43,7 @@ export const App: FC = memo(function App() {
             <Route path={'/laundries/:id'} element={<RequireAuth><LaundryDetails /></RequireAuth>} />
             <Route path={'/laundries/edit/:id'} element={<RequireAuth><LaundryEditInfo /></RequireAuth>} />
             <Route path={'/orders'} element={<RequireAuth><Orders /></RequireAuth>} />
-            <Route path={'/items'} element={<RequireAuth><Orders /></RequireAuth>} />
+            <Route path={'/items'} element={<RequireAuth><Items /></RequireAuth>} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </MainLayout>
