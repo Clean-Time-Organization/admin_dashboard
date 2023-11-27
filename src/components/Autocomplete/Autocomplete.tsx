@@ -62,7 +62,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({
         onClose={() => {
           setOpen(false);
         }}
-        style={{ width: '100%', borderColor: error ? 'red' : 'rgba(0, 0, 0, 0.87)' }}
+        style={{ width: '100%', borderColor: error ? '#B91C1C' : 'rgba(0, 0, 0, 0.87)' }}
         onChange={(event: any, newValue: { id: number; name: string } | null) => {
           selectValue(newValue);
         }}
@@ -112,8 +112,14 @@ const Autocomplete: FC<IAutocompleteProps> = ({
                 '& .Mui-focused': {
                   top: '0',
                 },
+              },
+            } : {
+              "& .MuiOutlinedInput-root.Mui-disabled.Mui-error": {
+                "& fieldset": {
+                  borderColor: "#B91C1C",
+                },
               }
-            } : {}}
+            }}
           />
         }
       />
