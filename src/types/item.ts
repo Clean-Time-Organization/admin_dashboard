@@ -2,6 +2,7 @@ export type Item = {
   id: number;
   name_en: string;
   name_ar: string;
+  is_active: boolean;
   services: Array<Service>;
 }
 
