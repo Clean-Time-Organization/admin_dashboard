@@ -1,20 +1,15 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDebounce } from "../services/common";
 import httpClient from "../services/HttpClient";
 import {
   ContentBody,
   FilterRow,
-  Logo,
   Name,
   BasicText,
-  ColoredText,
   Chips,
   ChipsButton,
   HintText,
-  BasicTextName,
-  NameLink,
-  BasicTextNameLink,
-  ChipsOverflow,
+  ColoredText,
 } from '../styles/styled';
 import { Table } from '../components/Table/Table';
 import {EntityData, TableRow} from '../components/Table/TableRow';
@@ -26,18 +21,18 @@ import { Close } from "../components/Icons/Close";
 import { Search } from "../components/Search/Search";
 import { LinkButton } from "../components/Button/Buttons";
 import { useNavigate } from "react-router-dom";
-import { Grid, debounce } from "@mui/material";
-import { Autocomplete } from "../components/Autocomplete/Autocomplete";
-import { Order, OrderList } from "../types/order";
-import { Branch, Laundry } from "../types/user";
+import { Grid } from "@mui/material";
+import { Item, ItemList } from "../types/item";
+import { Active } from "../components/Icons/Active";
+import { Inactive } from "../components/Icons/Inactive";
 
-interface IStaffRowProps {
-  order: Order;
+interface IItemRowProps {
+  item: Item;
 }
 
 const Items = () => {
   const [selectedStatus, setSelectedStatus] = useState<number | string | boolean>();
-  const [orderList, setOrderList] = useState<OrderList>();
+  const [itemList, setItemList] = useState<ItemList>();
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isListLoading, setIsListLoading] = useState(false);
@@ -77,7 +72,7 @@ const Items = () => {
       return;
     }
     if (selectedStatus !== undefined) {
-      params.append('status', selectedStatus + '');
+      params.append('is_available', selectedStatus + '');
     }
     if (searchValue) {
       params.append('value', searchValue);
@@ -85,8 +80,8 @@ const Items = () => {
     if (currentPage && !page) {
       params.append('page', currentPage + '');
     }
-    await httpClient.get('/order/?' + new URLSearchParams(params)).then(response => {
-      setOrderList(response.data);
+    await httpClient.get('/item/?' + new URLSearchParams(params)).then(response => {
+      setItemList(response.data);
       setIsListLoading(false);
     })
   };
@@ -106,7 +101,7 @@ const Items = () => {
       createButtonName={'Create Item'}
     />
       {
-        (!orderList && !selectedStatus && !searchValue && !isListLoading) ?
+        ((!itemList || itemList.items.length === 0) && !selectedStatus && !searchValue && !isListLoading) ?
           <EmptyState
             title={'There are no items yet'}
             subtitle={'You don\'t have any items created yet'}
@@ -130,20 +125,20 @@ const Items = () => {
               </FilterRow>
             }
             {
-              orderList &&
+              itemList &&
                 <FilterRow>
                   {(selectedStatus !== undefined  || searchValue) &&
                     <HintText>
-                      { orderList.total + ' ' + (orderList.total === 1 ? 'result' : 'results') + ' found'}
+                      { itemList.total + ' ' + (itemList.total === 1 ? 'result' : 'results') + ' found'}
                     </HintText>
                   }
                 </FilterRow>
             }
-            <Table totalPages={orderList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
+            <Table totalPages={itemList?.pages || 1} currentPage={currentPage} setCurrentPage={setCurrentPage}>
               <>
                 {
-                  orderList?.items.map((order: Order) => (
-                    <CustomerRow order={order} key={'item' + order.id} />
+                  itemList?.items.map((item: Item) => (
+                    <CustomerRow item={item} key={'item' + item.id} />
                   ))
                 }
               </>
@@ -153,61 +148,39 @@ const Items = () => {
   </ContentBody>
 };
 
-const CustomerRow: FC<IStaffRowProps> = ({ order }) => {
-  const navigate = useNavigate()
-
-  const dateToString = (date: Date): string => {
-    const formatter = new Intl.DateTimeFormat('en', { month: 'short' })
-    const day = date.getDate();
-    const month = formatter.format(date);;
-    // const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-
-    return (day < 10 ? '0' + day : day) + ' ' + month + ', ' + // year + ' ' +
-      (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes);
-  };
+const CustomerRow: FC<IItemRowProps> = ({ item }) => {
+  const navigate = useNavigate();
 
   const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
     const id = entityData ? entityData.id : ''
     // navigate(`/customers/${id}`)
   }
 
-  const onLaundryClick = (event: React.MouseEvent<HTMLElement>, id: number) => {
-    event.stopPropagation();
-    navigate(`/laundries/${id}`)
-  }
-
-  // const onCustomerClick = (event: React.MouseEvent<HTMLElement>, id: number) => {
-  //   event.stopPropagation();
-  //   navigate(`/customers/${id}`)
-  // }
-
-  return <TableRow active={true} entityData={order} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, entityData)}>
+  return <TableRow active={true} entityData={item} onClickHandle={(event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => onTableRowClick(event, entityData)}>
     <Grid container>
       <Grid item xs={5} style={{ display: 'flex', alignItems: 'center' }}>
         <Grid container>
           <Grid item xs={12}>
-            <Name>{order.customer.first_name + ' ' + order.customer.last_name}</Name>
+            <Name>{item.name_en || item.name_ar}</Name>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
           <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>SAR</Name></Grid>
+          <Grid item xs={12}><Name>{item.services[0].price} SAR</Name></Grid>
         </Grid>
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
           <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>SAR</Name></Grid>
+          <Grid item xs={12}><Name>{item.services[1].price} SAR</Name></Grid>
         </Grid>
       </Grid>
       <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         {/* <BasicText>
-          <ColoredText color={user.is_active ? '#005E1B' : '#AE2121'}>{user.id}</ColoredText>&nbsp;
-          {user.is_active ? <Active /> : <Inactive />}
+          <ColoredText color={item.is_available ? '#005E1B' : '#AE2121'}>{item.id}</ColoredText>&nbsp;
+          {item.is_available ? <Active /> : <Inactive />}
         </BasicText> */}
       </Grid>
     </Grid>
