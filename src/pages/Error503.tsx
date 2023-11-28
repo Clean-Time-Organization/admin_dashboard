@@ -1,7 +1,7 @@
 import {Box, Divider, Link, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 
-const PageNotFound = () => {
+const Error503 = () => {
   const navigate = useNavigate()
 
   const handleTryAgain = () => {
@@ -34,7 +34,7 @@ const PageNotFound = () => {
           alignItems: "center",
         }}
       >
-        404
+        503
       </Box>
       <Divider
         orientation="vertical" flexItem
@@ -58,7 +58,7 @@ const PageNotFound = () => {
             height: "24px",
           }}
         >
-          This page could not be found
+          Service Unavailable
         </Typography>
         <Box
           sx={{
@@ -101,4 +101,4 @@ const PageNotFound = () => {
   )
 }
 
-export { PageNotFound };
+export { Error503 }
