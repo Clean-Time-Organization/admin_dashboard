@@ -1,6 +1,13 @@
 import {Box, Divider, Link, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 const Error500 = () => {
+  const navigate = useNavigate()
+
+  const handleTryAgain = () => {
+    navigate(-1)
+  }
+
   return (
     <Box
       sx={{
@@ -75,6 +82,7 @@ const Error500 = () => {
           <Link
             component="button"
             underline="none"
+            onClick={handleTryAgain}
             sx={{
               color: "#2E8DC8",
               fontFamily: "Anek Latin",
