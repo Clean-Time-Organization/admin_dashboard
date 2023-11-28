@@ -16,7 +16,7 @@ export const PageTitle = styled('div')`
 `;
 
 export const OrderStatus = styled('div')<{ color: string; background: string }>`
-  padding: 4px 8px;
+  padding: 2px 6px;
   color: ${({color}) => color};
   background: ${({background}) => background};
   text-align: center;
@@ -57,7 +57,7 @@ export const TextSide = styled('div')`
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 26px;
 `;
 
 export const TextSubside = styled('div')`
@@ -76,7 +76,7 @@ export const DataBlockTitle = styled('div')`
 export const FieldBlock = styled('div')`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 `;
 
 export const FieldTitle = styled('div')`
@@ -89,7 +89,7 @@ export const FieldTitle = styled('div')`
 export const LinkedBasicText = styled('a')`
   color: #2E8DC8;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 100%;
   text-decoration: none;
 `;
@@ -98,4 +98,5 @@ export const NumberBasicText = styled(BasicText)`
   color: #1F2937;
   font-size: 16px;
   font-weight: 600;
+  margin-bottom: 8px;
 `;
