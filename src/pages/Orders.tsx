@@ -47,6 +47,7 @@ const Orders = () => {
   const [branches, setBranches] = useState<Array<Branch>>();
   const [openLaundries, setOpenLaundries] = useState(false);
   const [openBranches, setOpenBranches] = useState(false);
+  const [listLoading, setListLoading] = useState(0);
   const today = new Date();
 
   const dateToString = (date: Date): string => {
@@ -81,19 +82,25 @@ const Orders = () => {
   ];
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList(1);
+    if (listLoading > 0) {
+      setIsListLoading(true);
+      resetList(1);
+    }
   }, [selectedDates]);
 
   useEffect(() => {
-    setSelectedBranch(null);
-    setIsListLoading(true);
-    resetList(1);
+    if (listLoading > 0) {
+      setSelectedBranch(null);
+      setIsListLoading(true);
+      resetList(1);
+    }
   }, [selectedLaundry]);
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList(1);
+    if (listLoading > 0) {
+      setIsListLoading(true);
+      resetList(1);
+    }
   }, [selectedBranch]);
 
   useDebounce(() => {
@@ -103,8 +110,10 @@ const Orders = () => {
   )
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList();
+    if (listLoading > 0) {
+      setIsListLoading(true);
+      resetList();
+    }
   }, [currentPage]);
 
   const resetList = async (page?: number) => {
@@ -132,7 +141,10 @@ const Orders = () => {
     await httpClient.get('/order/?' + new URLSearchParams(params)).then(response => {
       setOrderList(response.data);
       setIsListLoading(false);
-    })
+      setListLoading(listLoading + 1);
+    }).catch(error => {
+      setListLoading(listLoading + 1);
+    });
   };
 
   const clearFilters = () => {
@@ -200,7 +212,7 @@ const Orders = () => {
       exportButtonClick={console.log}
     />
       {
-        ((!orderList || orderList.items.length === 0) && !selectedDates && !searchValue && !isListLoading) ?
+        ((!orderList || orderList.items.length === 0) && listLoading > 0 && !selectedDates && !searchValue && !isListLoading) ?
           <EmptyState
             title={'There are no orders yet'}
             subtitle={'You don\'t have any orders created yet'}

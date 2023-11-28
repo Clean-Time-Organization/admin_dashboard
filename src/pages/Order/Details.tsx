@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { setBreadCrumbsData } from "../../store/features/breadCrumbsDataSlice";
 import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
-import { OrderDetail } from "../../types/order";
+import { OrderDetail, SelectedItems } from "../../types/order";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -117,6 +117,17 @@ const OrderDetails = () => {
       (hours < 10 ? '0' + hours : hours) + ':' + (minutes < 10 ? '0' + minutes : minutes);
   };
 
+  const getServiceItems = (list: Array<SelectedItems>, service: string): Array<SelectedItems> => {
+    const selectedList = Array<SelectedItems>();
+    list.forEach(itm => {
+      if (itm.item?.service?.name_en === service) {
+        selectedList.push(itm);
+      }
+    });
+
+    return selectedList;
+  };
+
   return <DetailsBody>
     <Breadcrumbs />
     <PageTitle>
@@ -169,12 +180,35 @@ const OrderDetails = () => {
       <DataBlock width="394px">
         <TextSide>
           <DataBlockTitle>Selected Items ({data.pieces || 0})</DataBlockTitle>
-          {
-            data.selected_items?.map(item => <FieldBlock key={'itm' + item.item.service.name_en + '-' + item.item.item_type.id}>
-              <FieldTitle>{item.item?.service?.name_en || item.item?.service?.name_ar}</FieldTitle>
-              <BasicText>{item?.quantity} x {item.item?.item_type?.name_en || item.item?.item_type?.name_ar}</BasicText>
-              <NumberBasicText>{item?.sub_total_price.toFixed(2)} SAR</NumberBasicText>
-            </FieldBlock>)
+          { data.selected_items &&
+            <>
+              { getServiceItems(data.selected_items, 'Washing and ironing').length > 0 &&
+                <FieldBlock>
+                  <FieldTitle>Washing and ironing</FieldTitle>
+                  {
+                    getServiceItems(data.selected_items, 'Washing and ironing').map(itm =>
+                      <>
+                        <BasicText>{itm?.quantity} x {itm.item?.item_type?.name_en || itm.item?.item_type?.name_ar}</BasicText>
+                        <NumberBasicText>{itm?.sub_total_price.toFixed(2)} SAR</NumberBasicText>
+                      </>
+                    )
+                  }
+                </FieldBlock>
+              }
+              { getServiceItems(data.selected_items, 'Ironing').length > 0 &&
+                <FieldBlock>
+                  <FieldTitle>Ironing</FieldTitle>
+                  {
+                    getServiceItems(data.selected_items, 'Ironing').map(itm =>
+                      <>
+                        <BasicText>{itm?.quantity} x {itm.item?.item_type?.name_en || itm.item?.item_type?.name_ar}</BasicText>
+                        <NumberBasicText>{itm?.sub_total_price.toFixed(2)} SAR</NumberBasicText>
+                      </>
+                    )
+                  }
+                </FieldBlock>
+              }
+            </>
           }
         </TextSide>
       </DataBlock>
@@ -185,15 +219,15 @@ const OrderDetails = () => {
             <FieldTitle>Subtotal amount:</FieldTitle>
             <NumberBasicText>{data?.sub_total_amount?.toFixed(2) || 0} SAR</NumberBasicText>
           </FieldBlock>
-          <FieldBlock>
+          <FieldBlock style={{ marginBottom: '-16px' }}>
             <FieldTitle>VAT (+15%)</FieldTitle>
             <NumberBasicText>{data?.vat_price?.toFixed(2) || 0} SAR</NumberBasicText>
           </FieldBlock>
         </TextSide>
         <Divider />
         <TextSide>
-        <FieldBlock>
-            <NumberBasicText>Total amount</NumberBasicText>
+        <FieldBlock style={{ marginTop: '-8px' }}>
+            <NumberBasicText style={{ marginBottom: '0' }}>Total amount</NumberBasicText>
             <NumberBasicText>{data?.total_amount?.toFixed(2) || 0} SAR</NumberBasicText>
           </FieldBlock>
         </TextSide>
