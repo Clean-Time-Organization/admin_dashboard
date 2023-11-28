@@ -314,7 +314,7 @@ const CustomerRow: FC<IStaffRowProps> = ({ order }) => {
 
   const onTableRowClick = (event: React.MouseEvent<HTMLElement>, entityData?: EntityData) => {
     const id = entityData ? entityData.id : ''
-    // navigate(`/customers/${id}`)
+    navigate(`/orders/${id}`)
   }
 
   const onLaundryClick = (event: React.MouseEvent<HTMLElement>, id: number) => {
