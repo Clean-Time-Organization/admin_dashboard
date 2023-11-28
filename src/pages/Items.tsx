@@ -36,6 +36,7 @@ const Items = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isListLoading, setIsListLoading] = useState(false);
+  const [listLoading, setListLoading] = useState(0);
 
   const statusProperties = [
     {
@@ -49,8 +50,10 @@ const Items = () => {
   ];
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList(1);
+    if (listLoading > 0) {
+      setIsListLoading(true);
+      resetList(1);
+    }
   }, [selectedStatus]);
 
   useDebounce(() => {
@@ -60,8 +63,10 @@ const Items = () => {
   )
 
   useEffect(() => {
-    setIsListLoading(true);
-    resetList();
+    if (listLoading > 0) {
+      setIsListLoading(true);
+      resetList();
+    }
   }, [currentPage]);
 
   const resetList = async (page?: number) => {
@@ -83,6 +88,7 @@ const Items = () => {
     await httpClient.get('/item/?' + new URLSearchParams(params)).then(response => {
       setItemList(response.data);
       setIsListLoading(false);
+      setListLoading(listLoading + 1);
     })
   };
 
@@ -167,14 +173,22 @@ const CustomerRow: FC<IItemRowProps> = ({ item }) => {
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
-          <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>{item.services[0].price} SAR</Name></Grid>
+          {item.services.length > 0 &&
+            <>
+              <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
+              <Grid item xs={12}><Name>{item.services[0].price + ' SAR'}</Name></Grid>
+            </>
+          }
         </Grid>
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
-          <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>{item.services[1].price} SAR</Name></Grid>
+          { item.services.length > 1 &&
+            <>
+              <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
+              <Grid item xs={12}><Name>{item.services[1].price + ' SAR'}</Name></Grid>
+            </>
+          }
         </Grid>
       </Grid>
       <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>

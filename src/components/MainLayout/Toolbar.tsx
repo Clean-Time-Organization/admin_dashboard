@@ -36,7 +36,7 @@ export const Toolbar: FC = memo(function Toolbar() {
     navigate('/login')
   }
 
-  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders', '/items'])
+  const routeMatch = useRouteMatch(['/', '/home', '/staff', '/staff/*', '/customers', '/customers/*', '/laundries', '/laundries/*', '/orders', '/orders/*', '/items'])
   let currentTab = routeMatch?.pathnameBase
 
   if (currentTab === '/') {
