@@ -100,7 +100,7 @@ const Customers = () => {
       exportButtonClick={console.log}
     />
       {
-        (!userList && !selectedStatus && !searchValue && !isListLoading) ?
+        (!userList && !selectedStatus === undefined && !searchValue && !isListLoading) ?
           <EmptyState
             title={'There are no staff users yet'}
             subtitle={'You don\'t have any staff users created yet'}

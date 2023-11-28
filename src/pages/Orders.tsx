@@ -4,10 +4,7 @@ import httpClient from "../services/HttpClient";
 import {
   ContentBody,
   FilterRow,
-  Logo,
-  Name,
   BasicText,
-  ColoredText,
   Chips,
   ChipsButton,
   HintText,
@@ -203,7 +200,7 @@ const Orders = () => {
       exportButtonClick={console.log}
     />
       {
-        (!orderList && !selectedDates && !searchValue && !isListLoading) ?
+        ((!orderList || orderList.items.length === 0) && !selectedDates && !searchValue && !isListLoading) ?
           <EmptyState
             title={'There are no orders yet'}
             subtitle={'You don\'t have any orders created yet'}

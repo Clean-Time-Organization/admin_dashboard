@@ -168,9 +168,9 @@ const OrderDetails = () => {
       </DataBlock>
       <DataBlock width="394px">
         <TextSide>
-          <DataBlockTitle>Selected Items ({data.selected_items?.length || 0})</DataBlockTitle>
+          <DataBlockTitle>Selected Items ({data.pieces || 0})</DataBlockTitle>
           {
-            data.selected_items?.map(item => <FieldBlock>
+            data.selected_items?.map(item => <FieldBlock key={'itm' + item.item.service.name_en + '-' + item.item.item_type.id}>
               <FieldTitle>{item.item?.service?.name_en || item.item?.service?.name_ar}</FieldTitle>
               <BasicText>{item?.quantity} x {item.item?.item_type?.name_en || item.item?.item_type?.name_ar}</BasicText>
               <NumberBasicText>{item?.sub_total_price.toFixed(2)} SAR</NumberBasicText>
