@@ -167,14 +167,22 @@ const CustomerRow: FC<IItemRowProps> = ({ item }) => {
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
-          <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>{item.services[0].price} SAR</Name></Grid>
+          {item.services.length > 0 &&
+            <>
+              <Grid item xs={12}><BasicText>Washing & Ironing</BasicText></Grid>
+              <Grid item xs={12}><Name>{item.services[0].price + ' SAR'}</Name></Grid>
+            </>
+          }
         </Grid>
       </Grid>
       <Grid item xs={3} style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
         <Grid container>
-          <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
-          <Grid item xs={12}><Name>{item.services[1].price} SAR</Name></Grid>
+          { item.services.length > 1 &&
+            <>
+              <Grid item xs={12}><BasicText>Ironing</BasicText></Grid>
+              <Grid item xs={12}><Name>{item.services[1].price + ' SAR'}</Name></Grid>
+            </>
+          }
         </Grid>
       </Grid>
       <Grid item xs={1} style={{ display: 'flex', justifyContent: 'flex-end' }}>
