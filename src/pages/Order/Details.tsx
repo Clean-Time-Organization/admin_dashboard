@@ -153,7 +153,7 @@ const OrderDetails = () => {
           {
             data.selected_items?.map(item => <FieldBlock>
               <FieldTitle>{item.item?.service?.name_en || item.item?.service?.name_ar}</FieldTitle>
-              <BasicText>{item?.quantity} X {item.item?.item_type?.name_en || item.item?.item_type?.name_ar}</BasicText>
+              <BasicText>{item?.quantity} x {item.item?.item_type?.name_en || item.item?.item_type?.name_ar}</BasicText>
               <NumberBasicText>{item?.sub_total_price.toFixed(2)} SAR</NumberBasicText>
             </FieldBlock>)
           }
