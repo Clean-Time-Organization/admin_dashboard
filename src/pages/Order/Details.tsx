@@ -81,12 +81,28 @@ const OrderDetails = () => {
 
   const getStatusColor = (status: string): string => {
     return status === 'In Progress' ? '#A16207' :
-      status === 'Completed' ? '#005E1B' : '#B91C1C'; 
+      status === 'Created' ? '#4B5563' :
+      status === 'Draft' ? '#4B5563' :
+      status === 'Dropped' ? '#1E40AF' :
+      status === 'Ready to pick-up' ? '#2772AC' :
+      status === 'Completed' ? '#047857' : '#A16207'; 
   };
 
   const getStatusBackground = (status: string): string => {
     return status === 'In Progress' ? '#FEFCE8' :
-      status === 'Completed' ? '#E6F3E9' : '#B91C1C36 '; 
+      status === 'Created' ? '#F3F4F6' :
+      status === 'Draft' ? '#F3F4F6' :
+      status === 'Dropped' ? '#EFF6FF' :
+      status === 'Ready to pick-up' ? '#EEF5FB' :
+      status === 'Completed' ? '#EFFCF6' : '#FEFCE8'; 
+  };
+
+  const getPaymentColor = (status: string): string => {
+    return status === 'Paid' ? '#1E40AF' : '#991B1B'; 
+  };
+
+  const getPaymentBackground = (status: string): string => {
+    return status === 'Paid' ? '#EFF6FF' : '#FEF2F2'; 
   };
 
   const dateToString = (date: Date): string => {
@@ -131,6 +147,9 @@ const OrderDetails = () => {
             </FieldBlock>
             <FieldBlock>
               <FieldTitle>Payment Status:</FieldTitle>
+              <OrderStatus color={getPaymentColor(data.payment_status || '')} background={getPaymentBackground(data.payment_status || '')}>
+                {data.payment_status}
+              </OrderStatus>
             </FieldBlock>
             <FieldBlock>
               <FieldTitle>Laundry:</FieldTitle>

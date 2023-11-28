@@ -24,6 +24,7 @@ export const OrderStatus = styled('div')<{ color: string; background: string }>`
   font-weight: 500;
   line-height: 100%;
   letter-spacing: 0.28px;
+  width: fit-content;
 `;
 
 export const BasicText = styled('div')`
