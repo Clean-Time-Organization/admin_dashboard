@@ -69,6 +69,10 @@ const StepUserDetails: FC<IStepUserDetailsProps> = ({
               value: 80,
               message: 'Too long value for user`s full name',
             },
+            pattern: {
+              value: /^([\S]{1,40}\s[\S]{1,40})+$/,
+              message: 'First name and Last name must contain from 1 to 40 symbols',
+            },
         }}
       />
       <Controller
