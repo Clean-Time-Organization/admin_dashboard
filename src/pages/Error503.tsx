@@ -1,6 +1,6 @@
 import {Box, Divider, Link, Typography} from "@mui/material";
 
-const PageNotFound = () => {
+const Error503 = () => {
   return (
     <Box
       sx={{
@@ -27,7 +27,7 @@ const PageNotFound = () => {
           alignItems: "center",
         }}
       >
-        404
+        503
       </Box>
       <Divider
         orientation="vertical" flexItem
@@ -51,7 +51,7 @@ const PageNotFound = () => {
             height: "24px",
           }}
         >
-          This page could not be found
+          Service Unavailable
         </Typography>
         <Box
           sx={{
@@ -93,4 +93,4 @@ const PageNotFound = () => {
   )
 }
 
-export { PageNotFound };
+export { Error503 }

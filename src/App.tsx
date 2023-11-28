@@ -20,6 +20,8 @@ import {CreateLaundry} from "./pages/Laundry/CreateLaundry";
 import { Orders } from './pages/Orders';
 import { Items } from './pages/Items';
 import { OrderDetails } from './pages/Order/Details';
+import {Error500} from "./pages/Error500";
+import {Error503} from "./pages/Error503";
 
 const queryClient = new QueryClient()
 
@@ -46,6 +48,8 @@ export const App: FC = memo(function App() {
             <Route path={'/orders'} element={<RequireAuth><Orders /></RequireAuth>} />
             <Route path={'/orders/:id'} element={<RequireAuth><OrderDetails /></RequireAuth>} />
             <Route path={'/items'} element={<RequireAuth><Items /></RequireAuth>} />
+            <Route path={'/500'} element={<Error500 />} />
+            <Route path={'/503'} element={<Error503 />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </MainLayout>
