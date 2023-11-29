@@ -111,8 +111,8 @@ const Staff = () => {
       name={'Staff'}
       createButtonName={'Create staff user'}
       createButtonClick={createUser}
-      exportButtonName={'Export to .xls'}
-      exportButtonClick={console.log}
+      // exportButtonName={'Export to .xls'}
+      // exportButtonClick={console.log}
     />
     {
       (!userList && !selectedRole && selectedStatus === undefined && !searchValue && !isListLoading) ?

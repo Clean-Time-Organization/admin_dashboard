@@ -208,8 +208,8 @@ const Orders = () => {
     <Breadcrumbs />
     <PageTitle
       name={'Orders'}
-      exportButtonName={'Export to .xls'}
-      exportButtonClick={console.log}
+      // exportButtonName={'Export to .xls'}
+      // exportButtonClick={console.log}
     />
       {
         ((!orderList || orderList.items.length === 0) && listLoading > 0 && !selectedDates && !searchValue && !isListLoading) ?

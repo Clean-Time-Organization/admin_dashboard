@@ -121,8 +121,6 @@ export const Toolbar: FC = memo(function Toolbar() {
               />
               <Tab
                 label={(<Typography variant="nav">Laundries</Typography>)}
-                icon={<ArrowDown />}
-                iconPosition="end"
                 value="/laundries"
                 to="/laundries"
                 component={Link}
