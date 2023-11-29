@@ -84,15 +84,6 @@ export const Toolbar: FC = memo(function Toolbar() {
               }}
             >
               <Tab
-                label={(<Typography variant="nav">Default</Typography>)}
-                value="/default"
-                to="/default"
-                component={Link}
-                sx={{
-                  height: "64px",
-                }}
-              />
-              <Tab
                 label={(<Typography variant="nav">Home</Typography>)}
                 value="/home"
                 to="/home"
