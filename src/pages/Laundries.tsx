@@ -120,8 +120,8 @@ const Laundries = () => {
       name={'Laundries'}
       createButtonName={'Create laundry'}
       createButtonClick={createLaundry}
-      exportButtonName={'Export to .xls'}
-      exportButtonClick={console.log}
+      // exportButtonName={'Export to .xls'}
+      // exportButtonClick={console.log}
     />
       {
         (!entityList && !selectedStatus && !searchValue && !isListLoading) ?

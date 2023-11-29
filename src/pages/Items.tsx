@@ -101,8 +101,8 @@ const Items = () => {
     <Breadcrumbs />
     <PageTitle
       name={'Items'}
-      exportButtonName={'Export to .xls'}
-      exportButtonClick={console.log}
+      // exportButtonName={'Export to .xls'}
+      // exportButtonClick={console.log}
       createButtonClick={console.log}
       createButtonName={'Create Item'}
     />

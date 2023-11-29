@@ -96,8 +96,8 @@ const Customers = () => {
     <Breadcrumbs />
     <PageTitle
       name={'Customers'}
-      exportButtonName={'Export to .xls'}
-      exportButtonClick={console.log}
+      // exportButtonName={'Export to .xls'}
+      // exportButtonClick={console.log}
     />
       {
         (!userList && !selectedStatus === undefined && !searchValue && !isListLoading) ?
